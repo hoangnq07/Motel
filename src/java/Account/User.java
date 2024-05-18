@@ -21,14 +21,17 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String email, String password,boolean gender, String phone) {
+    public User(String email, String password, boolean gender, String phone) {
         this.email = email;
         this.password = password;
-        this.gender=gender;
+        this.gender = gender;
         this.phone = phone;
     }
-
-     public User(int accountId, boolean active, String avatar, String citizen, Date createDate, String email, String fullname, boolean gender, String password, String phone, String role) {
+     public User(String email, String role) {
+        this.email = email;
+        this.role = role;
+    }
+    public User(int accountId, boolean active, String avatar, String citizen, Date createDate, String email, String fullname, boolean gender, String password, String phone, String role) {
         this.accountId = accountId;
         this.active = active;
         this.avatar = avatar;
@@ -130,13 +133,12 @@ public class User implements Serializable {
         this.role = role;
     }
 
-    
     public boolean registerUser() {
         return AccountDAO.registerUser(this);
     }
-    
+
     public boolean updateUser() {
         return AccountDAO.updateUser(this);
     }
-    
+
 }

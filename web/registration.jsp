@@ -28,24 +28,16 @@
 
                                 <div class="form-group">
                                     <label for="email"><i class="zmdi zmdi-email"></i></label> <input
-                                        type="email" name="email" id="email" placeholder="Your Email" />
+                                        type="email" name="email" id="email" required="" placeholder="Your Email" />
                                 </div>
                                 <div class="form-group">
                                     <label for="pass"><i class="zmdi zmdi-lock"></i></label> <input
-                                        type="password" name="pass" id="pass" placeholder="Password" />
+                                        type="password" name="pass" id="pass" required="" placeholder="Password" />
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="contact"><i class="zmdi zmdi-lock-outline"></i></label>
-                                    <input type="text" name="phone" id="contact"
-                                           placeholder="Phone number" />
-                                </div>
-                                <div class="form-group">
-                                    <select id="gender" name="gender">
-                                        <option value="">Select gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                    </select>
+                                    <input type="text" name="phone" id="contact" required="" placeholder="Phone number" />
                                 </div>
                                 <div class="form-group">
                                     <label style="color: red" for="status" class="label-agree-term">

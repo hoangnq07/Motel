@@ -45,7 +45,7 @@
                                     <label style="color: red" for="status" class="label-agree-term">
                                         <span><span></span></span><%= request.getAttribute("status") == null ? "" : request.getAttribute("status")%></label>
                                 </div>
-                                
+
                                 <div class="form-group form-button">
                                     <input type="submit" name="signin" id="signin"
                                            class="form-submit" value="Log in" />
@@ -54,13 +54,12 @@
                                     <a href="#" class="signup-image-link">Forgot password?</a>
                                 </div>
                             </form>
+
                             <div class="social-login">
-                                <span class="social-label">Or login with Google</span>
-                                <ul class="socials">
-                                    <li><a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:9999/Assignment/login-google&response_type=code
-                                           &client_id=409560142881-vcesta6vsjgkn20u47uefh0cdqbe72b5.apps.googleusercontent.com&approval_prompt=force"><i
-                                                class="display-flex-center zmdi zmdi-google"></i></a></li>
-                                </ul>
+                                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:9999/Assignment/login-google&response_type=code
+                                   &client_id=409560142881-vcesta6vsjgkn20u47uefh0cdqbe72b5.apps.googleusercontent.com&approval_prompt=force" class="social-label-button><i
+                                   class="display-flex-center"> </i> Or login with Google
+                                </a>
                             </div>
                         </div>
                     </div>
