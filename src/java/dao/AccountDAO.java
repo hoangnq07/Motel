@@ -85,7 +85,8 @@ public class AccountDAO {
             return false;
         }
     }
-    public static boolean registerGoogle(String email,String name) {
+
+    public static boolean registerGoogle(String email, String name) {
         String QUERY = "INSERT INTO accounts (active, email,fullname, gender, role) VALUES (1,?,?,1, 'user')";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
             pst.setString(1, email);
@@ -96,24 +97,25 @@ public class AccountDAO {
             return false;
         }
     }
+
     public static boolean isEmailExist(String email) {
-    String QUERY = "SELECT COUNT(*) FROM accounts WHERE email = ?";
-    
-    try (Connection conn = DBcontext.getConnection();
-         PreparedStatement pst = conn.prepareStatement(QUERY)) {
-        pst.setString(1, email);
-        ResultSet rs = pst.executeQuery();
-        
-        if (rs.next()) {
-            int count = rs.getInt(1);
-            return count > 0;
+        String QUERY = "SELECT COUNT(*) FROM accounts WHERE email = ?";
+
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    } catch (Exception e) {
-        e.printStackTrace();
+
+        return false;
     }
-    
-    return false;
-}
+
     public static boolean updateUser(User user) {
         String QUERY = "UPDATE Users SET Username=?, [Password]=?,Name=?, Email=?, Phone=?, [Address]=?, [Role]=?, IsActive=? WHERE UserID=?";
         try (Connection conn = DBcontext.getConnection()) {
@@ -128,10 +130,30 @@ public class AccountDAO {
         return false;
     }
 
+    public static boolean updatePassword(String email, String newPassword) {
+        String QUERY = "UPDATE accounts SET password = ? WHERE email = ?";
+
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+
+            // Mã hóa mật khẩu mới bằng BCrypt
+            String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+
+            pst.setString(1, hashedPassword);
+            pst.setString(2, email);
+
+            int rowsAffected = pst.executeUpdate();
+            return rowsAffected > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
 //        System.out.println(searchUser("admin2@gmail.com"));
-            System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoang@123"));
+        System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoang@123"));
 //        System.out.println(registerUser(new User("nguyenhoang5@gmail.com", "123456", "012345678")));
     }
 }

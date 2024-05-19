@@ -51,7 +51,7 @@
                                            class="form-submit" value="Log in" />
                                 </div>
                                 <div class="form-group">
-                                    <a href="#" class="signup-image-link">Forgot password?</a>
+                                    <a href="forgot-password.jsp" class="signup-image-link">Forgot password?</a>
                                 </div>
                             </form>
                             <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:9999/Project/login-google&response_type=code
