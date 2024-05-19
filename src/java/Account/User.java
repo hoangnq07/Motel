@@ -46,7 +46,9 @@ public class User implements Serializable {
     }
 
     public User(String email, String pass, String phone) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this.email = email;
+        this.password = pass;
+        this.phone = phone;
     }
 
     public int getAccountId() {

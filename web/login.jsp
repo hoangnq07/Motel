@@ -54,13 +54,11 @@
                                     <a href="#" class="signup-image-link">Forgot password?</a>
                                 </div>
                             </form>
-
-                            <div class="social-login">
-                                <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:9999/Assignment/login-google&response_type=code
-                                   &client_id=409560142881-vcesta6vsjgkn20u47uefh0cdqbe72b5.apps.googleusercontent.com&approval_prompt=force" class="social-label-button><i
-                                   class="display-flex-center"> </i> Or login with Google
-                                </a>
-                            </div>
+                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:9999/Project/login-google&response_type=code
+                                   &client_id=497792706407-dfbqjap8g73tgihr7i06r4lv8ho42foh.apps.googleusercontent.com&approval_prompt=force" class="btn btn-google">
+                                <span class="google-icon">G+</span>
+                                <span class="btn-text">Sign in with Google</span>
+                            </a>
                         </div>
                     </div>
                 </div>

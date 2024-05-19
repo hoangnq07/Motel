@@ -68,7 +68,7 @@ public class AccountDAO {
     }
 
     public static boolean registerUser(User u) {
-        String QUERY = "INSERT INTO accounts (active, email, password, 1, phone, role) VALUES (1,?, ?, ?, ?, 'user')";
+        String QUERY = "INSERT INTO accounts (active, email, password, gender, phone, role) VALUES (1,?, ?, 1, ?, 'user')";
 
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
 
@@ -77,9 +77,19 @@ public class AccountDAO {
 
             pst.setString(1, u.getEmail());
             pst.setString(2, hashedPassword); // Lưu mật khẩu đã mã hóa
-            pst.setBoolean(3, u.isGender());
-            pst.setString(4, u.getPhone());
+            pst.setString(3, u.getPhone());
 
+            return pst.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static boolean registerGoogle(String email,String name) {
+        String QUERY = "INSERT INTO accounts (active, email,fullname, gender, role) VALUES (1,?,?,1, 'user')";
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            pst.setString(1, email);
+            pst.setString(2, name);
             return pst.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +131,7 @@ public class AccountDAO {
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
 //        System.out.println(searchUser("admin2@gmail.com"));
-            System.out.println(authenticateUser("user@gmail.com", "123456"));
-//        System.out.println(registerUser(new User("nguyenhoang1@gmail.com", "123456", true, "012345678")));
+            System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoang@123"));
+//        System.out.println(registerUser(new User("nguyenhoang5@gmail.com", "123456", "012345678")));
     }
 }
