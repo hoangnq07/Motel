@@ -42,9 +42,8 @@ public class LoginGoogleServlet extends HttpServlet {
             if (!AccountDAO.isEmailExist(email)) {
                 AccountDAO.registerGoogle(email,googlePojo.getName());
             }
-            request.getSession().setAttribute("User", AccountDAO.searchUser(email));
-            RequestDispatcher dis = request.getRequestDispatcher("index.jsp");
-            dis.forward(request, response);
+            request.getSession().setAttribute("user", AccountDAO.searchUser(email));
+            response.sendRedirect("index.jsp");
         }
     }
 

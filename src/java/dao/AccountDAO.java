@@ -117,13 +117,17 @@ public class AccountDAO {
     }
 
     public static boolean updateUser(User user) {
-        String QUERY = "UPDATE Users SET Username=?, [Password]=?,Name=?, Email=?, Phone=?, [Address]=?, [Role]=?, IsActive=? WHERE UserID=?";
-        try (Connection conn = DBcontext.getConnection()) {
-            try (PreparedStatement pst = conn.prepareStatement(QUERY)) {
+        String QUERY = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen = ?, avatar = ? WHERE account_id = ?";
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            pst.setString(1, user.getFullname());
+            pst.setBoolean(2, user.isGender());
+            pst.setString(3, user.getPhone());
+            pst.setString(4, user.getCitizen());
+            pst.setString(5, user.getAvatar());
+            pst.setInt(6, user.getAccountId());
 
-                int rowsAffected = pst.executeUpdate();
-                return rowsAffected > 0;
-            }
+            int rowsAffected = pst.executeUpdate();
+            return rowsAffected > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -153,7 +157,7 @@ public class AccountDAO {
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
 //        System.out.println(searchUser("admin2@gmail.com"));
-        System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoang@123"));
+        System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoangasd@123"));
 //        System.out.println(registerUser(new User("nguyenhoang5@gmail.com", "123456", "012345678")));
     }
 }

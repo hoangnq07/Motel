@@ -25,10 +25,10 @@ public class LoginServlet extends HttpServlet {
         User user = AccountDAO.authenticateUser(email, password);
         if (user != null) {
             if (user.getRole().equals("admin")) {
-                session.setAttribute("login", AccountDAO.searchUser(email));
+                session.setAttribute("user", AccountDAO.searchUser(email));
                 request.getRequestDispatcher("admin.jsp").forward(request, response);
             } else if (user.getRole().equals("user")) {
-                session.setAttribute("login", AccountDAO.searchUser(email));
+                session.setAttribute("user", AccountDAO.searchUser(email));
                 request.getRequestDispatcher("home").forward(request, response);
             }
         } else {
