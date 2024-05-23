@@ -91,7 +91,7 @@
         <div class="navbar">
             <div class="logo">HOME</div>
             <div class="menu">
-                <a href="#">Trang chủ</a>
+                <a href="index.jsp">Trang chủ</a>
                 <a href="#">Sản phẩm</a>
                 <a href="#">Chia sẻ</a>
             </div>

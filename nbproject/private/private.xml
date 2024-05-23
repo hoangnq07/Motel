@@ -3,7 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Admin/OneDrive/Máy%20tính/Code/SWP/Project/src/java/Account/GoogleUtils.java</file>
+            <file>file:/C:/Users/Admin/OneDrive/Máy%20tính/Code/SWP/Project/src/java/dao/AccountDAO.java</file>
+            <file>file:/C:/Users/Admin/OneDrive/Máy%20tính/Code/SWP/Project/web/header.jsp</file>
+            <file>file:/C:/Users/Admin/OneDrive/Máy%20tính/Code/SWP/Project/src/java/controller/RegisterServlet.java</file>
+            <file>file:/C:/Users/Admin/OneDrive/Máy%20tính/Code/SWP/Project/src/java/Account/GooglePojo.java</file>
+            <file>file:/C:/Users/Admin/OneDrive/Máy%20tính/Code/SWP/Project/src/java/controller/UpdateProfileServlet.java</file>
+            <file>file:/C:/Users/Admin/OneDrive/Máy%20tính/Code/SWP/Project/web/WEB-INF/web.xml</file>
         </group>
     </open-files>
 </project-private>
