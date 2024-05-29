@@ -9,6 +9,6 @@
     <body>
         <!-- header section start -->
         <jsp:include page="header.jsp" ></jsp:include>
-           
+
     </body>
 </html>

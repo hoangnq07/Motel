@@ -32,7 +32,7 @@
                             <form method="POST" action="login" class="register-form"
                                   id="login-form">
                                 <div class="form-group">
-                                    <label for="username"><i
+                                    <%--@declare id="username"--%><label for="username"><i
                                             class="zmdi zmdi-account material-icons-name"></i></label> 
                                     <input type="text" name="email" id="email" required="" placeholder="Email" />
                                 </div>
@@ -42,7 +42,7 @@
                                         placeholder="Password" />
                                 </div>
                                 <div class="form-group">
-                                    <label style="color: red" for="status" class="label-agree-term">
+                                    <%--@declare id="status"--%><label style="color: red" for="status" class="label-agree-term">
                                         <span><span></span></span><%= request.getAttribute("status") == null ? "" : request.getAttribute("status")%></label>
                                 </div>
 
