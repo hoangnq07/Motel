@@ -30,7 +30,7 @@ public class LoginServlet extends HttpServlet {
                 request.getRequestDispatcher("admin.jsp").forward(request, response);
             }else if (user.getRole().equals("owner")){
                 session.setAttribute("owner", AccountDAO.searchUser(email));
-                request.getRequestDispatcher("owner.jsp").forward(request, response);
+                request.getRequestDispatcher("owner-header.jsp").forward(request, response);
 
             }else if (user.getRole().equals("user")) {
                 session.setAttribute("user", AccountDAO.searchUser(email));
