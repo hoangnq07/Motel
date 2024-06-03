@@ -8,7 +8,7 @@
 </head>
 <body>
 <h1>${motel == null ? "Create New Motel" : "Edit Motel"}</h1>
-<form action="motel/${motel == null ? 'create' : 'update'}" method="post">
+<form action="/Project/motel/${motel == null ? 'create' : 'update'}" method="post">
     <input type="hidden" name="id" value="${motel.motelId}" />
     <label>Descriptions:</label>
     <input type="text" name="descriptions" value="${motel.descriptions}" /><br/>
@@ -32,6 +32,6 @@
     <input type="text" name="accountId" value="${motel.accountId}" /><br/>
     <input type="submit" value="${motel == null ? 'Create' : 'Update'}" />
 </form>
-<a href="motel">Back to List</a>
+<a href="/Project/motel">Back to List</a>
 </body>
 </html>

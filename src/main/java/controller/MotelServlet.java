@@ -147,7 +147,7 @@ public class MotelServlet extends HttpServlet {
             stmt.setInt(11, accountId);
             stmt.executeUpdate();
         }
-        response.sendRedirect("motel");
+        response.sendRedirect("/Project/motel");
     }
 
     private void updateMotel(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -178,7 +178,7 @@ public class MotelServlet extends HttpServlet {
             stmt.setInt(11, id);
             stmt.executeUpdate();
         }
-        response.sendRedirect("motel");
+        response.sendRedirect("/Project/motel");
     }
 
     private void deleteMotel(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -188,6 +188,6 @@ public class MotelServlet extends HttpServlet {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
-        response.sendRedirect("motel");
+        response.sendRedirect("/Project/motel");
     }
 }
