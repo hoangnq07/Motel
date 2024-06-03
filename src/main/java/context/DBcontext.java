@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class DBcontext {
     public static Connection getConnection() throws SQLException {
-        String jdbcUrl = "jdbc:sqlserver://Localhost:1433;databaseName=motel1";
+        String jdbcUrl = "jdbc:sqlserver://Localhost:1433;databaseName=motel3";
         String username = "sa";
         String password = "123456";
 
