@@ -7,9 +7,9 @@ public class Renter {
     private String phone;
     private String renterDate;
     private String checkOutDate;
+    private int motelRoomId;
 
-    // Getters and setters
-
+    // Getters và setters cho tất cả các thuộc tính
     public int getRenterId() {
         return renterId;
     }
@@ -56,5 +56,13 @@ public class Renter {
 
     public void setCheckOutDate(String checkOutDate) {
         this.checkOutDate = checkOutDate;
+    }
+
+    public int getMotelRoomId() {
+        return motelRoomId;
+    }
+
+    public void setMotelRoomId(int motelRoomId) {
+        this.motelRoomId = motelRoomId;
     }
 }

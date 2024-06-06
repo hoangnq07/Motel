@@ -10,12 +10,11 @@
 <div class="container mt-4">
     <h2>Renters List</h2>
     <form method="get" action="RentersServlet">
-        <input type="text" name="searchQuery" placeholder="Search by name" value="${param.searchQuery != null ? param.searchQuery : ''}">
-        <input type="hidden" name="action" value="search">
-        <input type="submit" value="Search">
+        <input type="text" name="searchQuery" placeholder="Search by name">
+        <button type="submit" class="btn btn-primary">Search</button>
     </form>
-    <br>
-    <table class="table table-bordered">
+    <table class="table table-bordered mt-3">
+        <thead>
         <tr>
             <th>ID</th>
             <th>Full Name</th>
@@ -23,7 +22,11 @@
             <th>Phone</th>
             <th>Renter Date</th>
             <th>Check Out Date</th>
+            <th>Motel Room ID</th>
+            <th>Action</th>
         </tr>
+        </thead>
+        <tbody>
         <c:forEach var="renter" items="${rentersList}">
             <tr>
                 <td>${renter.renterId}</td>
@@ -32,51 +35,51 @@
                 <td>${renter.phone}</td>
                 <td>${renter.renterDate}</td>
                 <td>${renter.checkOutDate}</td>
+                <td>${renter.motelRoomId}</td>
                 <td>
                     <form method="post" action="RentersServlet" style="display:inline;">
                         <input type="hidden" name="action" value="delete">
                         <input type="hidden" name="renterId" value="${renter.renterId}">
-                        <input type="submit" value="Delete" class="btn btn-danger">
+                        <button type="submit" class="btn btn-danger">Delete</button>
                     </form>
                     <form method="post" action="RentersServlet" style="display:inline;">
                         <input type="hidden" name="action" value="update">
                         <input type="hidden" name="renterId" value="${renter.renterId}">
-                        <input type="hidden" name="fullname" value="${renter.fullname}">
-                        <input type="hidden" name="email" value="${renter.email}">
-                        <input type="hidden" name="phone" value="${renter.phone}">
-                        <input type="hidden" name="renterDate" value="${renter.renterDate}">
-                        <input type="hidden" name="checkOutDate" value="${renter.checkOutDate}">
-                        <input type="submit" value="Edit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-warning">Update</button>
                     </form>
                 </td>
             </tr>
         </c:forEach>
+        </tbody>
     </table>
-
     <h3>Add a New Renter</h3>
     <form method="post" action="RentersServlet">
         <input type="hidden" name="action" value="add">
         <div class="form-group">
-            <label>Full Name:</label>
+            <%--@declare id="fullname"--%><label for="fullname">Full Name:</label>
             <input type="text" name="fullname" class="form-control" required>
         </div>
         <div class="form-group">
-            <label>Email:</label>
+            <%--@declare id="email"--%><label for="email">Email:</label>
             <input type="email" name="email" class="form-control" required>
         </div>
         <div class="form-group">
-            <label>Phone:</label>
+            <%--@declare id="phone"--%><label for="phone">Phone:</label>
             <input type="text" name="phone" class="form-control" required>
         </div>
         <div class="form-group">
-            <label>Renter Date:</label>
+            <%--@declare id="renterdate"--%><label for="renterDate">Renter Date:</label>
             <input type="date" name="renterDate" class="form-control" required>
         </div>
         <div class="form-group">
-            <label>Check Out Date:</label>
+            <%--@declare id="checkoutdate"--%><label for="checkOutDate">Check Out Date:</label>
             <input type="date" name="checkOutDate" class="form-control" required>
         </div>
-        <input type="submit" value="Add Renter" class="btn btn-success">
+        <div class="form-group">
+            <%--@declare id="motelroomid"--%><label for="motelRoomId">Motel Room ID:</label>
+            <input type="number" name="motelRoomId" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Renter</button>
     </form>
 </div>
 </body>
