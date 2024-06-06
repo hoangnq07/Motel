@@ -2,103 +2,82 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
+    <title>Quản lý Thành viên</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Quản lý Thành viên</title>
 </head>
 <body>
 <div class="container mt-4">
-    <h3>Quản lý thành viên</h3>
-    <div class="row">
-        <div class="col-md-12">
-            <form class="form-inline" action="renters" method="get">
-                <input type="hidden" name="action" value="search">
-                <input class="form-control mr-sm-2" type="search" name="email" placeholder="Search by email" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+    <h2>Renters List</h2>
+    <form method="get" action="RentersServlet">
+        <input type="text" name="searchQuery" placeholder="Search by name" value="${param.searchQuery != null ? param.searchQuery : ''}">
+        <input type="hidden" name="action" value="search">
+        <input type="submit" value="Search">
+    </form>
+    <br>
+    <table class="table table-bordered">
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Renter Date</th>
+            <th>Check Out Date</th>
+        </tr>
+        <c:forEach var="renter" items="${rentersList}">
+            <tr>
+                <td>${renter.renterId}</td>
+                <td>${renter.fullname}</td>
+                <td>${renter.email}</td>
+                <td>${renter.phone}</td>
+                <td>${renter.renterDate}</td>
+                <td>${renter.checkOutDate}</td>
+                <td>
+                    <form method="post" action="RentersServlet" style="display:inline;">
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="renterId" value="${renter.renterId}">
+                        <input type="submit" value="Delete" class="btn btn-danger">
+                    </form>
+                    <form method="post" action="RentersServlet" style="display:inline;">
+                        <input type="hidden" name="action" value="update">
+                        <input type="hidden" name="renterId" value="${renter.renterId}">
+                        <input type="hidden" name="fullname" value="${renter.fullname}">
+                        <input type="hidden" name="email" value="${renter.email}">
+                        <input type="hidden" name="phone" value="${renter.phone}">
+                        <input type="hidden" name="renterDate" value="${renter.renterDate}">
+                        <input type="hidden" name="checkOutDate" value="${renter.checkOutDate}">
+                        <input type="submit" value="Edit" class="btn btn-primary">
+                    </form>
+                </td>
+            </tr>
+        </c:forEach>
+    </table>
+
+    <h3>Add a New Renter</h3>
+    <form method="post" action="RentersServlet">
+        <input type="hidden" name="action" value="add">
+        <div class="form-group">
+            <label>Full Name:</label>
+            <input type="text" name="fullname" class="form-control" required>
         </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Fullname</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                    <th>Gender</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="account" items="${accounts}">
-                    <tr>
-                        <td>${account.fullname}</td>
-                        <td>${account.email}</td>
-                        <td>${account.phone}</td>
-                        <td>${account.role}</td>
-                        <td><c:choose>
-                            <c:when test="${account.gender}">Male</c:when>
-                            <c:otherwise>Female</c:otherwise>
-                        </c:choose></td>
-                        <td>
-                            <form action="renters" method="post" style="display:inline;">
-                                <input type="hidden" name="action" value="add">
-                                <input type="hidden" name="account_id" value="${account.accountId}">
-                                <button type="submit" class="btn btn-success btn-sm">Add</button>
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" name="email" class="form-control" required>
         </div>
-    </div>
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <h3>Danh sách người thuê</h3>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>Fullname</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                    <th>Gender</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="renter" items="${renters}">
-                    <tr>
-                        <td>${renter.fullname}</td>
-                        <td>${renter.email}</td>
-                        <td>${renter.phone}</td>
-                        <td>${renter.role}</td>
-                        <td><c:choose>
-                            <c:when test="${renter.gender}">Male</c:when>
-                            <c:otherwise>Female</c:otherwise>
-                        </c:choose></td>
-                        <td>
-                            <form action="renters" method="post" style="display:inline;">
-                                <input type="hidden" name="action" value="delete">
-                                <input type="hidden" name="account_id" value="${renter.accountId}">
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+        <div class="form-group">
+            <label>Phone:</label>
+            <input type="text" name="phone" class="form-control" required>
         </div>
-    </div>
+        <div class="form-group">
+            <label>Renter Date:</label>
+            <input type="date" name="renterDate" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Check Out Date:</label>
+            <input type="date" name="checkOutDate" class="form-control" required>
+        </div>
+        <input type="submit" value="Add Renter" class="btn btn-success">
+    </form>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>

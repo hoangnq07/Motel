@@ -151,6 +151,30 @@ public class AccountDAO {
 
         return false;
     }
+    public  boolean addRenter(int accountId, int roomId) {
+        String QUERY = "INSERT INTO [dbo].[renter]([account_id]\n" +
+                "           ,[motel_room_id]) VALUES (?,?)";
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            pst.setInt(1, accountId);
+            pst.setInt(2, roomId);
+            return pst.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public  boolean deleteAccount(int accountId) {
+        String QUERY = "DELETE FROM [dbo].[accounts]\n" +
+                "      WHERE account_id = ?";
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            pst.setInt(1, accountId);
+
+            return pst.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
