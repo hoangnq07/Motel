@@ -4,125 +4,86 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="vi">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Trang chủ</title>
-        <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-            }
-            .navbar {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                background-color: #f8f8f8;
-                padding: 10px 20px;
-                border-bottom: 1px solid #ccc;
-            }
-            .navbar .logo {
-                font-size: 20px;
-                font-weight: bold;
-            }
-            .navbar .menu {
-                display: flex;
-                gap: 20px;
-            }
-            .navbar .menu a {
-                text-decoration: none;
-                color: black;
-                font-size: 16px;
-            }
-            .navbar .buttons {
-                display: flex;
-                gap: 10px;
-            }
-            .navbar .buttons a {
-                text-decoration: none;
-                color: black;
-                padding: 5px 10px;
-                border: 1px solid #ccc;
-                background-color: white;
-                display: inline-block;
-                text-align: center;
-                cursor: pointer;
-            }
-            .navbar .buttons a:hover {
-                background-color: #e0e0e0;
-            }
-            .navbar .buttons a:visited {
-                color: black;
-            }
-            .menu-list {
-                list-style-type: none;
-                padding: 0;
-                margin: 0;
-                position: absolute;
-                right: 10px;
-                background-color: #f9f9f9;
-                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                z-index: 1;
-                display: none;
-                min-width: 200px;
-            }
+<head>
+    <meta charset="utf-8">
+    <title>HOME</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" role="status"></div>
+</div>
+<!-- Spinner End -->
 
-            .menu-list li {
-                width: 150px; /* Đặt chiều rộng cho các mục trong menu */
-            }
-
-            .menu-list li a {
-                color: black;
-                padding: 16px 20px;
-                text-decoration: none;
-                display: block;
-                font-size: 16px;
-                white-space: nowrap; /* Ngăn chữ bị xuống dòng */
-                overflow: hidden; /* Ẩn nội dung vượt quá chiều rộng */
-                text-overflow: ellipsis; /* Hiển thị dấu ... cho nội dung vượt quá */
-            }
-
-            .menu-list li a:hover {
-                background-color: #f1f1f1;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="navbar">
-            <div class="logo">HOME</div>
-            <div class="menu">
-                <a href="index.jsp">Trang chủ</a>
-                <a href="#">Sản phẩm</a>
-                <a href="#">Chia sẻ</a>
+<!-- Navbar Start -->
+<div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+    <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.jsp" class="navbar-brand ms-4 ms-lg-0">
+            <h1 class="fw-bold text-primary mb-4">H<span class="text-secondary">O</span>ME</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.jsp" class="nav-item nav-link active">Home</a>
+                <a href="about.jsp" class="nav-item nav-link">About Us</a>
+                <a href="product.jsp" class="nav-item nav-link">Products</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="blog.jsp" class="dropdown-item">Blog Grid</a>
+                        <a href="feature.jsp" class="dropdown-item">Our Features</a>
+                        <a href="testimonial.jsp" class="dropdown-item">Testimonial</a>
+                        <a href="404.jsp" class="dropdown-item">404 Page</a>
+                    </div>
+                </div>
+                <a href="contact.jsp" class="nav-item nav-link">Contact Us</a>
             </div>
-            <div class="buttons">
+            <div class="d-none d-lg-flex ms-2">
+                <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
+                    <small class="fa fa-search text-body"></small>
+                </a>
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
-                        <div class="user-menu">
-                            <c:choose>
-                                <c:when test="${empty sessionScope.user.avatar}">
-                                    <img src="default_avatar.png" alt="Avatar" class="avatar" onclick="toggleMenu(this)" width="50" height="50">
-                                </c:when>
-                                <c:otherwise>
-                                    <img src="${pageContext.request.contextPath}/uploads/${sessionScope.user.avatar}" alt="Avatar" class="avatar" onclick="toggleMenu(this)" width="50" height="50">
-                                </c:otherwise>
-                            </c:choose>
-                            <ul id="menu" class="menu-list">
-                                <li><a href="account_info.jsp">User Profile</a></li>
-                                <li><a href="change_password.jsp">Change Password</a></li>
-                                <li><a href="logout">Log Out</a></li>
-                            </ul>
+                        <div class="btn-sm-square bg-white rounded-circle ms-3">
+                            <img src="${pageContext.request.contextPath}/uploads/${sessionScope.user.avatar}" alt="Avatar" class="rounded-circle" onclick="toggleMenu(this)" width="50" height="50">
                         </div>
+                        <ul id="menu" class="menu-list">
+                            <li><a href="account_info.jsp">User Profile</a></li>
+                            <li><a href="change_password.jsp">Change Password</a></li>
+                            <li><a href="logout">Log Out</a></li>
+                        </ul>
                     </c:when>
                     <c:otherwise>
-                        <a href="login.jsp">Login</a>
-                        <a href="registration.jsp">Register</a>
+                        <a class="btn-sm-square bg-white rounded-circle ms-3" href="login.jsp">
+                            <small class="fa fa-user text-body"></small>
+                        </a>
                     </c:otherwise>
                 </c:choose>
             </div>
         </div>
-    </div>
-</body>
+    </nav>
+</div>
+<!-- Navbar End -->
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/lib/wow/wow.min.js"></script>
+<script src="assets/lib/easing/easing.min.js"></script>
+<script src="assets/lib/waypoints/waypoints.min.js"></script>
+<script src="assets/js/main.js"></script>
+
 <script>
     function toggleMenu(avatar) {
         var menu = document.getElementById("menu");
@@ -144,5 +105,5 @@
         }
     }
 </script>
+</body>
 </html>
-

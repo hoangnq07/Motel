@@ -6,30 +6,13 @@ public class CategoryRoom {
     private int quantity;
     private boolean status;
 
-    // Các getter và setter cho các thuộc tính
-
+    // Getters and Setters
     public int getCategoryRoomId() {
         return categoryRoomId;
     }
 
     public void setCategoryRoomId(int categoryRoomId) {
         this.categoryRoomId = categoryRoomId;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public String getDescriptions() {
@@ -40,17 +23,21 @@ public class CategoryRoom {
         this.descriptions = descriptions;
     }
 
-    // Constructor
-    public CategoryRoom() {
+    public int getQuantity() {
+        return quantity;
     }
 
-    public CategoryRoom(int categoryRoomId, String descriptions, int quantity, boolean status) {
-        this.categoryRoomId = categoryRoomId;
-        this.descriptions = descriptions;
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
         this.status = status;
     }
-    // Các phương thức khác nếu cần
 
     @Override
     public String toString() {

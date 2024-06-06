@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.*;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 import model.Post;
@@ -10,6 +11,7 @@ public class PostDAO {
 
     public List<Post> getAllPosts() throws SQLException {
         List<Post> posts = new ArrayList<>();
+
         String sql = "SELECT * FROM dbo.posts";
         try (Connection conn = DBcontext.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
@@ -36,5 +38,23 @@ public class PostDAO {
         }
     }
 
-    // Các phương thức khác như updatePost, deletePost, ...
+    public void updatePost(Post post) throws SQLException {
+        String sql = "UPDATE dbo.posts SET create_date = ?, status = ?, title = ?, motel_id = ? WHERE post_id = ?";
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, new java.sql.Date(post.getCreateDate().getTime()));
+            stmt.setBoolean(2, post.isStatus());
+            stmt.setString(3, post.getTitle());
+            stmt.setInt(4, post.getMotelId());
+            stmt.setInt(5, post.getPostId());
+            stmt.executeUpdate();
+        }
+    }
+    public void deletePost(int postId) throws SQLException {
+        String sql = "DELETE FROM dbo.posts WHERE post_id = ?";
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, postId);
+            stmt.executeUpdate();
+        }
+    }
+
 }

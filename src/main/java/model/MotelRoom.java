@@ -1,37 +1,18 @@
 package model;
 
-import java.util.Date;
-
 public class MotelRoom {
     private int motelRoomId;
-    private Date createDate;
+    private java.sql.Date createDate;
     private String descriptions;
     private double length;
+    private double width;
     private boolean status;
     private String video;
-    private double width;
     private int categoryRoomId;
     private int motelId;
     private String roomStatus;
 
-
-    // Constructor
-    public MotelRoom() {
-    }
-
-    public MotelRoom(int motelRoomId, String roomStatus, int categoryRoomId, int motelId, double width, String video, boolean status, double length, String descriptions, Date createDate) {
-        this.motelRoomId = motelRoomId;
-        this.roomStatus = roomStatus;
-        this.categoryRoomId = categoryRoomId;
-        this.motelId = motelId;
-        this.width = width;
-        this.video = video;
-        this.status = status;
-        this.length = length;
-        this.descriptions = descriptions;
-        this.createDate = createDate;
-    }
-
+    // Getters and Setters
     public int getMotelRoomId() {
         return motelRoomId;
     }
@@ -40,11 +21,11 @@ public class MotelRoom {
         this.motelRoomId = motelRoomId;
     }
 
-    public Date getCreateDate() {
+    public java.sql.Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    public void setCreateDate(java.sql.Date createDate) {
         this.createDate = createDate;
     }
 
@@ -64,12 +45,12 @@ public class MotelRoom {
         this.length = length;
     }
 
-    public String getVideo() {
-        return video;
+    public double getWidth() {
+        return width;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setWidth(double width) {
+        this.width = width;
     }
 
     public boolean isStatus() {
@@ -80,12 +61,12 @@ public class MotelRoom {
         this.status = status;
     }
 
-    public double getWidth() {
-        return width;
+    public String getVideo() {
+        return video;
     }
 
-    public void setWidth(double width) {
-        this.width = width;
+    public void setVideo(String video) {
+        this.video = video;
     }
 
     public int getCategoryRoomId() {
@@ -119,9 +100,9 @@ public class MotelRoom {
                 ", createDate=" + createDate +
                 ", descriptions='" + descriptions + '\'' +
                 ", length=" + length +
+                ", width=" + width +
                 ", status=" + status +
                 ", video='" + video + '\'' +
-                ", width=" + width +
                 ", categoryRoomId=" + categoryRoomId +
                 ", motelId=" + motelId +
                 ", roomStatus='" + roomStatus + '\'' +
