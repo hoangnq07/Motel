@@ -26,7 +26,7 @@ public class AccountDAO {
                             rs.getInt("account_id"),
                             rs.getBoolean("active"),
                             rs.getString("avatar"),
-                            rs.getString("citizen"),
+                            rs.getString("citizen_id"),
                             rs.getDate("create_date"),
                             rs.getString("email"),
                             rs.getString("fullname"),
@@ -115,7 +115,7 @@ public class AccountDAO {
     }
 
     public static boolean updateUser(User user) {
-        String QUERY = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen = ?, avatar = ? WHERE account_id = ?";
+        String QUERY = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen_id = ?, avatar = ? WHERE account_id = ?";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
             pst.setString(1, user.getFullname());
             pst.setBoolean(2, user.isGender());
@@ -154,8 +154,8 @@ public class AccountDAO {
 
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
-//        System.out.println(searchUser("admin2@gmail.com"));
-        System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoangasd@123"));
+//        System.out.println(searchUser("hoangnq417@gmail.com"));
+//        System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoangasd@123"));
 //        System.out.println(registerUser(new User("nguyenhoang5@gmail.com", "123456", "012345678")));
     }
 }

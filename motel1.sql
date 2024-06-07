@@ -198,3 +198,10 @@ CREATE TABLE dbo.feedback (
 -- Tạo người dùng quản trị mặc định
 INSERT dbo.accounts (active, avatar, citizen_id, email, fullname, gender, [password], phone, [role], approved) VALUES 
 (1, NULL, NULL, 'admin@gmail.com', 'ADMIN', 0, '$2a$10$uXuofG8QEf4SFRpdWSxt3u9U4/hEX4FPLj8rHdbPo9bipmRjMqVsy', NULL, 'admin', 1);
+INSERT INTO dbo.motels (create_date, descriptions, detail_address, district, district_id, image, province, province_id, status, ward, account_id)
+VALUES (GETDATE(), 'Mô tả nhà trọ', 'Địa chỉ chi tiết', 'Quận/Huyện', '1234', 'hinhanh.jpg', 'Tỉnh/Thành phố', '5678', 1, 'Phường/Xã', 1);
+SELECT * FROM dbo.motels;
+INSERT INTO dbo.category_room (descriptions, quantity, status) VALUES
+('Single Room', 10, 1),
+('Double Room', 5, 1);
+select *from category_room

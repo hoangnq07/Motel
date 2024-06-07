@@ -1,7 +1,5 @@
-<%-- Document : header.jsp Created on : 28-02-2024, 20:30:36 Author : PC --%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -36,8 +34,8 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="index.jsp" class="nav-item nav-link active">Home</a>
-                <a href="about.jsp" class="nav-item nav-link">About Us</a>
                 <a href="product.jsp" class="nav-item nav-link">Products</a>
+                <a href="about.jsp" class="nav-item nav-link">About Us</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                     <div class="dropdown-menu m-0">
@@ -55,19 +53,35 @@
                 </a>
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
-                        <div class="btn-sm-square bg-white rounded-circle ms-3">
-                            <img src="${pageContext.request.contextPath}/uploads/${sessionScope.user.avatar}" alt="Avatar" class="rounded-circle" onclick="toggleMenu(this)" width="50" height="50">
-                        </div>
-                        <ul id="menu" class="menu-list">
-                            <li><a href="account_info.jsp">User Profile</a></li>
-                            <li><a href="change_password.jsp">Change Password</a></li>
-                            <li><a href="logout">Log Out</a></li>
-                        </ul>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <c:choose>
+                                    <c:when test="${empty sessionScope.user.avatar}">
+                                        <small class="fa fa-user text-body"></small>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="${pageContext.request.contextPath}/uploads/${sessionScope.user.avatar}" alt="" width="35" height="35" class="rounded-circle">
+                                    </c:otherwise>
+                                </c:choose>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="userDropdown">
+                                <div class="message-body">
+                                    <a href="account_info.jsp" class="d-flex align-items-center gap-2 dropdown-item">
+                                        <i class="ti ti-user fs-6"></i>
+                                        <p class="mb-0 fs-3">User Profile</p>
+                                    </a>
+                                    <a href="change_password.jsp" class="d-flex align-items-center gap-2 dropdown-item">
+                                        <i class="ti ti-mail fs-6"></i>
+                                        <p class="mb-0 fs-3">Change Password</p>
+                                    </a>
+                                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
+                                </div>
+                            </div>
+                        </li>
                     </c:when>
                     <c:otherwise>
-                        <a class="btn-sm-square bg-white rounded-circle ms-3" href="login.jsp">
-                            <small class="fa fa-user text-body"></small>
-                        </a>
+                        <a class="btn btn-outline-primary ms-3" href="login.jsp">Đăng nhập</a>
+                        <a class="btn btn-primary ms-3" href="register.jsp">Đăng ký</a>
                     </c:otherwise>
                 </c:choose>
             </div>
@@ -85,25 +99,21 @@
 <script src="assets/js/main.js"></script>
 
 <script>
-    function toggleMenu(avatar) {
-        var menu = document.getElementById("menu");
-        if (menu.style.display === "none") {
-            menu.style.display = "block";
-            document.addEventListener("click", hideMenuOutside);
-        } else {
-            menu.style.display = "none";
-        }
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+        const userDropdown = document.getElementById("userDropdown");
+        const dropdownMenu = document.querySelector(".dropdown-menu-animate-up");
 
-    function hideMenuOutside(event) {
-        var menu = document.getElementById("menu");
-        var avatar = menu.previousElementSibling;
-        var isClickInside = menu.contains(event.target) || avatar === event.target;
-        if (!isClickInside) {
-            menu.style.display = "none";
-            document.removeEventListener("click", hideMenuOutside);
-        }
-    }
+        userDropdown.addEventListener("click", function(event) {
+            event.stopPropagation();
+            dropdownMenu.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(event) {
+            if (!dropdownMenu.contains(event.target) && !userDropdown.contains(event.target)) {
+                dropdownMenu.classList.remove("show");
+            }
+        });
+    });
 </script>
 </body>
 </html>

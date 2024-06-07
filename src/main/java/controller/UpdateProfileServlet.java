@@ -70,7 +70,7 @@ public class UpdateProfileServlet extends HttpServlet {
                 response.sendRedirect("account_info.jsp");
             } else {
                 request.setAttribute("error", "Failed to update profile.");
-                request.getRequestDispatcher("update_profile.jsp").forward(request, response);
+                request.getRequestDispatcher("account_info.jsp").forward(request, response);
             }
         } else {
             response.sendRedirect("login.jsp");

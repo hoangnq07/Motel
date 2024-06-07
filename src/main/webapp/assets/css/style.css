@@ -382,3 +382,12 @@
 .footer .copyright a:hover {
     color: var(--primary);
 }
+
+.dropdown-menu-animate-up {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    min-width: 200px;
+    right: 0;
+}
+
