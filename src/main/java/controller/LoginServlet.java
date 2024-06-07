@@ -28,7 +28,11 @@ public class LoginServlet extends HttpServlet {
             if (user.getRole().equals("admin")) {
                 session.setAttribute("user", AccountDAO.searchUser(email));
                 request.getRequestDispatcher("admin.jsp").forward(request, response);
-            } else if (user.getRole().equals("user")) {
+            }else if (user.getRole().equals("owner")){
+                session.setAttribute("owner", AccountDAO.searchUser(email));
+                request.getRequestDispatcher("owner-header.jsp").forward(request, response);
+
+            }else if (user.getRole().equals("user")) {
                 session.setAttribute("user", AccountDAO.searchUser(email));
                 request.getRequestDispatcher("home").forward(request, response);
             }
