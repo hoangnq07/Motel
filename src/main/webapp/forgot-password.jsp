@@ -6,17 +6,21 @@
     <title>Forgot Password</title>
 </head>
 <body>
-    <h1>Forgot Password</h1>
-    <c:if test="${not empty error}">
-        <p style="color: red;">${error}</p>
-    </c:if>
-    <form action="forgot-password" method="post">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <button type="submit">Submit</button>
-    </form>
-    <c:if test="${not empty message}">
-        <p style="color: blanchedalmonda;">${message}</p>
-    </c:if>
+    <jsp:include page="header.jsp" ></jsp:include>
+    <div class="container mt-5">
+        <h1>Forgot Password</h1>
+        <c:if test="${not empty error}">
+            <p style="color: red;">${error}</p>
+        </c:if>
+        <form action="forgot-password" method="post">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <button type="submit">Submit</button>
+        </form>
+        <c:if test="${not empty message}">
+            <p style="color: blanchedalmonda;">${message}</p>
+        </c:if>
+    </div>
+    <jsp:include page="footer.jsp" ></jsp:include>
 </body>
 </html>

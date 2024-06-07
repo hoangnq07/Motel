@@ -1,148 +1,119 @@
-<%-- Document : header.jsp Created on : 28-02-2024, 20:30:36 Author : PC --%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="vi">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Trang chủ</title>
-        <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-            }
-            .navbar {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                background-color: #f8f8f8;
-                padding: 10px 20px;
-                border-bottom: 1px solid #ccc;
-            }
-            .navbar .logo {
-                font-size: 20px;
-                font-weight: bold;
-            }
-            .navbar .menu {
-                display: flex;
-                gap: 20px;
-            }
-            .navbar .menu a {
-                text-decoration: none;
-                color: black;
-                font-size: 16px;
-            }
-            .navbar .buttons {
-                display: flex;
-                gap: 10px;
-            }
-            .navbar .buttons a {
-                text-decoration: none;
-                color: black;
-                padding: 5px 10px;
-                border: 1px solid #ccc;
-                background-color: white;
-                display: inline-block;
-                text-align: center;
-                cursor: pointer;
-            }
-            .navbar .buttons a:hover {
-                background-color: #e0e0e0;
-            }
-            .navbar .buttons a:visited {
-                color: black;
-            }
-            .menu-list {
-                list-style-type: none;
-                padding: 0;
-                margin: 0;
-                position: absolute;
-                right: 10px;
-                background-color: #f9f9f9;
-                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-                z-index: 1;
-                display: none;
-                min-width: 200px;
-            }
+<head>
+    <meta charset="utf-8">
+    <title>HOME</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+<body>
+<!-- Spinner Start -->
+<div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div class="spinner-border text-primary" role="status"></div>
+</div>
+<!-- Spinner End -->
 
-            .menu-list li {
-                width: 150px; /* Đặt chiều rộng cho các mục trong menu */
-            }
-
-            .menu-list li a {
-                color: black;
-                padding: 16px 20px;
-                text-decoration: none;
-                display: block;
-                font-size: 16px;
-                white-space: nowrap; /* Ngăn chữ bị xuống dòng */
-                overflow: hidden; /* Ẩn nội dung vượt quá chiều rộng */
-                text-overflow: ellipsis; /* Hiển thị dấu ... cho nội dung vượt quá */
-            }
-
-            .menu-list li a:hover {
-                background-color: #f1f1f1;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="navbar">
-            <div class="logo">HOME</div>
-            <div class="menu">
-                <a href="index.jsp">Trang chủ</a>
-                <a href="#">Sản phẩm</a>
-                <a href="#">Chia sẻ</a>
+<!-- Navbar Start -->
+<div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+    <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.jsp" class="navbar-brand ms-4 ms-lg-0">
+            <h1 class="fw-bold text-primary mb-4">H<span class="text-secondary">O</span>ME</h1>
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+                <a href="index.jsp" class="nav-item nav-link active">Home</a>
+                <a href="product.jsp" class="nav-item nav-link">Products</a>
+                <a href="about.jsp" class="nav-item nav-link">About Us</a>
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <div class="dropdown-menu m-0">
+                        <a href="blog.jsp" class="dropdown-item">Blog Grid</a>
+                        <a href="feature.jsp" class="dropdown-item">Our Features</a>
+                        <a href="testimonial.jsp" class="dropdown-item">Testimonial</a>
+                        <a href="404.jsp" class="dropdown-item">404 Page</a>
+                    </div>
+                </div>
+                <a href="contact.jsp" class="nav-item nav-link">Contact Us</a>
             </div>
-            <div class="buttons">
+            <div class="d-none d-lg-flex ms-2">
+                <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
+                    <small class="fa fa-search text-body"></small>
+                </a>
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
-                        <div class="user-menu">
-                            <c:choose>
-                                <c:when test="${empty sessionScope.user.avatar}">
-                                    <img src="default_avatar.png" alt="Avatar" class="avatar" onclick="toggleMenu(this)" width="50" height="50">
-                                </c:when>
-                                <c:otherwise>
-                                    <img src="${pageContext.request.contextPath}/uploads/${sessionScope.user.avatar}" alt="Avatar" class="avatar" onclick="toggleMenu(this)" width="50" height="50">
-                                </c:otherwise>
-                            </c:choose>
-                            <ul id="menu" class="menu-list">
-                                <li><a href="account_info.jsp">User Profile</a></li>
-                                <li><a href="change_password.jsp">Change Password</a></li>
-                                <li><a href="logout">Log Out</a></li>
-                            </ul>
-                        </div>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <c:choose>
+                                    <c:when test="${empty sessionScope.user.avatar}">
+                                        <small class="fa fa-user text-body"></small>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <img src="${pageContext.request.contextPath}/uploads/${sessionScope.user.avatar}" alt="" width="35" height="35" class="rounded-circle">
+                                    </c:otherwise>
+                                </c:choose>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="userDropdown">
+                                <div class="message-body">
+                                    <a href="account_info.jsp" class="d-flex align-items-center gap-2 dropdown-item">
+                                        <i class="ti ti-user fs-6"></i>
+                                        <p class="mb-0 fs-3">User Profile</p>
+                                    </a>
+                                    <a href="change_password.jsp" class="d-flex align-items-center gap-2 dropdown-item">
+                                        <i class="ti ti-mail fs-6"></i>
+                                        <p class="mb-0 fs-3">Change Password</p>
+                                    </a>
+                                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
+                                </div>
+                            </div>
+                        </li>
                     </c:when>
                     <c:otherwise>
-                        <a href="login.jsp">Login</a>
-                        <a href="registration.jsp">Register</a>
+                        <a class="btn btn-outline-primary ms-3" href="login.jsp">Đăng nhập</a>
+                        <a class="btn btn-primary ms-3" href="register.jsp">Đăng ký</a>
                     </c:otherwise>
                 </c:choose>
             </div>
         </div>
-    </div>
-</body>
+    </nav>
+</div>
+<!-- Navbar End -->
+
+<!-- JavaScript Libraries -->
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/lib/wow/wow.min.js"></script>
+<script src="assets/lib/easing/easing.min.js"></script>
+<script src="assets/lib/waypoints/waypoints.min.js"></script>
+<script src="assets/js/main.js"></script>
+
 <script>
-    function toggleMenu(avatar) {
-        var menu = document.getElementById("menu");
-        if (menu.style.display === "none") {
-            menu.style.display = "block";
-            document.addEventListener("click", hideMenuOutside);
-        } else {
-            menu.style.display = "none";
-        }
-    }
+    document.addEventListener("DOMContentLoaded", function() {
+        const userDropdown = document.getElementById("userDropdown");
+        const dropdownMenu = document.querySelector(".dropdown-menu-animate-up");
 
-    function hideMenuOutside(event) {
-        var menu = document.getElementById("menu");
-        var avatar = menu.previousElementSibling;
-        var isClickInside = menu.contains(event.target) || avatar === event.target;
-        if (!isClickInside) {
-            menu.style.display = "none";
-            document.removeEventListener("click", hideMenuOutside);
-        }
-    }
+        userDropdown.addEventListener("click", function(event) {
+            event.stopPropagation();
+            dropdownMenu.classList.toggle("show");
+        });
+
+        document.addEventListener("click", function(event) {
+            if (!dropdownMenu.contains(event.target) && !userDropdown.contains(event.target)) {
+                dropdownMenu.classList.remove("show");
+            }
+        });
+    });
 </script>
+</body>
 </html>
-
