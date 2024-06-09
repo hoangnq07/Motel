@@ -94,6 +94,7 @@
                 <a href="index.jsp">Trang chủ</a>
                 <a href="#">Sản phẩm</a>
                 <a href="#">Chia sẻ</a>
+                <a href="myMotel.jsp">My motel</a>
             </div>
             <div class="buttons">
                 <c:choose>
