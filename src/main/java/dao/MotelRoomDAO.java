@@ -8,65 +8,123 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MotelRoomDAO {
+    private Connection connection;
 
-    public List<MotelRoom> getAllMotelRooms() throws SQLException {
-        List<MotelRoom> motelRooms = new ArrayList<>();
-        String sql = "SELECT * FROM dbo.motel_room";
-        try (Connection conn = DBcontext.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+    public MotelRoomDAO() throws SQLException {
+        connection = DBcontext.getConnection();
+    }
+
+    public List<MotelRoom> getAllMotelRooms(int page, int pageSize) {
+        List<MotelRoom> rooms = new ArrayList<>();
+        String query = "SELECT * FROM motel_room ORDER BY create_date DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, (page - 1) * pageSize);
+            ps.setInt(2, pageSize);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 MotelRoom room = new MotelRoom();
                 room.setMotelRoomId(rs.getInt("motel_room_id"));
-                room.setCreateDate(rs.getDate("create_date"));
-                room.setDescriptions(rs.getString("descriptions"));
+                room.setDescription(rs.getString("descriptions"));
                 room.setLength(rs.getDouble("length"));
                 room.setWidth(rs.getDouble("width"));
-                room.setStatus(rs.getBoolean("status"));
-                room.setVideo(rs.getString("video"));
+                room.setRoomPrice(rs.getDouble("room_price"));
+                room.setImage(getImageByRoomId(rs.getInt("motel_room_id")));
+                rooms.add(room);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rooms;
+    }
+    public int getTotalMotelRooms() {
+        String query = "SELECT COUNT(*) FROM motel_room";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private String getImageByRoomId(int roomId) {
+        String query = "SELECT name FROM image WHERE motel_room_id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, roomId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public MotelRoom getMotelRoomById(int roomId) {
+        String query = "SELECT mr.*, a.fullname, a.phone " +
+                "FROM motel_room mr " +
+                "JOIN accounts a ON mr.account_id = a.account_id " +
+                "WHERE mr.motel_room_id = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, roomId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                MotelRoom room = new MotelRoom();
+                room.setMotelRoomId(rs.getInt("motel_room_id"));
+                room.setDescription(rs.getString("descriptions"));
+                room.setLength(rs.getDouble("length"));
+                room.setWidth(rs.getDouble("width"));
+                room.setRoomPrice(rs.getDouble("room_price"));
+                room.setElectricityPrice(rs.getDouble("electricity_price"));
+                room.setWaterPrice(rs.getDouble("water_price"));
+                room.setWifiPrice(rs.getDouble("wifi_price"));
                 room.setCategoryRoomId(rs.getInt("category_room_id"));
                 room.setMotelId(rs.getInt("motel_id"));
-                room.setRoomStatus(rs.getString("room_status"));
-                motelRooms.add(room);
+                room.setRoomStatus(rs.getBoolean("room_status"));
+                room.setAccountId(rs.getInt("account_id"));
+                room.setAccountFullname(rs.getString("fullname"));
+                room.setAccountPhone(rs.getString("phone"));
+                room.setImage(getImageByRoomId(roomId));
+                return room;
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return motelRooms;
+        return null;
     }
 
-    public MotelRoom getMotelRoomById(int id) throws SQLException {
-        MotelRoom room = null;
-        String sql = "SELECT * FROM dbo.motel_room WHERE motel_room_id = ?";
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    room = new MotelRoom();
-                    room.setMotelRoomId(rs.getInt("motel_room_id"));
-                    room.setCreateDate(rs.getDate("create_date"));
-                    room.setDescriptions(rs.getString("descriptions"));
-                    room.setLength(rs.getDouble("length"));
-                    room.setWidth(rs.getDouble("width"));
-                    room.setStatus(rs.getBoolean("status"));
-                    room.setVideo(rs.getString("video"));
-                    room.setCategoryRoomId(rs.getInt("category_room_id"));
-                    room.setMotelId(rs.getInt("motel_id"));
-                    room.setRoomStatus(rs.getString("room_status"));
-                }
-            }
-        }
-        return room;
+    public static void main(String[] args) {
+        try {
+            MotelRoomDAO motelRoomDAO = new MotelRoomDAO();
+            MotelRoom room = motelRoomDAO.getMotelRoomById(1);
+            System.out.println(room);
+        } catch (SQLException e) {
+            e.printStackTrace();
     }
-
+        }
     public void addMotelRoom(MotelRoom room) throws SQLException {
-        String sql = "INSERT INTO dbo.motel_room (create_date, descriptions, length, width, status, video, category_room_id, motel_id, room_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO dbo.motel_room (create_date, descriptions, length, width, room_price, electricity_price, water_price, wifi_price, room_status, category_room_id, motel_id, account_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDate(1, new java.sql.Date(System.currentTimeMillis()));
-            stmt.setString(2, room.getDescriptions());
+            stmt.setString(2, room.getDescription());
             stmt.setDouble(3, room.getLength());
             stmt.setDouble(4, room.getWidth());
-            stmt.setBoolean(5, room.isStatus());
-            stmt.setString(6, room.getVideo());
-            stmt.setInt(7, room.getCategoryRoomId());
-            stmt.setInt(8, room.getMotelId());
-            stmt.setString(9, room.getRoomStatus());
+            stmt.setDouble(5, room.getRoomPrice());
+            stmt.setDouble(6, room.getElectricityPrice());
+            stmt.setDouble(7, room.getWaterPrice());
+            stmt.setDouble(8, room.getWifiPrice());
+            stmt.setBoolean(9, room.isRoomStatus());
+            stmt.setInt(10, room.getCategoryRoomId());
+            stmt.setInt(11, room.getMotelId());
+            stmt.setInt(12, room.getAccountId());
             stmt.executeUpdate();
         }
     }
@@ -74,17 +132,20 @@ public class MotelRoomDAO {
     public void updateMotelRoom(MotelRoom room) throws SQLException {
         int motelRoomId = room.getMotelRoomId();
         if (isMotelRoomExists(motelRoomId)) {
-            String sql = "UPDATE dbo.motel_room SET descriptions = ?, length = ?, width = ?, status = ?, video = ?, category_room_id = ?, motel_id = ?, room_status = ? WHERE motel_room_id = ?";
+            String sql = "UPDATE dbo.motel_room SET descriptions = ?, length = ?, width = ?, room_price = ?, electricity_price = ?, water_price = ?, wifi_price = ?, room_status = ?, category_room_id = ?, motel_id = ?, account_id = ? WHERE motel_room_id = ?";
             try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, room.getDescriptions());
+                stmt.setString(1, room.getDescription());
                 stmt.setDouble(2, room.getLength());
                 stmt.setDouble(3, room.getWidth());
-                stmt.setBoolean(4, room.isStatus());
-                stmt.setString(5, room.getVideo());
-                stmt.setInt(6, room.getCategoryRoomId());
-                stmt.setInt(7, room.getMotelId());
-                stmt.setString(8, room.getRoomStatus());
-                stmt.setInt(9, motelRoomId);
+                stmt.setDouble(4, room.getRoomPrice());
+                stmt.setDouble(5, room.getElectricityPrice());
+                stmt.setDouble(6, room.getWaterPrice());
+                stmt.setDouble(7, room.getWifiPrice());
+                stmt.setBoolean(8, room.isRoomStatus());
+                stmt.setInt(9, room.getCategoryRoomId());
+                stmt.setInt(10, room.getMotelId());
+                stmt.setInt(11, room.getAccountId());
+                stmt.setInt(12, motelRoomId);
                 stmt.executeUpdate();
             }
         } else {

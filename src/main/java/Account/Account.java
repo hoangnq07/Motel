@@ -5,13 +5,14 @@ import dao.AccountDAO;
 import java.io.Serializable;
 import java.sql.Date;
 
-public class User implements Serializable {
+public class Account implements Serializable {
 
     private int accountId;
     private boolean active;
     private String avatar;
-    private String citizen;
+    private String citizenId;
     private Date createDate;
+    private Date dob;
     private String email;
     private String fullname;
     private boolean gender;
@@ -19,34 +20,36 @@ public class User implements Serializable {
     private String phone;
     private String role;
 
-    public User() {
+    public Account() {
     }
 
-    public User(String email, String password, boolean gender, String phone) {
+    public Account(String email, String password, boolean gender, String phone) {
         this.email = email;
         this.password = password;
         this.gender = gender;
         this.phone = phone;
     }
-     public User(String email, String role) {
+     public Account(String email, String role) {
         this.email = email;
         this.role = role;
     }
-    public User(int accountId, boolean active, String avatar, String citizen, Date createDate, String email, String fullname, boolean gender, String password, String phone, String role) {
+
+    public Account(int accountId, String role, String phone, String password, boolean gender, String fullname, String email, Date dob, Date createDate, String citizenId, String avatar, boolean active) {
         this.accountId = accountId;
-        this.active = active;
-        this.avatar = avatar;
-        this.citizen = citizen;
-        this.createDate = createDate;
-        this.email = email;
-        this.fullname = fullname;
-        this.gender = gender;
-        this.password = password;
-        this.phone = phone;
         this.role = role;
+        this.phone = phone;
+        this.password = password;
+        this.gender = gender;
+        this.fullname = fullname;
+        this.email = email;
+        this.dob = dob;
+        this.createDate = createDate;
+        this.citizenId = citizenId;
+        this.avatar = avatar;
+        this.active = active;
     }
 
-    public User(String email, String pass, String phone) {
+    public Account(String email, String pass, String phone) {
         this.email = email;
         this.password = pass;
         this.phone = phone;
@@ -74,14 +77,6 @@ public class User implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    public String getCitizen() {
-        return citizen;
-    }
-
-    public void setCitizen(String citizen) {
-        this.citizen = citizen;
     }
 
     public Date getCreateDate() {
@@ -126,6 +121,22 @@ public class User implements Serializable {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getCitizenId() {
+        return citizenId;
+    }
+
+    public void setCitizenId(String citizenId) {
+        this.citizenId = citizenId;
+    }
+
+    public Date getDob() {
+        return dob;
+    }
+
+    public void setDob(Date dob) {
+        this.dob = dob;
     }
 
     public void setPhone(String phone) {

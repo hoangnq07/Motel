@@ -1,7 +1,7 @@
 package controller;
 
 
-import Account.User;
+import Account.Account;
 import dao.AccountDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,7 +22,7 @@ public class VerificationServlet extends HttpServlet {
         String storedCode = (String) session.getAttribute("verificationCode");
 
         if (enteredCode.equals(storedCode)) {
-            User u = (User)session.getAttribute("User");
+            Account u = (Account) session.getAttribute("User");
             boolean registrationSuccess = AccountDAO.registerUser(u);
 
             if (registrationSuccess) {

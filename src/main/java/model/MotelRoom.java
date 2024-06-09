@@ -1,18 +1,64 @@
 package model;
 
+import java.sql.Date;
+
 public class MotelRoom {
     private int motelRoomId;
-    private java.sql.Date createDate;
-    private String descriptions;
+    private Date createDate;
+    private String description;
     private double length;
     private double width;
-    private boolean status;
-    private String video;
+    private double roomPrice;
+    private double electricityPrice;
+    private double waterPrice;
+    private double wifiPrice;
     private int categoryRoomId;
     private int motelId;
-    private String roomStatus;
+    private boolean roomStatus;
+    private int accountId;
+    private String image;
+    private String address;
+    private String accountFullname;
+    private String accountPhone;
 
-    // Getters and Setters
+    public MotelRoom() {
+    }
+
+    public MotelRoom(int motelRoomId, String description, Date createDate, double length, double electricityPrice, double roomPrice, double width, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, String image, int accountId, String address, String accountFullname, String accountPhone) {
+        this.motelRoomId = motelRoomId;
+        this.description = description;
+        this.createDate = createDate;
+        this.length = length;
+        this.electricityPrice = electricityPrice;
+        this.roomPrice = roomPrice;
+        this.width = width;
+        this.waterPrice = waterPrice;
+        this.wifiPrice = wifiPrice;
+        this.categoryRoomId = categoryRoomId;
+        this.motelId = motelId;
+        this.roomStatus = roomStatus;
+        this.image = image;
+        this.accountId = accountId;
+        this.address = address;
+        this.accountFullname = accountFullname;
+        this.accountPhone = accountPhone;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
     public int getMotelRoomId() {
         return motelRoomId;
     }
@@ -21,20 +67,20 @@ public class MotelRoom {
         this.motelRoomId = motelRoomId;
     }
 
-    public java.sql.Date getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(java.sql.Date createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public String getDescriptions() {
-        return descriptions;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriptions(String descriptions) {
-        this.descriptions = descriptions;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public double getLength() {
@@ -53,20 +99,36 @@ public class MotelRoom {
         this.width = width;
     }
 
-    public boolean isStatus() {
-        return status;
+    public double getRoomPrice() {
+        return roomPrice;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setRoomPrice(double roomPrice) {
+        this.roomPrice = roomPrice;
     }
 
-    public String getVideo() {
-        return video;
+    public double getElectricityPrice() {
+        return electricityPrice;
     }
 
-    public void setVideo(String video) {
-        this.video = video;
+    public void setElectricityPrice(double electricityPrice) {
+        this.electricityPrice = electricityPrice;
+    }
+
+    public double getWaterPrice() {
+        return waterPrice;
+    }
+
+    public void setWaterPrice(double waterPrice) {
+        this.waterPrice = waterPrice;
+    }
+
+    public double getWifiPrice() {
+        return wifiPrice;
+    }
+
+    public void setWifiPrice(double wifiPrice) {
+        this.wifiPrice = wifiPrice;
     }
 
     public int getCategoryRoomId() {
@@ -85,27 +147,36 @@ public class MotelRoom {
         this.motelId = motelId;
     }
 
-    public String getRoomStatus() {
+    public boolean isRoomStatus() {
         return roomStatus;
     }
 
-    public void setRoomStatus(String roomStatus) {
+    public void setRoomStatus(boolean roomStatus) {
         this.roomStatus = roomStatus;
     }
 
-    @Override
-    public String toString() {
-        return "MotelRoom{" +
-                "motelRoomId=" + motelRoomId +
-                ", createDate=" + createDate +
-                ", descriptions='" + descriptions + '\'' +
-                ", length=" + length +
-                ", width=" + width +
-                ", status=" + status +
-                ", video='" + video + '\'' +
-                ", categoryRoomId=" + categoryRoomId +
-                ", motelId=" + motelId +
-                ", roomStatus='" + roomStatus + '\'' +
-                '}';
+    public int getAccountId() {
+        return accountId;
     }
+
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
+    }
+
+    public String getAccountFullname() {
+        return accountFullname;
+    }
+
+    public void setAccountFullname(String accountFullname) {
+        this.accountFullname = accountFullname;
+    }
+
+    public String getAccountPhone() {
+        return accountPhone;
+    }
+
+    public void setAccountPhone(String accountPhone) {
+        this.accountPhone = accountPhone;
+    }
+
 }

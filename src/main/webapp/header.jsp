@@ -34,7 +34,7 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="index.jsp" class="nav-item nav-link active">Home</a>
-                <a href="product.jsp" class="nav-item nav-link">Products</a>
+                <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
                 <a href="about.jsp" class="nav-item nav-link">About Us</a>
                 <div class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>

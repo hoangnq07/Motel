@@ -15,16 +15,17 @@ public class MotelRoomServlet extends HttpServlet {
     private MotelRoomDAO motelRoomDAO;
 
     public void init() {
-        motelRoomDAO = new MotelRoomDAO();
+        try {
+            motelRoomDAO = new MotelRoomDAO();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
-            List<MotelRoom> motelRooms = motelRoomDAO.getAllMotelRooms();
-            request.setAttribute("motelRooms", motelRooms);
-            request.getRequestDispatcher("room-list.jsp").forward(request, response);
-        } catch (SQLException ex) {
-            throw new ServletException(ex);
+        String action = request.getParameter("action");
+        if (action == null || action.equals("list")) {
+            listRooms(request, response);
         }
     }
 
@@ -46,16 +47,29 @@ public class MotelRoomServlet extends HttpServlet {
 //                break;
         }
     }
+    private void listRooms(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int page = 1;
+        int pageSize = 9;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(page, pageSize);
+        int totalRooms = motelRoomDAO.getTotalMotelRooms();
+        int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
 
+        request.setAttribute("rooms", rooms);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.getRequestDispatcher("/listRooms.jsp").forward(request, response);
+    }
     private void createMotelRoom(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         MotelRoom room = new MotelRoom();
-        room.setDescriptions(request.getParameter("descriptions"));
+        room.setDescription(request.getParameter("descriptions"));
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
-        room.setStatus(Boolean.parseBoolean(request.getParameter("status")));
+        room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
         room.setCategoryRoomId(Integer.parseInt(request.getParameter("categoryRoomId")));
         room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
-        room.setRoomStatus(request.getParameter("roomStatus"));
 
         try {
             motelRoomDAO.addMotelRoom(room);

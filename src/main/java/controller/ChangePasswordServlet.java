@@ -5,7 +5,7 @@
 
 package controller;
 
-import Account.User;
+import Account.Account;
 import dao.AccountDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -31,7 +31,7 @@ public class ChangePasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        Account user = (Account) session.getAttribute("user");
 
         if (user == null) {
             response.sendRedirect("login.jsp");
@@ -58,7 +58,7 @@ public class ChangePasswordServlet extends HttpServlet {
         }
 
         // Xác thực mật khẩu hiện tại
-        User authenticatedUser = AccountDAO.authenticateUser(email, currentPassword);
+        Account authenticatedUser = AccountDAO.authenticateUser(email, currentPassword);
         if (authenticatedUser == null) {
             request.setAttribute("status", "Current password is incorrect.");
             request.getRequestDispatcher("change_password.jsp").forward(request, response);
