@@ -1,4 +1,5 @@
 package controller;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -9,6 +10,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 @WebServlet("/motel-rooms")
 public class MotelRoomServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -40,13 +42,14 @@ public class MotelRoomServlet extends HttpServlet {
                 createMotelRoom(request, response);
                 break;
             case "update":
-//                updateMotelRoom(request, response);
-//                break;
+                // updateMotelRoom(request, response);
+                break;
             case "delete":
-//                deleteMotelRoom(request, response);
-//                break;
+                // deleteMotelRoom(request, response);
+                break;
         }
     }
+
     private void listRooms(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int page = 1;
         int pageSize = 9;
@@ -62,6 +65,7 @@ public class MotelRoomServlet extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("/listRooms.jsp").forward(request, response);
     }
+
     private void createMotelRoom(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         MotelRoom room = new MotelRoom();
         room.setDescription(request.getParameter("descriptions"));
@@ -78,6 +82,4 @@ public class MotelRoomServlet extends HttpServlet {
             throw new ServletException(ex);
         }
     }
-
-    // Các phương thức khác như updateMotelRoom, deleteMotelRoom, ...
 }

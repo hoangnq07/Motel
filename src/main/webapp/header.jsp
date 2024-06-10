@@ -37,15 +37,21 @@
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
                 <a href="about.jsp" class="nav-item nav-link">About Us</a>
                 <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                    <a href="#" class="nav-link dropdown-toggle fa-solid fa-user" data-bs-toggle="dropdown"></a>
                     <div class="dropdown-menu m-0">
-                        <a href="blog.jsp" class="dropdown-item">Blog Grid</a>
-                        <a href="feature.jsp" class="dropdown-item">Our Features</a>
-                        <a href="testimonial.jsp" class="dropdown-item">Testimonial</a>
-                        <a href="404.jsp" class="dropdown-item">404 Page</a>
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.user}">
+                                <a href="account_info.jsp" class="dropdown-item">User Profile</a>
+                                <a href="change_password.jsp" class="dropdown-item">Change Password</a>
+                                <a href="logout" class="dropdown-item">Log Out</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="login.jsp" class="dropdown-item">Đăng nhập</a>
+                                <a href="registration.jsp" class="dropdown-item">Đăng ký</a>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </div>
-                <a href="contact.jsp" class="nav-item nav-link">Contact Us</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
                 <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
@@ -81,11 +87,12 @@
                     </c:when>
                     <c:otherwise>
                         <a class="btn btn-outline-primary ms-3" href="login.jsp">Đăng nhập</a>
-                        <a class="btn btn-primary ms-3" href="register.jsp">Đăng ký</a>
+                        <a class="btn btn-primary ms-3" href="registration.jsp">Đăng ký</a>
                     </c:otherwise>
                 </c:choose>
             </div>
         </div>
+
     </nav>
 </div>
 <!-- Navbar End -->
