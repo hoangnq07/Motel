@@ -21,6 +21,12 @@ public class MotelRoom {
     private String accountFullname;
     private String accountPhone;
 
+    private String detailAddress;
+    private String ward;
+    private String district;
+    private String city;
+    private String province;
+
     public MotelRoom() {
     }
 
@@ -42,6 +48,71 @@ public class MotelRoom {
         this.address = address;
         this.accountFullname = accountFullname;
         this.accountPhone = accountPhone;
+    }
+
+    public MotelRoom(int motelRoomId, Date createDate, String description, double length, double width, double roomPrice, double electricityPrice, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, int accountId, String image, String address, String accountFullname, String accountPhone, String detailAddress, String ward, String district, String city, String province) {
+        this.motelRoomId = motelRoomId;
+        this.createDate = createDate;
+        this.description = description;
+        this.length = length;
+        this.width = width;
+        this.roomPrice = roomPrice;
+        this.electricityPrice = electricityPrice;
+        this.waterPrice = waterPrice;
+        this.wifiPrice = wifiPrice;
+        this.categoryRoomId = categoryRoomId;
+        this.motelId = motelId;
+        this.roomStatus = roomStatus;
+        this.accountId = accountId;
+        this.image = image;
+        this.address = address;
+        this.accountFullname = accountFullname;
+        this.accountPhone = accountPhone;
+        this.detailAddress = detailAddress;
+        this.ward = ward;
+        this.district = district;
+        this.city = city;
+        this.province = province;
+    }
+
+    public String getDetailAddress() {
+        return detailAddress;
+    }
+
+    public void setDetailAddress(String detailAddress) {
+        this.detailAddress = detailAddress;
+    }
+
+    public String getWard() {
+        return ward;
+    }
+
+    public void setWard(String ward) {
+        this.ward = ward;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+        this.province = province;
     }
 
     public String getImage() {

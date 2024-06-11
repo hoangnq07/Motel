@@ -34,6 +34,7 @@
             <p><strong>WiFi Price:</strong> <%= room.getWifiPrice() %></p>
             <p><strong>Account Fullname:</strong> <%= room.getAccountFullname() %></p>
             <p><strong>Account Phone:</strong> <%= room.getAccountPhone() %></p>
+            <p><strong>Address:</strong> <%= room.getDetailAddress() %>, <%= room.getWard() %>, <%= room.getDistrict() %>, <%= room.getCity() %>, <%= room.getProvince() %></p>
         </div>
     </div>
 </div>

@@ -27,7 +27,7 @@
     <% for (MotelRoom room : motelRooms) { %>
     <tr>
         <td><%= room.getMotelRoomId() %></td>
-        <td><%= room.getDescriptions() %></td>
+        <td><%= room.getDescription() %></td>
         <td><%= room.getLength() %></td>
         <td><%= room.getWidth() %></td>
         <td><%= room.isStatus() ? "Đang hoạt động" : "Ngừng hoạt động" %></td>
