@@ -1,6 +1,6 @@
 package dao;
 
-import Account.User;
+import Account.Account;
 import context.DBcontext;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -12,9 +12,9 @@ public class AccountDAO {
 
     private static final String LOGIN = "SELECT email,password,role from [accounts] where email=?";
 
-    public static User searchUser(String email) {
+    public static Account searchUser(String email) {
         String QUERY = "SELECT * FROM accounts WHERE email=?";
-        User user = null;
+        Account acc = null;
 
         try (Connection conn = DBcontext.getConnection()) {
             try (PreparedStatement pst = conn.prepareStatement(QUERY)) {
@@ -22,18 +22,19 @@ public class AccountDAO {
                 ResultSet rs = pst.executeQuery();
 
                 if (rs.next()) {
-                    user = new User(
+                    acc = new Account(
                             rs.getInt("account_id"),
-                            rs.getBoolean("active"),
-                            rs.getString("avatar"),
-                            rs.getString("citizen"),
-                            rs.getDate("create_date"),
-                            rs.getString("email"),
-                            rs.getString("fullname"),
-                            rs.getBoolean("gender"),
-                            "",
+                            rs.getString("role"),
                             rs.getString("phone"),
-                            rs.getString("role")
+                            "",
+                            rs.getBoolean("gender"),
+                            rs.getString("fullname"),
+                            rs.getString("email"),
+                            rs.getDate("dob"),
+                            rs.getDate("create_date"),
+                            rs.getString("citizen_id"),
+                            rs.getString("avatar"),
+                            rs.getBoolean("active")
                     );
                 }
             }
@@ -41,11 +42,11 @@ public class AccountDAO {
             e.printStackTrace();
         }
 
-        return user;
+        return acc;
     }
 
-    public static User authenticateUser(String email, String password) {
-        User user = null;
+    public static Account authenticateUser(String email, String password) {
+        Account user = null;
 
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(LOGIN)) {
             pst.setString(1, email);
@@ -55,7 +56,7 @@ public class AccountDAO {
                 String hashedPassword = rs.getString("password");
                 if (BCrypt.checkpw(password, hashedPassword)) {
                     String role = rs.getString("role");
-                    user = new User(email, role);
+                    user = new Account(email, role);
                 }
             }
         } catch (Exception e) {
@@ -65,7 +66,7 @@ public class AccountDAO {
         return user;
     }
 
-    public static boolean registerUser(User u) {
+    public static boolean registerUser(Account u) {
         String QUERY = "INSERT INTO accounts (active, email, password, gender, phone, role) VALUES (1,?, ?, 1, ?, 'user')";
 
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
@@ -114,13 +115,13 @@ public class AccountDAO {
         return false;
     }
 
-    public static boolean updateUser(User user) {
-        String QUERY = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen = ?, avatar = ? WHERE account_id = ?";
+    public static boolean updateUser(Account user) {
+        String QUERY = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen_id = ?, avatar = ? WHERE account_id = ?";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
             pst.setString(1, user.getFullname());
             pst.setBoolean(2, user.isGender());
             pst.setString(3, user.getPhone());
-            pst.setString(4, user.getCitizen());
+            pst.setString(4, user.getCitizenId());
             pst.setString(5, user.getAvatar());
             pst.setInt(6, user.getAccountId());
 
@@ -178,8 +179,8 @@ public class AccountDAO {
 
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
-//        System.out.println(searchUser("admin2@gmail.com"));
-        System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoangasd@123"));
+//        System.out.println(searchUser("hoangnq417@gmail.com"));
+//        System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoangasd@123"));
 //        System.out.println(registerUser(new User("nguyenhoang5@gmail.com", "123456", "012345678")));
     }
 }

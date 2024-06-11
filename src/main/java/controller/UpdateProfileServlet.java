@@ -1,6 +1,6 @@
 package controller;
 
-import Account.User;
+import Account.Account;
 import dao.AccountDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -21,7 +21,7 @@ public class UpdateProfileServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("user");
+        Account user = (Account) session.getAttribute("user");
 
         if (user != null) {
             String fullName = request.getParameter("fullName");
@@ -51,7 +51,7 @@ public class UpdateProfileServlet extends HttpServlet {
                 user.setFullname(fullName);
                 user.setGender(gender);
                 user.setPhone(phone);
-                user.setCitizen(citizen);
+                user.setCitizenId(citizen);
                 if (fileName != null) {
                     user.setAvatar(fileName);
                 }

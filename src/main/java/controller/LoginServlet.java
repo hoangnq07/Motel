@@ -1,6 +1,6 @@
 package controller;
 
-import Account.User;
+import Account.Account;
 import dao.AccountDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         HttpSession session = request.getSession();
-        User user = AccountDAO.authenticateUser(email, password);
+        Account user = AccountDAO.authenticateUser(email, password);
         if (user != null) {
             if (user.getRole().equals("admin")) {
                 session.setAttribute("user", AccountDAO.searchUser(email));

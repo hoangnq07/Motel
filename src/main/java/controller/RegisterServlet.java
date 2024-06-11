@@ -1,6 +1,6 @@
 package controller;
 
-import Account.User;
+import Account.Account;
 import dao.AccountDAO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.AddressException;
@@ -26,7 +26,7 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
         String phone = request.getParameter("phone");
-        User u = new User(email, pass, phone);
+        Account u = new Account(email, pass, phone);
         // Kiểm tra xem email đã tồn tại hay chưa
         if (AccountDAO.isEmailExist(email)) {
             request.setAttribute("status", "Email already exists.");
