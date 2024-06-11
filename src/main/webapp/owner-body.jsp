@@ -14,30 +14,23 @@
 <!-- mymotel -->
 <jsp:include page="header.jsp"></jsp:include>
 <div class="container-fluid mt-10">
-     <div class="row">
+    <div class="row">
         <div class="col-2">
             <ul class="nav flex-column">
                 <li class="nav-item">
-<<<<<<< HEAD
                     <a class="nav-link active" href="#" data-target="customer-management">Quản lý Thành viên</a>
-=======
-                    <a class="nav-link active" href="motel-list.jsp" data-target="motel-management">Quản lý Phòng trọ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="motel-rooms-list.jsp" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
+                    <a class="nav-link" href="#" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="renters.jsp" data-target="customer-management">Quản lý Thành viên</a>
->>>>>>> origin/taskbaoupdate
+                    <a class="nav-link" href="#" data-target="customer-management">Quản lý Thành viên</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" data-target="notifications">Thông báo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-target="sendBill">Hóa Đơn</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-target="addMeterReading">Thêm Chỉ Số Điện & Nước</a>
+                    <a class="nav-link" href="#" data-target="create invoice">Hóa đơn</a>
                 </li>
             </ul>
         </div>
@@ -45,20 +38,17 @@
             <div id="motel-management" class="content">
                 <jsp:include page="motel-list.jsp"></jsp:include>
             </div>
-            <div id="motel-room-management" class="content">
+            <div id="motel-rooms-management" class="content d-none">
                 <jsp:include page="motel-rooms-list.jsp"></jsp:include>
             </div>
-            <div id="customer-management" class="content">
+            <div id="customer-management" class="content d-none">
                 <jsp:include page="renters.jsp"></jsp:include>
             </div>
             <div id="notifications" class="content d-none">
                 <jsp:include page="notify.jsp"></jsp:include>
             </div>
-            <div id="sendBill" class="content d-none">
-                <jsp:include page="sendBill.jsp"></jsp:include>
-            </div>
-            <div id="addMeterReading" class="content d-none">
-                <jsp:include page="addMeterReading.jsp"></jsp:include>
+            <div id="createinvoice" class="content d-none">
+                <jsp:include page="createInvoice.jsp"></jsp:include>
             </div>
         </div>
     </div>

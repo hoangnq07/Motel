@@ -20,7 +20,38 @@ public class RentersServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+        String email = request.getParameter("email");
+        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
+
+        try {
+            DBcontext dbContext = new DBcontext();
+            Connection conn = dbContext.getConnection();
+
+            // Lấy account_id từ email
+            String sqlSelect = "SELECT account_id FROM dbo.accounts WHERE email = ?";
+            PreparedStatement psSelect = conn.prepareStatement(sqlSelect);
+            psSelect.setString(1, email);
+            int accountId = -1;
+            var rs = psSelect.executeQuery();
+            if (rs.next()) {
+                accountId = rs.getInt("account_id");
+            }
+
+            if (accountId != -1) {
+                // Thêm người thuê vào phòng trọ
+                String sqlInsert = "INSERT INTO dbo.renter (renter_id, renter_date, motel_room_id) VALUES (?, GETDATE(), ?)";
+                PreparedStatement psInsert = conn.prepareStatement(sqlInsert);
+                psInsert.setInt(1, accountId);
+                psInsert.setInt(2, motelRoomId);
+                psInsert.executeUpdate();
+            }
+
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        response.sendRedirect("renters.jsp");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
