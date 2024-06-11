@@ -77,7 +77,7 @@
         </div>
         <div class="form-group">
             <%--@declare id="motelroomid"--%><label for="motelRoomId">Motel Room ID:</label>
-            <input type="number" name="motelRoomId" class="form-control" required>
+            <input type="number" id="motelRoomId" name="motelRoomId" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">Add Renter</button>
     </form>
