@@ -12,11 +12,17 @@
 </head>
 <body>
 <!-- mymotel -->
-<jsp:include page="owner-header.jsp"></jsp:include>
-<div class="container mt-4">
-    <div class="row">
+<jsp:include page="header.jsp"></jsp:include>
+<div class="container-fluid mt-10">
+     <div class="row">
         <div class="col-2">
             <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="motel-list.jsp" data-target="motel-management">Quản lý Phòng trọ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="motel-rooms-list.jsp" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="renters.jsp" data-target="customer-management">Quản lý Thành viên</a>
                 </li>
@@ -26,6 +32,12 @@
             </ul>
         </div>
         <div class="col-10">
+            <div id="motel-management" class="content">
+                <jsp:include page="motel-list.jsp"></jsp:include>
+            </div>
+            <div id="motel-room-management" class="content">
+                <jsp:include page="motel-rooms-list.jsp"></jsp:include>
+            </div>
             <div id="customer-management" class="content">
                 <jsp:include page="renters.jsp"></jsp:include>
             </div>

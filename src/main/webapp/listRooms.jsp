@@ -52,7 +52,7 @@
     </style>
 </head>
 <body>
-<jsp:include page="header.jsp" ></jsp:include>
+<jsp:include page="header.jsp" />
 <div class="container mt-5">
     <div class="row">
         <% for (MotelRoom room : (List<MotelRoom>)request.getAttribute("rooms")) { %>
