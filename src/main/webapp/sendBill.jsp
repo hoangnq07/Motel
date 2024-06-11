@@ -7,7 +7,7 @@
     <title>Gửi hóa đơn</title>
 </head>
 <body>
-<h2>Gửi hóa đơn cho người thuê</h2>
+<h3>Gửi hóa đơn cho người thuê</h3>
 <form action="SendBillServlet" method="post">
     <label for="email">Nhập email của người thuê:</label>
     <input type="email" id="email" name="email" required>
