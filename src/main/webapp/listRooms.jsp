@@ -55,10 +55,14 @@
 <jsp:include page="header.jsp" />
 <div class="container mt-5">
     <div class="row">
-        <% for (MotelRoom room : (List<MotelRoom>)request.getAttribute("rooms")) { %>
+        <%
+            List<MotelRoom> roomList = (List<MotelRoom>) request.getAttribute("rooms");
+            if (roomList != null && !roomList.isEmpty()) {
+                for (MotelRoom room : roomList) {
+        %>
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="room-card">
-                <% if (room.getImage() != null) { %>
+                <% if (room.getImage() != null && !room.getImage().isEmpty()) { %>
                 <img src="<%= room.getImage() %>" alt="Room Image">
                 <% } else { %>
                 <img src="images/default-room.jpg" alt="Default Room Image">
@@ -67,13 +71,18 @@
                     <h5><%= room.getDescription() %></h5>
                     <p><%= room.getLength() * room.getWidth() %> m²</p>
                     <p class="price"><%= room.getRoomPrice() %> triệu/tháng</p>
+                    <p><%= room.getDetailAddress() %>, <%= room.getWard() %>, <%= room.getDistrict() %>, <%= room.getCity() %>, <%= room.getProvince() %></p>
                     <a href="room-details?roomId=<%= room.getMotelRoomId() %>" class="btn btn-primary">View Details</a>
                 </div>
             </div>
         </div>
+        <%
+            }
+        } else {
+        %>
+        <p class="col-12">No rooms available.</p>
         <% } %>
     </div>
-
 
     <!-- Pagination -->
     <nav aria-label="Page navigation example">
