@@ -47,7 +47,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="citizen" class="form-label">Citizen ID</label>
-                    <input type="text" class="form-control" id="citizen" name="citizen" value="${user.citizen}" required>
+                    <input type="text" class="form-control" id="citizen" name="citizen" value="${user.citizenId}" required>
                 </div>
                 <div class="mb-3">
                     <label for="avatar" class="form-label">Avatar</label>
