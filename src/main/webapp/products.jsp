@@ -21,6 +21,13 @@
                     <p>Tempor ut dolore lorem kasd vero ipsum sit eirmod sit. Ipsum diam justo sed rebum vero dolor duo.</p>
                 </div>
             </div>
+
+            <div class="container mt-5">
+                <div class="text-center">
+                    <a href="motel-rooms?action=list" class="btn btn-primary">View Room List</a>
+                </div>
+            </div>
+
             <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
                 <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
                     <li class="nav-item me-2">
