@@ -109,18 +109,20 @@ public class MotelRoomDAO {
         return null;
     }
 
-    public MotelRoom getMotelRoomById(int roomId) {
-        String query = "SELECT mr.*, a.fullname, a.phone, m.detail_address, m.ward, m.district, m.city, m.province " +
+    public MotelRoom getMotelRoomById(int id) {
+        MotelRoom room = null;
+        String query = "SELECT mr.*, cr.descriptions as category, a.fullname, a.phone, m.detail_address, m.ward, m.district, m.city, m.province " +
                 "FROM motel_room mr " +
+                "JOIN category_room cr ON mr.category_room_id = cr.category_room_id " +
                 "JOIN accounts a ON mr.account_id = a.account_id " +
                 "JOIN motels m ON mr.motel_id = m.motel_id " +
                 "WHERE mr.motel_room_id = ?";
-        try {
-            PreparedStatement ps = connection.prepareStatement(query);
-            ps.setInt(1, roomId);
+        try (Connection con = DBcontext.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                MotelRoom room = new MotelRoom();
+                room = new MotelRoom();
                 room.setMotelRoomId(rs.getInt("motel_room_id"));
                 room.setDescription(rs.getString("descriptions"));
                 room.setLength(rs.getDouble("length"));
@@ -129,25 +131,21 @@ public class MotelRoomDAO {
                 room.setElectricityPrice(rs.getDouble("electricity_price"));
                 room.setWaterPrice(rs.getDouble("water_price"));
                 room.setWifiPrice(rs.getDouble("wifi_price"));
+                room.setAccountFullname(rs.getString("fullname"));
+                room.setAccountPhone(rs.getString("phone"));
                 room.setDetailAddress(rs.getString("detail_address"));
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
                 room.setCity(rs.getString("city"));
                 room.setProvince(rs.getString("province"));
-                room.setCategoryRoomId(rs.getInt("category_room_id"));
-                room.setMotelId(rs.getInt("motel_id"));
-                room.setRoomStatus(rs.getBoolean("room_status"));
-                room.setAccountId(rs.getInt("account_id"));
-                room.setAccountFullname(rs.getString("fullname"));
-                room.setAccountPhone(rs.getString("phone"));
-                room.setImage(getImageByRoomId(roomId));
-                return room;
+                room.setCategory(rs.getString("category"));
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return room;
     }
+
 
     public void addMotelRoom(MotelRoom room) throws SQLException {
         String sql = "INSERT INTO dbo.motel_room (create_date, descriptions, length, width, room_price, electricity_price, water_price, wifi_price, room_status, category_room_id, motel_id, account_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -216,6 +214,49 @@ public class MotelRoomDAO {
     }
 
 
+    public List<String> getImagesForRoom(int motelRoomId) {
+        List<String> images = new ArrayList<>();
+        String query = "SELECT name FROM dbo.image WHERE motel_room_id = ?";
+        try (Connection con = DBcontext.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, motelRoomId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                images.add(rs.getString("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return images;
+    }
+
+    public static void main(String[] args) {
+        MotelRoomDAO motelRoomDAO;
+        try {
+            motelRoomDAO = new MotelRoomDAO();
+            int motelRoomId = 1; // Change this to the ID of the motel room you want to retrieve
+            MotelRoom room = motelRoomDAO.getMotelRoomById(motelRoomId);
+            if (room != null) {
+                System.out.println("Motel Room Details:");
+                System.out.println("ID: " + room.getMotelRoomId());
+                System.out.println("Description: " + room.getDescription());
+                System.out.println("Length: " + room.getLength());
+                System.out.println("Width: " + room.getWidth());
+                System.out.println("Room Price: " + room.getRoomPrice());
+                System.out.println("Electricity Price: " + room.getElectricityPrice());
+                System.out.println("Water Price: " + room.getWaterPrice());
+                System.out.println("Wifi Price: " + room.getWifiPrice());
+                System.out.println("Account Fullname: " + room.getAccountFullname());
+                System.out.println("Account Phone: " + room.getAccountPhone());
+                System.out.println("Detail Address: " + room.getDetailAddress());
+                System.out.println("Ward: " + room.getWard());
+                System.out.println("District: " + room.getDistrict());
+                System.out.println("City: " + room.getCity());
+                System.out.println("Province: " + room.getProvince());
+                System.out.println("Category: " + room.getCategory());
+            } else {
+                System.out.println("Motel room with ID " + motelRoomId + " not found.");
+
     public List<MotelRoom> searchMotelRooms(String description, Double minPrice, Double maxPrice, Boolean status) {
         List<MotelRoom> rooms = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT mr.*, m.detail_address, m.ward, m.district, m.province " +
@@ -271,10 +312,12 @@ public class MotelRoomDAO {
                 room.setProvince(rs.getString("province"));
                 room.setRoomStatus(rs.getBoolean("room_status"));
                 rooms.add(room);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return rooms;
     }
 
