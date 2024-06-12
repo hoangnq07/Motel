@@ -25,6 +25,7 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Account user = AccountDAO.authenticateUser(email, password);
         if (user != null) {
+
             if (user.getRole().equals("admin")) {
                 session.setAttribute("user", AccountDAO.searchUser(email));
                 request.getRequestDispatcher("admin.jsp").forward(request, response);
