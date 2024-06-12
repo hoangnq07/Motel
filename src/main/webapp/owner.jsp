@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -8,31 +9,28 @@
           integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Owner Dashboard</title>
-
 </head>
 <body>
 <!-- mymotel -->
-<div class="container-fluid mt-20">
-     <div class="row">
+<jsp:include page="owner-header.jsp"></jsp:include>
+<div class="container-fluid mt-10">
+    <div class="row">
         <div class="col-2">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="motel-list.jsp" data-target="motel-management">Quản lý Nhà trọ </a>
+                    <a class="nav-link active" href="#" data-target="customer-management">Quản lý Thành viên</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " href="motel-rooms-list.jsp" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
+                    <a class="nav-link" href="#" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="renters.jsp" data-target="customer-management">Quản lý Người thuê</a>
+                    <a class="nav-link" href="#" data-target="customer-management">Quản lý Thành viên</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-target="sendBill">Hóa Đơn</a>
+                    <a class="nav-link" href="#" data-target="notifications">Thông báo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-target="addMeterReading">Thêm Chỉ Số Điện & Nước</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="notify.jsp" data-target="notifications">Thông báo</a>
+                    <a class="nav-link" href="#" data-target="createinvoice">Hóa đơn</a>
                 </li>
             </ul>
         </div>
@@ -46,19 +44,16 @@
             <div id="customer-management" class="content d-none">
                 <jsp:include page="renters.jsp"></jsp:include>
             </div>
-            <div id="sendBill" class="content d-none">
-                <jsp:include page="sendBill.jsp"></jsp:include>
-            </div>
-            <div id="addMeterReading" class="content d-none">
-                <jsp:include page="addMeterReading.jsp"></jsp:include>
-            </div>
             <div id="notifications" class="content d-none">
                 <jsp:include page="notify.jsp"></jsp:include>
+            </div>
+            <div id="createinvoice" class="content d-none">
+                <jsp:include page="createInvoice.jsp"></jsp:include>
             </div>
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script>
@@ -68,7 +63,7 @@
             $('.nav-link').removeClass('active');
             $(this).addClass('active');
 
-            var target = $(this).data('target');
+            const target = $(this).data('target');
             $('.content').addClass('d-none');
             $('#' + target).removeClass('d-none');
         });

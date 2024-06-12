@@ -36,8 +36,8 @@
             <input type="date" class="form-control" id="renterDate" name="renterDate" required>
         </div>
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <%--@declare id="motelroomid"--%><label for="motelRoomId">Motel Room ID:</label>
+            <input type="number" name="motelRoomId" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">Thêm</button>
     </form>
