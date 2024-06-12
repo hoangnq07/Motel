@@ -21,9 +21,12 @@ public class AdminApproveAuthorityServlet extends HttpServlet {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        PreparedStatement updateRoleStmt = null;
 
         try {
             conn = DBcontext.getConnection();
+            conn.setAutoCommit(false);
+
             String sql = "UPDATE dbo.request_authority SET respdescriptions = ?, request_authority_status = ? WHERE request_authority_id = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, respDescriptions);
@@ -31,13 +34,23 @@ public class AdminApproveAuthorityServlet extends HttpServlet {
             stmt.setInt(3, requestId);
             stmt.executeUpdate();
 
-            // Redirect back to authorityRequests.jsp
+            if ("Approved".equals(status)) {
+                String updateRoleSql = "UPDATE dbo.accounts SET role = 'owner' WHERE account_id = (SELECT account_id FROM dbo.request_authority WHERE request_authority_id = ?)";
+                updateRoleStmt = conn.prepareStatement(updateRoleSql);
+                updateRoleStmt.setInt(1, requestId);
+                updateRoleStmt.executeUpdate();
+            }
+
+            conn.commit();
+
             response.sendRedirect(request.getContextPath() + "/authorityRequests.jsp");
 
         } catch (SQLException e) {
+            if (conn != null) try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
             e.printStackTrace();
             throw new ServletException(e);
         } finally {
+            if (updateRoleStmt != null) try { updateRoleStmt.close(); } catch (SQLException e) { e.printStackTrace(); }
             if (stmt != null) try { stmt.close(); } catch (SQLException e) { e.printStackTrace(); }
             if (conn != null) try { conn.close(); } catch (SQLException e) { e.printStackTrace(); }
         }

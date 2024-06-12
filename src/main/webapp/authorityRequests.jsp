@@ -41,6 +41,7 @@
             String image = rs.getString("image");
             String descriptions = rs.getString("descriptions");
             String status = rs.getString("request_authority_status");
+            String responseDescriptions = rs.getString("respdescriptions"); // Assuming this column exists
             int accountId = rs.getInt("account_id");
 
             HttpServletRequest httpRequest = (HttpServletRequest) pageContext.getRequest();
@@ -51,17 +52,23 @@
             out.print("<p>Image: <img src='" + image + "' alt='Image' width='100'></p>");
             out.print("<p>Descriptions: " + descriptions + "</p>");
             out.print("<p>Status: " + status + "</p>");
-            out.print("<form action='" + contextPath + "/approveAuthority' method='post'>");
-            out.print("<input type='hidden' name='requestId' value='" + requestId + "'>");
-            out.print("<label for='respDescriptions'>Response Descriptions:</label>");
-            out.print("<textarea id='respDescriptions' name='respDescriptions' required></textarea><br><br>");
-            out.print("<label for='status'>Status:</label>");
-            out.print("<select id='status' name='status' required>");
-            out.print("<option value='Approved'>Approved</option>");
-            out.print("<option value='Rejected'>Rejected</option>");
-            out.print("</select><br><br>");
-            out.print("<input type='submit' value='Submit'>");
-            out.print("</form>");
+
+            if ("Pending".equals(status)) {
+                out.print("<form action='" + contextPath + "/approveAuthority' method='post'>");
+                out.print("<input type='hidden' name='requestId' value='" + requestId + "'>");
+                out.print("<label for='respDescriptions'>Response Descriptions:</label>");
+                out.print("<textarea id='respDescriptions' name='respDescriptions' required></textarea><br><br>");
+                out.print("<label for='status'>Status:</label>");
+                out.print("<select id='status' name='status' required>");
+                out.print("<option value='Approved'>Approved</option>");
+                out.print("<option value='Rejected'>Rejected</option>");
+                out.print("</select><br><br>");
+                out.print("<input type='submit' value='Submit'>");
+                out.print("</form>");
+            } else {
+                out.print("<p>Response Descriptions: " + responseDescriptions + "</p>");
+            }
+
             out.print("</div><hr>");
         }
     } catch (SQLException e) {
