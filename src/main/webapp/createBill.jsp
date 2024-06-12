@@ -11,9 +11,6 @@
   <label for="motelRoomId">Motel Room ID:</label>
   <input type="text" id="motelRoomId" name="motelRoomId" required><br><br>
 
-  <label for="renterId">Renter ID:</label>
-  <input type="text" id="renterId" name="renterId" required><br><br>
-
   <label for="totalPrice">Total Price:</label>
   <input type="text" id="totalPrice" name="totalPrice" required><br><br>
 

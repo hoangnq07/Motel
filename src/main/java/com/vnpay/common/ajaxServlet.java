@@ -23,6 +23,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -31,15 +32,18 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name="loginServlet", urlPatterns={"/vnpayajax"})
 public class ajaxServlet extends HttpServlet {
 
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        HttpSession session = req.getSession();
         
         String vnp_Version = "2.1.0";
         String vnp_Command = "pay";
         String vnp_OrderInfo = "Thanh toan don hang";
         String orderType = "other";
-        long amount = Integer.parseInt(req.getParameter("amount"))*100;
-        String bankCode = req.getParameter("bankCode");
+        long amount = ((long)Float.parseFloat(req.getParameter("amount")))*100;
+        String bankCode = "" ;
         
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = Config.getIpAddress(req);
@@ -112,6 +116,8 @@ public class ajaxServlet extends HttpServlet {
         Gson gson = new Gson();
         resp.getWriter().write(gson.toJson(job));
         resp.sendRedirect(paymentUrl);
-    }
 
+
+        session.setAttribute("invoiceId", req.getParameter("invoiceId"));
+    }
 }

@@ -1,7 +1,6 @@
-package controller;
+package com.motel6.servlets;
 
 import context.DBcontext;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,7 +19,6 @@ public class CreateBillServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
-        int renterId = Integer.parseInt(request.getParameter("renterId"));
         float totalPrice = Float.parseFloat(request.getParameter("totalPrice"));
         String invoiceStatus = request.getParameter("invoiceStatus");
         Date endDate = java.sql.Date.valueOf(request.getParameter("endDate"));
@@ -28,6 +26,21 @@ public class CreateBillServlet extends HttpServlet {
         float waterIndex = Float.parseFloat(request.getParameter("waterIndex"));
 
         try (Connection connection = DBcontext.getConnection()) {
+            // Find the renter_id from the motel_room_id
+            String selectRenterIdSQL = "SELECT renter_id FROM dbo.renter WHERE motel_room_id = ?";
+            int renterId = -1;
+            try (PreparedStatement psSelectRenter = connection.prepareStatement(selectRenterIdSQL)) {
+                psSelectRenter.setInt(1, motelRoomId);
+                var rs = psSelectRenter.executeQuery();
+                if (rs.next()) {
+                    renterId = rs.getInt("renter_id");
+                }
+            }
+            if (renterId == -1) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No renter found for the specified room.");
+                return;
+            }
+
             // Insert into Invoice table
             String insertInvoiceSQL = "INSERT INTO dbo.invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (GETDATE(), ?, ?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertInvoiceSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
