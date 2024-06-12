@@ -42,10 +42,10 @@ public class MotelRoomServlet extends HttpServlet {
                 createMotelRoom(request, response);
                 break;
             case "update":
-                // updateMotelRoom(request, response);
+                 updateMotelRoom(request, response);
                 break;
             case "delete":
-                // deleteMotelRoom(request, response);
+                 deleteMotelRoom(request, response);
                 break;
         }
     }
@@ -77,6 +77,34 @@ public class MotelRoomServlet extends HttpServlet {
 
         try {
             motelRoomDAO.addMotelRoom(room);
+            response.sendRedirect("motel-rooms");
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
+    }
+
+    public void updateMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        MotelRoom room = new MotelRoom();
+        room.setMotelRoomId(Integer.parseInt(request.getParameter("motelRoomId")));
+        room.setDescription(request.getParameter("description"));
+        room.setLength(Double.parseDouble(request.getParameter("length")));
+        room.setWidth(Double.parseDouble(request.getParameter("width")));
+        room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
+        room.setCategoryRoomId(Integer.parseInt(request.getParameter("categoryRoomId")));
+        room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
+
+        try {
+            motelRoomDAO.updateMotelRoom(room);
+            response.sendRedirect("motel-rooms");
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
+    }
+
+    public void deleteMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
+        try {
+            motelRoomDAO.deleteMotelRoom(motelRoomId);
             response.sendRedirect("motel-rooms");
         } catch (SQLException ex) {
             throw new ServletException(ex);

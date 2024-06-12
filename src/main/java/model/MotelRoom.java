@@ -20,7 +20,6 @@ public class MotelRoom {
     private String address;
     private String accountFullname;
     private String accountPhone;
-
     private String detailAddress;
     private String ward;
     private String district;
