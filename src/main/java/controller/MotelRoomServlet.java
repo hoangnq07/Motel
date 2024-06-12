@@ -68,18 +68,12 @@ public class MotelRoomServlet extends HttpServlet {
 
     private void createMotelRoom(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         MotelRoom room = new MotelRoom();
-        room.setDescription(request.getParameter("description"));
+        room.setDescription(request.getParameter("descriptions"));
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
-        room.setRoomPrice(Double.parseDouble(request.getParameter("roomPrice")));
-        room.setElectricityPrice(Double.parseDouble(request.getParameter("electricityPrice")));
-        room.setWaterPrice(Double.parseDouble(request.getParameter("waterPrice")));
-        room.setWifiPrice(Double.parseDouble(request.getParameter("wifiPrice")));
         room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
         room.setCategoryRoomId(Integer.parseInt(request.getParameter("categoryRoomId")));
         room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
-        room.setAccountId(Integer.parseInt(request.getParameter("accountId")));
-
 
         try {
             motelRoomDAO.addMotelRoom(room);
