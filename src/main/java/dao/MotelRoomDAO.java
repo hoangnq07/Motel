@@ -11,6 +11,8 @@ import Account.Account;
 public class MotelRoomDAO {
     private Connection connection;
 
+
+
     public MotelRoomDAO() throws SQLException {
         connection = DBcontext.getConnection();
     }

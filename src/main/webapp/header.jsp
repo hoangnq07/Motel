@@ -27,7 +27,7 @@
 <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
 
     <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
-        <a href="index.jsp" class="navbar-brand ms-4 ms-lg-0">
+        <a href="home" class="navbar-brand ms-4 ms-lg-0">
             <h1 class="fw-bold text-primary mb-4">H<span class="text-secondary">O</span>ME</h1>
         </a>
 
@@ -65,6 +65,9 @@
 
                                 <div class="message-body">
                                     <a href="account_info.jsp" class="dropdown-item">User Profile</a>
+                                    <c:if test="${sessionScope.user.role == 'owner'}">
+                                        <a href="owner" class="dropdown-item">Manage Motel</a>
+                                    </c:if>
                                     <a href="change_password.jsp" class="dropdown-item">Change Password</a>
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
                                 </div>

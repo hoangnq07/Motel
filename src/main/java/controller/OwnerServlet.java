@@ -28,7 +28,7 @@ public class OwnerServlet extends HttpServlet {
         } catch (SQLException e) {
             response.sendRedirect("404.jsp");
         }
-        request.getRequestDispatcher("dashboard_admin.jsp").forward(request, response);
+        request.getRequestDispatcher("owner.jsp").forward(request, response);
     }
 
     @Override
