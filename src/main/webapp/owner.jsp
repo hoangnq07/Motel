@@ -8,29 +8,46 @@
           integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <title>Owner Dashboard</title>
-
 </head>
 <body>
 <!-- mymotel -->
-<jsp:include page="owner-header.jsp"></jsp:include>
-<div class="container mt-4">
+<div class="container-fluid mt-3">
     <div class="row">
-        <div class="col-2">
+        <div class="col-2 mt-3">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link active" href="renters.jsp" data-target="customer-management">Quản lý Thành viên</a>
+                    <a class="nav-link active" href="motel-list.jsp" data-target="motel-management">Quản lý Nhà trọ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="createInvoice.jsp" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="renters.jsp" data-target="customer-management">Quản lý Thành viên</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="createInvoice.jsp" data-target="createinvoice">Hóa đơn</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="notify.jsp" data-target="notifications">Thông báo</a>
                 </li>
+
             </ul>
         </div>
         <div class="col-10">
-            <div id="customer-management" class="content">
+            <div id="motel-management" class="content">
+                <jsp:include page="motel-list.jsp"></jsp:include>
+            </div>
+            <div id="motel-rooms-management" class="content d-none">
+                <jsp:include page="motel-rooms-list.jsp"></jsp:include>
+            </div>
+            <div id="customer-management" class="content d-none">
                 <jsp:include page="renters.jsp"></jsp:include>
             </div>
             <div id="notifications" class="content d-none">
                 <jsp:include page="notify.jsp"></jsp:include>
+            </div>
+            <div id="createinvoice" class="content d-none">
+                <jsp:include page="createInvoice.jsp"></jsp:include>
             </div>
         </div>
     </div>

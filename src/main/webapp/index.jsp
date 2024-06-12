@@ -10,7 +10,7 @@
     </head>
     <body>
         <!-- header section start -->
-        <jsp:include page="header.jsp" ></jsp:include>
+        <jsp:include page="header.jsp" />
         <jsp:include page="products.jsp" />
         <jsp:include page="footer.jsp" />
     </body>

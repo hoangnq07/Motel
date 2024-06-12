@@ -54,8 +54,10 @@
         }
     </style>
 </head>
+
 <body class="body">
 <jsp:include page="header.jsp" ></jsp:include>
+
 <div class="container mt-5">
     <div class="row">
         <%

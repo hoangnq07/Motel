@@ -12,7 +12,7 @@
 </head>
 <body>
 <!-- Product Start -->
-<div class="container-xxl py-5">
+<div class="container-xxl py-5 mb-5">
     <div class="container">
         <div class="row g-0 gx-5 align-items-end">
             <div class="col-lg-6">

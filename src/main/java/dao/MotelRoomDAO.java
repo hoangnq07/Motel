@@ -6,6 +6,7 @@ import context.DBcontext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import Account.Account;
 
 public class MotelRoomDAO {
     private Connection connection;
@@ -16,7 +17,7 @@ public class MotelRoomDAO {
 
     public List<MotelRoom> getAllMotelRooms(int page, int pageSize) {
         List<MotelRoom> rooms = new ArrayList<>();
-        String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.city, m.province " +
+        String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province " +
                 "FROM motel_room mr " +
                 "JOIN motels m ON mr.motel_id = m.motel_id " +
                 "ORDER BY mr.create_date DESC " +
@@ -40,8 +41,37 @@ public class MotelRoomDAO {
                 room.setDetailAddress(rs.getString("detail_address"));
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
-                room.setCity(rs.getString("city"));
                 room.setProvince(rs.getString("province"));
+                rooms.add(room);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rooms;
+    }
+    //Get motel rooms by motel id
+    public static List<MotelRoom> getMotelRoomsByMotelId(int motelId) {
+        List<MotelRoom> rooms = new ArrayList<>();
+        String query = "SELECT * FROM motel_room WHERE motel_id = ?";
+        try {
+            PreparedStatement ps =DBcontext.getConnection().prepareStatement(query);
+            ps.setInt(1, motelId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MotelRoom room = new MotelRoom();
+                room.setMotelRoomId(rs.getInt("motel_room_id"));
+                room.setDescription(rs.getString("descriptions"));
+                room.setLength(rs.getDouble("length"));
+                room.setWidth(rs.getDouble("width"));
+                room.setRoomPrice(rs.getDouble("room_price"));
+                room.setElectricityPrice(rs.getDouble("electricity_price"));
+                room.setWaterPrice(rs.getDouble("water_price"));
+                room.setWifiPrice(rs.getDouble("wifi_price"));
+                room.setRoomStatus(rs.getBoolean("room_status"));
+                room.setCategoryRoomId(rs.getInt("category_room_id"));
+                room.setMotelId(rs.getInt("motel_id"));
+                room.setAccountId(rs.getInt("account_id"));
+                room.setImage(getImageByRoomId(rs.getInt("motel_room_id")));
                 rooms.add(room);
             }
         } catch (SQLException e) {
@@ -64,10 +94,10 @@ public class MotelRoomDAO {
         return 0;
     }
 
-    private String getImageByRoomId(int roomId) {
+    private static String getImageByRoomId(int roomId) {
         String query = "SELECT name FROM image WHERE motel_room_id = ?";
         try {
-            PreparedStatement ps = connection.prepareStatement(query);
+            PreparedStatement ps = DBcontext.getConnection().prepareStatement(query);
             ps.setInt(1, roomId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
@@ -183,6 +213,7 @@ public class MotelRoomDAO {
         }
     }
 
+
     public List<String> getImagesForRoom(int motelRoomId) {
         List<String> images = new ArrayList<>();
         String query = "SELECT name FROM dbo.image WHERE motel_room_id = ?";
@@ -225,10 +256,69 @@ public class MotelRoomDAO {
                 System.out.println("Category: " + room.getCategory());
             } else {
                 System.out.println("Motel room with ID " + motelRoomId + " not found.");
+
+    public List<MotelRoom> searchMotelRooms(String description, Double minPrice, Double maxPrice, Boolean status) {
+        List<MotelRoom> rooms = new ArrayList<>();
+        StringBuilder query = new StringBuilder("SELECT mr.*, m.detail_address, m.ward, m.district, m.province " +
+                "FROM motel_room mr " +
+                "JOIN motels m ON mr.motel_id = m.motel_id " +
+                "WHERE 1=1");
+
+        if (description != null && !description.isEmpty()) {
+            query.append(" AND mr.descriptions LIKE ?");
+        }
+        if (minPrice != null) {
+            query.append(" AND mr.room_price >= ?");
+        }
+        if (maxPrice != null) {
+            query.append(" AND mr.room_price <= ?");
+        }
+        if (status != null) {
+            query.append(" AND mr.room_status = ?");
+        }
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query.toString());
+            int paramIndex = 1;
+
+            if (description != null && !description.isEmpty()) {
+                ps.setString(paramIndex++, "%" + description + "%");
+            }
+            if (minPrice != null) {
+                ps.setDouble(paramIndex++, minPrice);
+            }
+            if (maxPrice != null) {
+                ps.setDouble(paramIndex++, maxPrice);
+            }
+            if (status != null) {
+                ps.setBoolean(paramIndex++, status);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MotelRoom room = new MotelRoom();
+                room.setMotelRoomId(rs.getInt("motel_room_id"));
+                room.setDescription(rs.getString("descriptions"));
+                room.setLength(rs.getDouble("length"));
+                room.setWidth(rs.getDouble("width"));
+                room.setRoomPrice(rs.getDouble("room_price"));
+                room.setElectricityPrice(rs.getDouble("electricity_price"));
+                room.setWaterPrice(rs.getDouble("water_price"));
+                room.setWifiPrice(rs.getDouble("wifi_price"));
+                room.setImage(getImageByRoomId(rs.getInt("motel_room_id")));
+                room.setDetailAddress(rs.getString("detail_address"));
+                room.setWard(rs.getString("ward"));
+                room.setDistrict(rs.getString("district"));
+                room.setProvince(rs.getString("province"));
+                room.setRoomStatus(rs.getBoolean("room_status"));
+                rooms.add(room);
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return rooms;
     }
 
 }

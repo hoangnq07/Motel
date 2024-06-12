@@ -85,6 +85,24 @@ public class AccountDAO {
         }
     }
 
+    public static int getAccountIdByEmail(String email) {
+        int accountId = -1; // Default value indicating not found
+        String QUERY = "SELECT account_id FROM accounts WHERE email = ?";
+
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            pst.setString(1, email);
+            ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                accountId = rs.getInt("account_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return accountId;
+    }
+
     public static boolean registerGoogle(String email, String name) {
         String QUERY = "INSERT INTO accounts (active, email,fullname, gender, role) VALUES (1,?,?,1, 'user')";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {

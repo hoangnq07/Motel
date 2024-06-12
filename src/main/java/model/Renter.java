@@ -1,46 +1,34 @@
 package model;
 
 import java.util.Date;
-
+import Account.Account;
 public class Renter {
     private int renterId;
     private Date changeRoomDate;
     private Date checkOutDate;
     private Date renterDate;
     private int motelRoomId;
+    private Account account;
 
-    // Các getter và setter cho các thuộc tính
+    // Constructors
+    public Renter() {}
 
+    public Renter(int renterId, Date changeRoomDate, Date checkOutDate, Date renterDate, int motelRoomId, Account account) {
+        this.renterId = renterId;
+        this.changeRoomDate = changeRoomDate;
+        this.checkOutDate = checkOutDate;
+        this.renterDate = renterDate;
+        this.motelRoomId = motelRoomId;
+        this.account = account;
+    }
+
+    // Getters and Setters
     public int getRenterId() {
         return renterId;
     }
 
     public void setRenterId(int renterId) {
         this.renterId = renterId;
-    }
-
-    public int getMotelRoomId() {
-        return motelRoomId;
-    }
-
-    public void setMotelRoomId(int motelRoomId) {
-        this.motelRoomId = motelRoomId;
-    }
-
-    public Date getRenterDate() {
-        return renterDate;
-    }
-
-    public void setRenterDate(Date renterDate) {
-        this.renterDate = renterDate;
-    }
-
-    public Date getCheckOutDate() {
-        return checkOutDate;
-    }
-
-    public void setCheckOutDate(Date checkOutDate) {
-        this.checkOutDate = checkOutDate;
     }
 
     public Date getChangeRoomDate() {
@@ -51,27 +39,35 @@ public class Renter {
         this.changeRoomDate = changeRoomDate;
     }
 
-    // Constructor
-    public Renter() {
+    public Date getCheckOutDate() {
+        return checkOutDate;
     }
 
-    public Renter(int renterId, Date changeRoomDate, Date checkOutDate, Date renterDate, int motelRoomId) {
-        this.renterId = renterId;
-        this.changeRoomDate = changeRoomDate;
+    public void setCheckOutDate(Date checkOutDate) {
         this.checkOutDate = checkOutDate;
+    }
+
+    public Date getRenterDate() {
+        return renterDate;
+    }
+
+    public void setRenterDate(Date renterDate) {
         this.renterDate = renterDate;
+    }
+
+    public int getMotelRoomId() {
+        return motelRoomId;
+    }
+
+    public void setMotelRoomId(int motelRoomId) {
         this.motelRoomId = motelRoomId;
     }
-    // Các phương thức khác nếu cần
 
-    @Override
-    public String toString() {
-        return "Renter{" +
-                "renterId=" + renterId +
-                ", changeRoomDate=" + changeRoomDate +
-                ", checkOutDate=" + checkOutDate +
-                ", renterDate=" + renterDate +
-                ", motelRoomId=" + motelRoomId +
-                '}';
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

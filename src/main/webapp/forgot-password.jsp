@@ -21,6 +21,5 @@
             <p style="color: blanchedalmonda;">${message}</p>
         </c:if>
     </div>
-    <jsp:include page="footer.jsp" ></jsp:include>
 </body>
 </html>
