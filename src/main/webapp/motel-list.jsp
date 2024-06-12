@@ -105,7 +105,6 @@
                 <td>${motel.provinceId}</td>
                 <td>${motel.status}</td>
                 <td>${motel.ward}</td>
-                <td>${motel.accountId}</td>
                 <td class="actions">
                     <a href="motel/update?id=${motel.motelId}">Edit</a>
                     <a href="motel/delete?id=${motel.motelId}" onclick="return confirm('Are you sure?');">Delete</a>

@@ -1,11 +1,19 @@
 <%@ page import="dao.NotificationDAO" %>
 <%@ page import="dao.Notification" %>
 <%@ page import="java.util.List" %>
+<<<<<<< HEAD
+<%@ page import="Account.User" %>
+<%@ page session="true" %>
+<%
+    // Lấy người dùng từ session
+    User user = (User) session.getAttribute("user");
+=======
 <%@ page import="Account.Account" %>
 <%@ page session="true" %>
 <%
     // Lấy người dùng từ session
     Account user = (Account) session.getAttribute("user");
+>>>>>>> origin/taskbaoupdate
 
     // Kiểm tra xem người dùng có đăng nhập hay không
     if (user == null) {
