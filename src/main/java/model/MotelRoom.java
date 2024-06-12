@@ -27,6 +27,8 @@ public class MotelRoom {
     private String city;
     private String province;
 
+    private String category;
+
     public MotelRoom() {
     }
 
@@ -73,6 +75,14 @@ public class MotelRoom {
         this.district = district;
         this.city = city;
         this.province = province;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getDetailAddress() {
