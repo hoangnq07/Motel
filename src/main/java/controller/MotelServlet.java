@@ -1,6 +1,7 @@
 package controller;
 
 import context.DBcontext;
+import dao.MotelDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -67,25 +68,7 @@ public class MotelServlet extends HttpServlet {
 
     private void listMotels(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         List<Motel> motels = new ArrayList<>();
-        String sql = "SELECT * FROM dbo.motels";
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                Motel motel = new Motel();
-                motel.setMotelId(rs.getInt("motel_id"));
-                motel.setCreateDate(rs.getDate("create_date"));
-                motel.setDescriptions(rs.getString("descriptions"));
-                motel.setDetailAddress(rs.getString("detail_address"));
-                motel.setDistrict(rs.getString("district"));
-                motel.setDistrictId(rs.getString("district_id"));
-                motel.setImage(rs.getString("image"));
-                motel.setProvince(rs.getString("province"));
-                motel.setProvinceId(rs.getString("province_id"));
-                motel.setStatus(rs.getBoolean("status"));
-                motel.setWard(rs.getString("ward"));
-                motel.setAccountId(rs.getInt("account_id"));
-                motels.add(motel);
-            }
-        }
+        motels = MotelDAO.getAllMotels();
         request.setAttribute("motels", motels);
         request.getRequestDispatcher("motel-list.jsp").forward(request, response);
     }

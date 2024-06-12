@@ -5,7 +5,7 @@ import java.util.List;
 import context.DBcontext;
 import model.Motel;
 public class MotelDAO {
-    public List<Motel> getAllMotels() throws SQLException {
+    public static List<Motel> getAllMotels() throws SQLException {
         List<Motel> motels = new ArrayList<>();
         String sql = "SELECT * FROM dbo.motels";
         try (Connection conn = DBcontext.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
@@ -28,7 +28,33 @@ public class MotelDAO {
         }
         return motels;
     }
-
+    //Get motel by account id
+    public static List<Motel> getMotelsByAccountId(int accountId) throws SQLException {
+        List<Motel> motels = new ArrayList<>();
+        String sql = "SELECT * FROM dbo.motels WHERE account_id = ?";
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, accountId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Motel motel = new Motel();
+                    motel.setMotelId(rs.getInt("motel_id"));
+                    motel.setCreateDate(rs.getDate("create_date"));
+                    motel.setDescriptions(rs.getString("descriptions"));
+                    motel.setDetailAddress(rs.getString("detail_address"));
+                    motel.setDistrict(rs.getString("district"));
+                    motel.setDistrictId(rs.getString("district_id"));
+                    motel.setImage(rs.getString("image"));
+                    motel.setProvince(rs.getString("province"));
+                    motel.setProvinceId(rs.getString("province_id"));
+                    motel.setStatus(rs.getBoolean("status"));
+                    motel.setWard(rs.getString("ward"));
+                    motel.setAccountId(rs.getInt("account_id"));
+                    motels.add(motel);
+                }
+            }
+        }
+        return motels;
+    }
     public void addMotel(Motel motel) throws SQLException {
         String sql = "INSERT INTO dbo.motels (create_date, descriptions, detail_address, district, district_id, image, province, province_id, status, ward, account_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -75,7 +101,7 @@ public class MotelDAO {
         try {
             // Chức năng Read
             System.out.println("Fetching all motels...");
-            List<Motel> motels = dao.getAllMotels();
+            List<Motel> motels = dao.getMotelsByAccountId(2);
             for (Motel motel : motels) {
                 System.out.println(motel);
             }
@@ -83,4 +109,6 @@ public class MotelDAO {
             e.printStackTrace();
         }
     }
+
+
 }

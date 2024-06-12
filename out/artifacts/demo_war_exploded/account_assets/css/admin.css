@@ -1,0 +1,221 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    top: 0;
+    position: fixed;
+    padding: 8px 0;
+}
+
+/* Định dạng phần tử chứa các trang */
+.pagination {
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Định dạng các trang hiện tại */
+.pagination span {
+    padding: 5px 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    margin: 2px;
+    border-radius: 3px;
+}
+
+/* Định dạng các trang không phải là trang hiện tại */
+.pagination a {
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #333;
+    margin: 2px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+/* Định dạng hover cho các trang không phải là trang hiện tại */
+.pagination a:hover {
+    background-color: #ddd;
+}
+
+nav ul {
+    list-style: none;
+    /*margin-top: 15px;*/
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #ffd700;
+}
+
+section {
+    background-color: #fff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #333;
+    color: #fff;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+#users {
+    padding-top: 120px
+}
+
+#userForm {
+    /*display: none;*/
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#userForm h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#userForm label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+#userForm input,
+#userForm select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+}
+
+#userForm button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#userForm button:hover {
+    background-color: #45a049;
+}
+
+form {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+fieldset {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+legend {
+    font-weight: bold;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 12px 0;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+/* Additional Styles for Image Form */
+div.align-center {
+    text-align: center;
+}
+
+div.align-center form {
+    margin-top: 20px;
+}
+
+
+
