@@ -10,6 +10,8 @@ import java.util.List;
 public class MotelRoomDAO {
     private Connection connection;
 
+
+
     public MotelRoomDAO() throws SQLException {
         connection = DBcontext.getConnection();
     }

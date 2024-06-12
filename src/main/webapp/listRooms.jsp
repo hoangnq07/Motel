@@ -4,22 +4,21 @@
 <jsp:useBean id="rooms" scope="request" type="java.util.List" />
 <jsp:useBean id="currentPage" scope="request" type="java.lang.Integer" />
 <jsp:useBean id="totalPages" scope="request" type="java.lang.Integer" />
-
-<!-- Include Bootstrap CSS -->
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-
 <!-- Include Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Motel Rooms</title>
     <!-- Include Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
+        .container{
+            padding-top: 100px;
+        }
         .room-card {
             border: none;
             margin-bottom: 20px;
@@ -52,6 +51,7 @@
     </style>
 </head>
 <body>
+
 <jsp:include page="header.jsp" />
 <div class="container mt-5">
     <div class="row">
@@ -96,5 +96,6 @@
     </nav>
 </div>
 <jsp:include page="footer.jsp" />
+
 </body>
 </html>
