@@ -24,6 +24,7 @@ public class AddIndexServlet extends HttpServlet {
             DBcontext dbContext = new DBcontext();
             Connection conn = dbContext.getConnection();
 
+            // Lưu chỉ số điện và nước vào database
             String sqlElectricity = "INSERT INTO dbo.electricity (electricity_index, invoice_id) VALUES (?, ?)";
             PreparedStatement psElectricity = conn.prepareStatement(sqlElectricity);
             psElectricity.setFloat(1, electricityIndex);

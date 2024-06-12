@@ -12,7 +12,7 @@
 </head>
 <body>
 <!-- mymotel -->
-<jsp:include page="header.jsp"></jsp:include>
+<jsp:include page="owner-header.jsp"></jsp:include>
 <div class="container-fluid mt-10">
     <div class="row">
         <div class="col-2">
@@ -30,7 +30,7 @@
                     <a class="nav-link" href="#" data-target="notifications">Thông báo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" data-target="create invoice">Hóa đơn</a>
+                    <a class="nav-link" href="#" data-target="createinvoice">Hóa đơn</a>
                 </li>
             </ul>
         </div>
