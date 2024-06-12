@@ -6,16 +6,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
-import java.util.Properties;
-
-import jakarta.mail.Message;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -96,16 +89,17 @@ public class CreateInvoiceServlet extends HttpServlet {
 
                 // Thiết lập thông tin email
                 String from = "thaibaovu0212@gmail.com";
+                String password = "@Bao02122003";
                 String host = "smtp.gmail.com";
                 Properties properties = System.getProperties();
-                properties.setProperty("mail.smtp.host", host);
-                properties.setProperty("mail.smtp.port", "587");
-                properties.setProperty("mail.smtp.auth", "true");
-                properties.setProperty("mail.smtp.starttls.enable", "true");
+                properties.put("mail.smtp.host", host);
+                properties.put("mail.smtp.port", "587");
+                properties.put("mail.smtp.auth", "true");
+                properties.put("mail.smtp.starttls.enable", "true");
 
-                Session session = Session.getDefaultInstance(properties, new jakarta.mail.Authenticator() {
+                Session session = Session.getInstance(properties, new jakarta.mail.Authenticator() {
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("thaibaovu0212@gmail.com", "@Bao02122003");
+                        return new PasswordAuthentication(from, password);
                     }
                 });
 
