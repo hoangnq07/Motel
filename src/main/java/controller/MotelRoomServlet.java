@@ -35,18 +35,6 @@ public class MotelRoomServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
-
-        switch (action) {
-            case "create":
-                createMotelRoom(request, response);
-                break;
-            case "update":
-                 updateMotelRoom(request, response);
-                break;
-            case "delete":
-                 deleteMotelRoom(request, response);
-                break;
-        }
     }
 
     private void listRooms(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -85,11 +73,6 @@ public class MotelRoomServlet extends HttpServlet {
         } catch (SQLException ex) {
             throw new ServletException(ex);
         }
-    }private void viewRoomDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-        int roomId = Integer.parseInt(request.getParameter("motelRoomId"));
-        MotelRoom room = motelRoomDAO.getMotelRoomById(roomId);
-        request.setAttribute("room", room);
-        request.getRequestDispatcher("/roomDetails.jsp").forward(request, response);
     }
 
     public void updateMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
