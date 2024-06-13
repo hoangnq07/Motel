@@ -70,29 +70,34 @@
     <h1>${motel == null ? "Create New Motel" : "Edit Motel"}</h1>
     <form action="/Project/motel/${motel == null ? 'create' : 'update'}" method="post">
         <input type="hidden" name="id" value="${motel.motelId}" />
+        <label>Name:</label>
+        <input type="text" name="name" value="${motel.name}" />
         <label>Descriptions:</label>
         <input type="text" name="descriptions" value="${motel.descriptions}" />
-        <label>Detail Address:</label>
-        <input type="text" name="detailAddress" value="${motel.detailAddress}" />
-        <label>District:</label>
-        <input type="text" name="district" value="${motel.district}" />
-        <label>District ID:</label>
-        <input type="text" name="districtId" value="${motel.districtId}" />
-        <label>Image:</label>
-        <input type="text" name="image" value="${motel.image}" />
         <label>Province:</label>
         <input type="text" name="province" value="${motel.province}" />
-        <label>Province ID:</label>
-        <input type="text" name="provinceId" value="${motel.provinceId}" />
-        <label>Status:</label>
-        <input type="checkbox" name="status" ${motel.status ? "checked" : ""} />
+        <label>District:</label>
+        <input type="text" name="district" value="${motel.district}" />
         <label>Ward:</label>
         <input type="text" name="ward" value="${motel.ward}" />
-        <label>Account ID:</label>
-        <input type="text" name="accountId" value="${motel.accountId}" />
+        <label>Detail Address:</label>
+        <input type="text" name="detailAddress" value="${motel.detailAddress}" />
+        <label>Status:</label>
+        <div>
+            <input type="radio" id="statusTrue" name="status" value="true" ${motel.status ? "checked" : ""}>
+            <label for="statusTrue">True</label>
+        </div>
+        <div>
+            <input type="radio" id="statusFalse" name="status" value="false" ${!motel.status ? "checked" : ""}>
+            <label for="statusFalse">False</label>
+        </div>
+        <label>Image:</label>
+        <input type="text" name="image" value="${motel.image}" />
+        <input type="hidden" name="accountId" value="${user.accountId}" />
         <input type="submit" value="${motel == null ? 'Create' : 'Update'}" />
     </form>
-    <a href="/Project/motel">Back to List</a>
+    <a href="/Project/owner">Back to List</a>
 </div>
 </body>
+
 </html>

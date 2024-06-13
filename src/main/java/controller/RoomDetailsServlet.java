@@ -10,6 +10,7 @@ import model.MotelRoom;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/room-details")
 public class RoomDetailsServlet extends HttpServlet {
@@ -24,9 +25,11 @@ public class RoomDetailsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int roomId = Integer.parseInt(request.getParameter("roomId"));
         MotelRoom room = motelRoomDAO.getMotelRoomById(roomId);
+        List<String> images = motelRoomDAO.getImagesForRoom(roomId);
 
         if (room != null) {
             request.setAttribute("room", room);
+            request.setAttribute("images", images);
             request.getRequestDispatcher("/roomDetails.jsp").forward(request, response);
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Room not found");

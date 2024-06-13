@@ -90,7 +90,6 @@ public class MotelRoomServlet extends HttpServlet {
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
         room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
-        room.setCategoryRoomId(Integer.parseInt(request.getParameter("categoryRoomId")));
         room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
 
         try {
