@@ -10,6 +10,7 @@
 <c:if test="${not empty room}">
     <p><strong>Room ID:</strong> ${room.motelRoomId}</p>
     <p><strong>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</strong> ${room.motelRoomId}</p>
+    <p><strong>bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb</strong> ${room.motelRoomId}</p>
     <p><strong>Description:</strong> ${room.description}</p>
     <p><strong>Price:</strong> ${room.roomPrice}</p>
     <p><strong>Location:</strong> ${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
