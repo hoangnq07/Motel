@@ -38,6 +38,7 @@ public class MotelDAO {
                 while (rs.next()) {
                     Motel motel = new Motel();
                     motel.setMotelId(rs.getInt("motel_id"));
+                    motel.setName(rs.getString("name"));
                     motel.setCreateDate(rs.getDate("create_date"));
                     motel.setDescriptions(rs.getString("descriptions"));
                     motel.setDetailAddress(rs.getString("detail_address"));
@@ -55,20 +56,21 @@ public class MotelDAO {
         }
         return motels;
     }
-    public void addMotel(Motel motel) throws SQLException {
-        String sql = "INSERT INTO dbo.motels (create_date, descriptions, detail_address, district, district_id, image, province, province_id, status, ward, account_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static void addMotel(Motel motel) throws SQLException {
+        String sql = "INSERT INTO dbo.motels (create_date,name, descriptions, detail_address, district, district_id, image, province, province_id, status, ward, account_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDate(1, new java.sql.Date(System.currentTimeMillis()));
-            stmt.setString(2, motel.getDescriptions());
-            stmt.setString(3, motel.getDetailAddress());
-            stmt.setString(4, motel.getDistrict());
-            stmt.setString(5, motel.getDistrictId());
-            stmt.setString(6, motel.getImage());
-            stmt.setString(7, motel.getProvince());
-            stmt.setString(8, motel.getProvinceId());
-            stmt.setBoolean(9, motel.isStatus());
-            stmt.setString(10, motel.getWard());
-            stmt.setInt(11, motel.getAccountId());
+            stmt.setString(2, motel.getName());
+            stmt.setString(3, motel.getDescriptions());
+            stmt.setString(4, motel.getDetailAddress());
+            stmt.setString(5, motel.getDistrict());
+            stmt.setString(6, motel.getDistrictId());
+            stmt.setString(7, motel.getImage());
+            stmt.setString(8, motel.getProvince());
+            stmt.setString(9, motel.getProvinceId());
+            stmt.setBoolean(10, motel.isStatus());
+            stmt.setString(11, motel.getWard());
+            stmt.setInt(12, motel.getAccountId());
             stmt.executeUpdate();
         }
     }

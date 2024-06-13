@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Motel {
     private int motelId;
+    private String name;
     private Date createDate;
     private String descriptions;
     private String detailAddress;
@@ -20,8 +21,9 @@ public class Motel {
     public Motel() {
     }
 
-    public Motel(int motelId, Date createDate, String descriptions, String detailAddress, String district, String districtId, String image, String province, String provinceId, boolean status, String ward, int accountId) {
+    public Motel(int motelId, String name, Date createDate, String descriptions, String detailAddress, String district, String districtId, String image, String province, String provinceId, boolean status, String ward, int accountId) {
         this.motelId = motelId;
+        this.name = name;
         this.createDate = createDate;
         this.descriptions = descriptions;
         this.detailAddress = detailAddress;
@@ -33,6 +35,14 @@ public class Motel {
         this.status = status;
         this.ward = ward;
         this.accountId = accountId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getMotelId() {
@@ -131,21 +141,5 @@ public class Motel {
         this.ward = ward;
     }
 
-    @Override
-    public String toString() {
-        return "Motel{" +
-                "motelId=" + motelId +
-                ", createDate=" + createDate +
-                ", descriptions='" + descriptions + '\'' +
-                ", detailAddress='" + detailAddress + '\'' +
-                ", district='" + district + '\'' +
-                ", districtId='" + districtId + '\'' +
-                ", image='" + image + '\'' +
-                ", province='" + province + '\'' +
-                ", provinceId='" + provinceId + '\'' +
-                ", status=" + status +
-                ", ward='" + ward + '\'' +
-                ", accountId=" + accountId +
-                '}';
-    }
+
 }

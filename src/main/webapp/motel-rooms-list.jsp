@@ -25,11 +25,10 @@
 <div class="container">
 
     <h2>Motel Room List</h2>
-    <a href="motel/create" class="btn">Add New Motel</a>
+    <a href="motel-rooms?action=create" class="btn">Add New Room</a>
     <table>
         <thead>
         <tr>
-            <th>ID</th>
             <th>Create Date</th>
             <th>Descriptions</th>
             <th>Length</th>
@@ -39,16 +38,12 @@
             <th>Water Price</th>
             <th>Wifi Price</th>
             <th>Room Status</th>
-            <th>Category Room ID</th>
-            <th>Motel ID</th>
-            <th>Account ID</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         <c:forEach var="room" items="${rooms}">
             <tr>
-                <td>${room.motelRoomId}</td>
                 <td>${room.createDate}</td>
                 <td>${room.description}</td>
                 <td>${room.length}</td>
@@ -61,12 +56,9 @@
                     <c:when test="${room.roomStatus}">Available</c:when>
                     <c:otherwise>Unavailable</c:otherwise>
                 </c:choose></td>
-                <td>${room.categoryRoomId}</td>
-                <td>${room.motelId}</td>
-                <td>${room.accountId}</td>
                 <td class="actions">
-                    <a href="motel/update?id=${motel.motelId}">Edit</a>
-                    <a href="motel/delete?id=${motel.motelId}" onclick="return confirm('Are you sure?');">Delete</a>
+                    <a href="motel-rooms?action=update?id=${motel.motelId}">Edit</a>
+                    <a href="motel-rooms?action=create&id=${motel.motelId}" onclick="return confirm('Are you sure?');">Delete</a>
                 </td>
             </tr>
         </c:forEach>

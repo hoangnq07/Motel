@@ -1,14 +1,12 @@
 package controller;
 
 import dao.MotelRoomDAO;
-import dao.RenterDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.MotelRoom;
-import model.Renter;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -18,12 +16,10 @@ import java.util.List;
 public class RoomDetailsServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private MotelRoomDAO motelRoomDAO;
-    private RenterDAO renterDAO;
 
     public RoomDetailsServlet() throws SQLException {
         super();
         motelRoomDAO = new MotelRoomDAO();
-        renterDAO = new RenterDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
