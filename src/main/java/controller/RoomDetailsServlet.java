@@ -23,16 +23,36 @@ public class RoomDetailsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int roomId = Integer.parseInt(request.getParameter("roomId"));
-        MotelRoom room = motelRoomDAO.getMotelRoomById(roomId);
-        List<String> images = motelRoomDAO.getImagesForRoom(roomId);
+        String roomIdParam = request.getParameter("roomId");
+        System.out.println("Received roomId: " + roomIdParam);
 
-        if (room != null) {
-            request.setAttribute("room", room);
-            request.setAttribute("images", images);
-            request.getRequestDispatcher("/roomDetails.jsp").forward(request, response);
+        if (roomIdParam != null) {
+            try {
+                int roomId = Integer.parseInt(roomIdParam);
+                MotelRoom room = motelRoomDAO.getMotelRoomById(roomId);
+                List<Renter> renters = renterDAO.getRentersByMotelRoom(roomId);
+
+                System.out.println("Room retrieved: " + room);
+                System.out.println("Renters retrieved: " + (renters != null ? renters.size() : "null"));
+
+                if (room != null) {
+                    request.setAttribute("room", room);
+                    request.setAttribute("renters", renters);
+                    request.getRequestDispatcher("/roomDetails.jsp").forward(request, response);
+                } else {
+                    System.out.println("Room not found for ID: " + roomId);
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND, "Room not found");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid roomId: " + roomIdParam);
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid room ID");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database error");
+            }
         } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Room not found");
+            System.out.println("Missing roomId parameter");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing room ID");
         }
     }
 }

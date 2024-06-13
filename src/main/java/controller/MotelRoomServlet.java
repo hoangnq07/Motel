@@ -60,6 +60,11 @@ public class MotelRoomServlet extends HttpServlet {
         int totalRooms = motelRoomDAO.getTotalMotelRooms();
         int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
 
+        System.out.println("Rooms fetched in servlet: " + rooms.size());
+        for (MotelRoom room : rooms) {
+            System.out.println("Room ID: " + room.getMotelRoomId() + ", Description: " + room.getDescription());
+        }
+
         request.setAttribute("rooms", rooms);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
