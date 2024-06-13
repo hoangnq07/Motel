@@ -1,4 +1,4 @@
-package com.motel6.servlets;
+package controller;
 
 import context.DBcontext;
 import jakarta.servlet.ServletException;

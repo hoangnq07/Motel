@@ -65,6 +65,5 @@ public class MotelRoomServlet extends HttpServlet {
         request.getRequestDispatcher("/roomDetails.jsp").forward(request, response);
     }
 
-    // Other methods (create, update, delete) remain unchanged
 }
 
