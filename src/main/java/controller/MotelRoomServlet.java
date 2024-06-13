@@ -35,6 +35,18 @@ public class MotelRoomServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
+
+        switch (action) {
+            case "create":
+                createMotelRoom(request, response);
+                break;
+            case "update":
+                 updateMotelRoom(request, response);
+                break;
+            case "delete":
+                 deleteMotelRoom(request, response);
+                break;
+        }
     }
 
     private void listRooms(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -58,13 +70,52 @@ public class MotelRoomServlet extends HttpServlet {
         request.getRequestDispatcher("/listRooms.jsp").forward(request, response);
     }
 
-    private void viewRoomDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+    private void createMotelRoom(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        MotelRoom room = new MotelRoom();
+        room.setDescription(request.getParameter("descriptions"));
+        room.setLength(Double.parseDouble(request.getParameter("length")));
+        room.setWidth(Double.parseDouble(request.getParameter("width")));
+        room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
+        room.setCategoryRoomId(Integer.parseInt(request.getParameter("categoryRoomId")));
+        room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
+
+        try {
+            motelRoomDAO.addMotelRoom(room);
+            response.sendRedirect("motel-rooms");
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
+    }private void viewRoomDetails(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
         int roomId = Integer.parseInt(request.getParameter("motelRoomId"));
         MotelRoom room = motelRoomDAO.getMotelRoomById(roomId);
         request.setAttribute("room", room);
         request.getRequestDispatcher("/roomDetails.jsp").forward(request, response);
     }
 
-    // Other methods (create, update, delete) remain unchanged
-}
+    public void updateMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        MotelRoom room = new MotelRoom();
+        room.setMotelRoomId(Integer.parseInt(request.getParameter("motelRoomId")));
+        room.setDescription(request.getParameter("description"));
+        room.setLength(Double.parseDouble(request.getParameter("length")));
+        room.setWidth(Double.parseDouble(request.getParameter("width")));
+        room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
+        room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
 
+        try {
+            motelRoomDAO.updateMotelRoom(room);
+            response.sendRedirect("motel-rooms");
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
+    }
+
+    public void deleteMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
+        try {
+            motelRoomDAO.deleteMotelRoom(motelRoomId);
+            response.sendRedirect("motel-rooms");
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
+    }
+}

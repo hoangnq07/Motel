@@ -78,36 +78,34 @@
     <a href="motel/create" class="btn">Add New Motel</a>
     <table>
         <tr>
-            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
             <th>Create Date</th>
-            <th>Descriptions</th>
-            <th>Detail Address</th>
-            <th>District</th>
-            <th>District ID</th>
-            <th>Image</th>
             <th>Province</th>
-            <th>Province ID</th>
-            <th>Status</th>
+            <th>District</th>
             <th>Ward</th>
-            <th>Account ID</th>
+            <th>Detail Address</th>
+            <th>Image</th>
+            <th>Status</th>
             <th>Actions</th>
         </tr>
         <c:forEach var="motel" items="${motels}">
             <tr>
-                <td>${motel.motelId}</td>
-                <td>${motel.createDate}</td>
+                <td>${motel.name}</td>
                 <td>${motel.descriptions}</td>
-                <td>${motel.detailAddress}</td>
-                <td>${motel.district}</td>
-                <td>${motel.districtId}</td>
-                <td>${motel.image}</td>
+                <td>${motel.createDate}</td>
                 <td>${motel.province}</td>
-                <td>${motel.provinceId}</td>
-                <td>${motel.status}</td>
+                <td>${motel.district}</td>
                 <td>${motel.ward}</td>
+                <td>${motel.detailAddress}</td>
+                <td>${motel.image}</td>
+                <td><c:choose>
+                    <c:when test="${motel.status}">Available</c:when>
+                    <c:otherwise>Unavailable</c:otherwise>
+                </c:choose></td>
                 <td class="actions">
                     <a href="motel/update?id=${motel.motelId}">Edit</a>
-                    <a href="motel/delete?id=${motel.motelId}" onclick="return confirm('Are you sure?');">Delete</a>
+<%--                    <a href="motel/delete?id=${motel.motelId}" onclick="return confirm('Are you sure?');">Delete</a>--%>
                 </td>
             </tr>
         </c:forEach>

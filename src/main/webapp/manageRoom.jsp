@@ -16,7 +16,7 @@
         <div class="col-2 mt-3">
             <ul class="nav flex-column">
 
-                    <a  href="home">Home</a>
+                <a  href="home">Home</a>
 
                 <li class="nav-item">
                     <a class="nav-link active" href="motel-list.jsp" data-target="motel-management">Quản lý Nhà trọ</a>
@@ -34,7 +34,7 @@
                     <a class="nav-link" href="notify.jsp" data-target="notifications">Thông báo</a>
                 </li>
 
-                    <a href="logout" >Logout</a>
+                <a href="logout" >Logout</a>
 
 
             </ul>

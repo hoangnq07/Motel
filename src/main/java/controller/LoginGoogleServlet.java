@@ -42,7 +42,7 @@ public class LoginGoogleServlet extends HttpServlet {
                 AccountDAO.registerGoogle(email,googlePojo.getName());
             }
             request.getSession().setAttribute("user", AccountDAO.searchUser(email));
-            response.sendRedirect("index.jsp");
+            response.sendRedirect("home");
         }
     }
 

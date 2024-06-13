@@ -24,7 +24,7 @@ public class OwnerServlet extends HttpServlet {
         try {
             motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
             request.setAttribute("motels", motels);
-            request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(2));
+            request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(10));
         } catch (SQLException e) {
             response.sendRedirect("404.jsp");
         }
