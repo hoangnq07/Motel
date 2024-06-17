@@ -280,7 +280,21 @@ public class MotelRoomDAO {
         }
         return rooms;
     }
-
+    public List<String> getImagesForRoom(int motelRoomId) {
+        List<String> images = new ArrayList<>();
+        String query = "SELECT name FROM dbo.image WHERE motel_room_id = ?";
+        try (Connection con = DBcontext.getConnection();
+             PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setInt(1, motelRoomId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                images.add(rs.getString("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return images;
+    }
     public static void main(String[] args) {
         try {
             MotelRoomDAO dao = new MotelRoomDAO();

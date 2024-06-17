@@ -37,6 +37,20 @@ public class Motel {
         this.accountId = accountId;
     }
 
+    public Motel(int motelId, String name, Date createDate, String descriptions, String detailAddress, String district, String image, String province, boolean status, String ward, int accountId) {
+        this.motelId = motelId;
+        this.name = name;
+        this.createDate = createDate;
+        this.descriptions = descriptions;
+        this.detailAddress = detailAddress;
+        this.district = district;
+        this.image = image;
+        this.province = province;
+        this.status = status;
+        this.ward = ward;
+        this.accountId = accountId;
+    }
+
     public String getName() {
         return name;
     }

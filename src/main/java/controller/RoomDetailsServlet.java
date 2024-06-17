@@ -1,5 +1,6 @@
 package controller;
 
+import context.DBcontext;
 import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,7 +10,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.MotelRoom;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @WebServlet("/room-details")
 public class RoomDetailsServlet extends HttpServlet {
@@ -23,7 +29,12 @@ public class RoomDetailsServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int roomId = Integer.parseInt(request.getParameter("roomId"));
-        MotelRoom room = motelRoomDAO.getMotelRoomById(roomId);
+        MotelRoom room = null;
+        try {
+            room = motelRoomDAO.getMotelRoomById(roomId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         List<String> images = motelRoomDAO.getImagesForRoom(roomId);
 
         if (room != null) {
@@ -34,4 +45,6 @@ public class RoomDetailsServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Room not found");
         }
     }
+
+
 }

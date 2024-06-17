@@ -28,12 +28,23 @@ public class MotelRoomServlet extends HttpServlet {
         String action = request.getParameter("action");
         if (action == null || action.equals("list")) {
             listRooms(request, response);
-        } else if (action.equals("view")) {
+        } else if (action.equals("create")) {
+            showForm(request, response, new MotelRoom());
+        } else if (action.equals("edit")) {
             try {
-                viewRoomDetails(request, response);
+                showEditForm(request, response);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String action = request.getParameter("action");
+        if ("create".equals(action)) {
+            createMotelRoom(request, response);
+        } else if ("edit".equals(action)) {
+            updateMotelRoom(request, response);
         }
     }
 
@@ -47,24 +58,29 @@ public class MotelRoomServlet extends HttpServlet {
         int totalRooms = motelRoomDAO.getTotalMotelRooms();
         int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
 
-        System.out.println("Rooms fetched in servlet: " + rooms.size());
-        for (MotelRoom room : rooms) {
-            System.out.println("Room ID: " + room.getMotelRoomId() + ", Description: " + room.getDescription());
-        }
-
         request.setAttribute("rooms", rooms);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("/listRooms.jsp").forward(request, response);
     }
 
+    private void showForm(HttpServletRequest request, HttpServletResponse response, MotelRoom room) throws ServletException, IOException {
+        request.setAttribute("room", room);
+        request.getRequestDispatcher("/room-form.jsp").forward(request, response);
+    }
+
+    private void showEditForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        MotelRoom existingRoom = motelRoomDAO.getMotelRoomById(id);
+        showForm(request, response, existingRoom);
+    }
+
     private void createMotelRoom(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         MotelRoom room = new MotelRoom();
-        room.setDescription(request.getParameter("descriptions"));
+        room.setDescription(request.getParameter("description"));
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
         room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
-        room.setCategoryRoomId(Integer.parseInt(request.getParameter("categoryRoomId")));
         room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
 
         try {
@@ -75,7 +91,7 @@ public class MotelRoomServlet extends HttpServlet {
         }
     }
 
-    public void updateMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void updateMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MotelRoom room = new MotelRoom();
         room.setMotelRoomId(Integer.parseInt(request.getParameter("motelRoomId")));
         room.setDescription(request.getParameter("description"));
@@ -92,7 +108,7 @@ public class MotelRoomServlet extends HttpServlet {
         }
     }
 
-    public void deleteMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void deleteMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
         try {
             motelRoomDAO.deleteMotelRoom(motelRoomId);

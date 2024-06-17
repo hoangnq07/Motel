@@ -1,14 +1,14 @@
 package controller;
-
+import Account.Account;
 import context.DBcontext;
 import dao.MotelDAO;
+import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.Motel;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -18,7 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@WebServlet(name = "MotelServlet", urlPatterns = {"/motel", "/motel/create", "/motel/update", "/motel/delete"})
+@WebServlet(name = "MotelServlet", urlPatterns = {"/motel", "/motel/create", "/motel/update", "/motel/delete","/motel/manage"})
 public class MotelServlet extends HttpServlet {
 
     @Override
@@ -28,13 +28,21 @@ public class MotelServlet extends HttpServlet {
         try {
             switch (action) {
                 case "/motel/create":
-                    showCreateForm(request, response);
+                    request.getRequestDispatcher("/motel-form.jsp").forward(request, response);
                     break;
                 case "/motel/update":
                     showUpdateForm(request, response);
                     break;
                 case "/motel/delete":
                     deleteMotel(request, response);
+                    break;
+                case "/motel/manage":
+                    List<Motel> motels = new ArrayList<>();
+                    Account account = (Account) request.getSession().getAttribute("user");
+                    motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
+                    request.setAttribute("motels", motels);
+                    request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(Integer.parseInt(request.getParameter("id"))));
+                    request.getRequestDispatcher("/motel-manage.jsp").forward(request, response);
                     break;
                 default:
                     listMotels(request, response);
@@ -73,33 +81,11 @@ public class MotelServlet extends HttpServlet {
         request.getRequestDispatcher("motel-list.jsp").forward(request, response);
     }
 
-    private void showCreateForm(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.getRequestDispatcher("/motel-form.jsp").forward(request, response);
-    }
 
     private void showUpdateForm(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         Motel existingMotel = new Motel();
-        String sql = "SELECT * FROM dbo.motels WHERE motel_id = ?";
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                existingMotel.setMotelId(rs.getInt("motel_id"));
-                existingMotel.setName(rs.getString("name"));
-                existingMotel.setCreateDate(rs.getDate("create_date"));
-                existingMotel.setDescriptions(rs.getString("descriptions"));
-                existingMotel.setDetailAddress(rs.getString("detail_address"));
-                existingMotel.setDistrict(rs.getString("district"));
-                existingMotel.setDistrictId(rs.getString("district_id"));
-                existingMotel.setImage(rs.getString("image"));
-                existingMotel.setProvince(rs.getString("province"));
-                existingMotel.setProvinceId(rs.getString("province_id"));
-                existingMotel.setStatus(rs.getBoolean("status"));
-                existingMotel.setWard(rs.getString("ward"));
-                existingMotel.setAccountId(rs.getInt("account_id"));
-            }
-        }
+        existingMotel = MotelDAO.getMotelById(id);
         request.setAttribute("motel", existingMotel);
         request.getRequestDispatcher("/motel-form.jsp").forward(request, response);
     }
@@ -139,32 +125,13 @@ public class MotelServlet extends HttpServlet {
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
         String ward = request.getParameter("ward");
         int accountId = Integer.parseInt(request.getParameter("accountId"));
-
-        String sql = "UPDATE dbo.motels SET descriptions = ?, detail_address = ?, district = ?, image = ?, province = ?, status = ?, ward = ?, account_id = ? ,name =? WHERE motel_id = ?";
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, descriptions);
-            stmt.setString(2, detailAddress);
-            stmt.setString(3, district);
-            stmt.setString(4, image);
-            stmt.setString(5, province);
-            stmt.setBoolean(6, status);
-            stmt.setString(7, ward);
-            stmt.setInt(8, accountId);
-            stmt.setString(9, name);
-            stmt.setInt(10, id);
-
-            stmt.executeUpdate();
-        }
+        MotelDAO.updateMotel(new Motel(id, name, new Date(System.currentTimeMillis()), descriptions, detailAddress, district, image, province, status, ward, accountId));
         response.sendRedirect("/Project/owner");
     }
 
     private void deleteMotel(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String sql = "DELETE FROM dbo.motels WHERE motel_id = ?";
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            stmt.executeUpdate();
-        }
+        MotelDAO.deleteMotel(id);
         response.sendRedirect("/Project/motel");
     }
 }

@@ -105,6 +105,7 @@
                 </c:choose></td>
                 <td class="actions">
                     <a href="motel/update?id=${motel.motelId}">Edit</a>
+                    <a href="motel/manage?id=${motel.motelId}">Manage</a>
 <%--                    <a href="motel/delete?id=${motel.motelId}" onclick="return confirm('Are you sure?');">Delete</a>--%>
                 </td>
             </tr>

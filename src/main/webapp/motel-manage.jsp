@@ -15,12 +15,12 @@
     <div class="row">
         <div class="col-2 mt-3">
             <ul class="nav flex-column">
-                    <a  href="home">Home</a>
+                <a  href="${pageContext.request.contextPath}/home">Home</a>
                 <li class="nav-item">
-                    <a class="nav-link active" href="motel-list.jsp" data-target="motel-management">Quản lý Nhà trọ</a>
+                    <a class="nav-link" href="motel-list.jsp" data-target="motel-management">Quản lý Nhà trọ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="createInvoice.jsp" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
+                    <a class="nav-link active" href="createInvoice.jsp" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="renters.jsp" data-target="customer-management">Quản lý Thành viên</a>
@@ -31,7 +31,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="notify.jsp" data-target="notifications">Thông báo</a>
                 </li>
-                    <a href="logout" >Logout</a>
+                <a href="${pageContext.request.contextPath}/logout" >Logout</a>
             </ul>
         </div>
         <div class="col-10">

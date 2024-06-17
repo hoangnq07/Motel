@@ -33,12 +33,12 @@ public class LoginServlet extends HttpServlet {
             if (accountId != -1) {
                 LOGGER.info("User authenticated successfully: " + accountId);
                 session.setAttribute("accountId", accountId);
-                session.setAttribute("user", user);
+                session.setAttribute("user", AccountDAO.searchUser(email));
 
                 if (user.getRole().equals("admin")) {
                     request.getRequestDispatcher("admin.jsp").forward(request, response);
                 } else if (user.getRole().equals("owner")) {
-                    request.getRequestDispatcher("owner-header.jsp").forward(request, response);
+                    request.getRequestDispatcher("owner.jsp").forward(request, response);
                 } else if (user.getRole().equals("user")) {
                     request.getRequestDispatcher("home").forward(request, response);
                 }
