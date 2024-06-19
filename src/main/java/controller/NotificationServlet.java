@@ -25,9 +25,9 @@ public class NotificationServlet extends HttpServlet {
             String userId = getUserIdByEmail(email, conn);
             if (userId != null) {
                 sendNotification(userId, message, conn);
-                response.sendRedirect("owner-body.jsp?status=success");
+                response.sendRedirect("owner.jsp?status=success");
             } else {
-                response.sendRedirect("owner-body.jsp?status=error");
+                response.sendRedirect("owner.jsp?status=error");
             }
         } catch (SQLException e) {
             throw new ServletException(e);

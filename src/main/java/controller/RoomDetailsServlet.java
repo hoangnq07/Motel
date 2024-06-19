@@ -1,5 +1,6 @@
 package controller;
 
+import context.DBcontext;
 import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -9,7 +10,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.MotelRoom;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/room-details")
@@ -36,3 +41,4 @@ public class RoomDetailsServlet extends HttpServlet {
         }
     }
 }
+

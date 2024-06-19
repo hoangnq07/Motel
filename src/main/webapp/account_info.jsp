@@ -31,7 +31,7 @@
                     <input type="email" class="form-control" id="email" name="email" value="${user.email}" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="gender">Gender</label>
+                    <%--@declare id="gender"--%><label for="gender">Gender</label>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="gender" id="genderMale" value="1" ${user.gender ? "checked" : ""}>
                         <label class="form-check-label" for="genderMale">Male</label>
@@ -47,7 +47,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="citizen" class="form-label">Citizen ID</label>
-                    <input type="text" class="form-control" id="citizen" name="citizen" value="${user.citizen}" required>
+                    <input type="text" class="form-control" id="citizen" name="citizen" value="${user.citizenId}" required>
                 </div>
                 <div class="mb-3">
                     <label for="avatar" class="form-label">Avatar</label>

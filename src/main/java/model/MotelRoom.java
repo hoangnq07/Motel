@@ -20,15 +20,12 @@ public class MotelRoom {
     private String address;
     private String accountFullname;
     private String accountPhone;
-
     private String detailAddress;
     private String ward;
     private String district;
     private String city;
     private String province;
-
     private String category;
-
     public MotelRoom() {
     }
 
@@ -50,6 +47,14 @@ public class MotelRoom {
         this.address = address;
         this.accountFullname = accountFullname;
         this.accountPhone = accountPhone;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public MotelRoom(int motelRoomId, Date createDate, String description, double length, double width, double roomPrice, double electricityPrice, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, int accountId, String image, String address, String accountFullname, String accountPhone, String detailAddress, String ward, String district, String city, String province) {

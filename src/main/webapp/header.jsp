@@ -22,45 +22,36 @@
 </div>
 <!-- Spinner End -->
 
+
 <!-- Navbar Start -->
 <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+
     <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
-        <a href="index.jsp" class="navbar-brand ms-4 ms-lg-0">
+        <a href="home" class="navbar-brand ms-4 ms-lg-0">
             <h1 class="fw-bold text-primary mb-4">H<span class="text-secondary">O</span>ME</h1>
         </a>
+
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarCollapse">
+
+            <form class="d-flex ms-auto me-4">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="index.jsp" class="nav-item nav-link active">Home</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
-                <a href="about.jsp" class="nav-item nav-link">About Us</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle fa-solid fa-user" data-bs-toggle="dropdown"></a>
-                    <div class="dropdown-menu m-0">
-                        <c:choose>
-                            <c:when test="${not empty sessionScope.user}">
-                                <a href="account_info.jsp" class="dropdown-item">User Profile</a>
-                                <a href="change_password.jsp" class="dropdown-item">Change Password</a>
-                                <a href="logout" class="dropdown-item">Log Out</a>
-                            </c:when>
-                            <c:otherwise>
-                                <a href="login.jsp" class="dropdown-item">Đăng nhập</a>
-                                <a href="registration.jsp" class="dropdown-item">Đăng ký</a>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
+                <a href="about.jsp" class="nav-item nav-link">Contact Us</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
-                <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                    <small class="fa fa-search text-body"></small>
-                </a>
+
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <li class="nav-item dropdown " style="list-style-type: none">
+                            <a class="nav-link nav-icon-hover"  id="userDropdown" data-bs-toggle="dropdown" aria-expanded="true">
                                 <c:choose>
                                     <c:when test="${empty sessionScope.user.avatar}">
                                         <small class="fa fa-user text-body"></small>
@@ -70,16 +61,14 @@
                                     </c:otherwise>
                                 </c:choose>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="userDropdown">
+                            <div class="dropdown-menu dropdown-menu-end show " aria-labelledby="userDropdown" data-bs-popper="none">
+
                                 <div class="message-body">
-                                    <a href="account_info.jsp" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-user fs-6"></i>
-                                        <p class="mb-0 fs-3">User Profile</p>
-                                    </a>
-                                    <a href="change_password.jsp" class="d-flex align-items-center gap-2 dropdown-item">
-                                        <i class="ti ti-mail fs-6"></i>
-                                        <p class="mb-0 fs-3">Change Password</p>
-                                    </a>
+                                    <a href="account_info.jsp" class="dropdown-item">User Profile</a>
+                                    <c:if test="${sessionScope.user.role == 'owner'}">
+                                        <a href="owner" class="dropdown-item">Manage Motel</a>
+                                    </c:if>
+                                    <a href="change_password.jsp" class="dropdown-item">Change Password</a>
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
                                 </div>
                             </div>
@@ -105,22 +94,6 @@
 <script src="assets/lib/waypoints/waypoints.min.js"></script>
 <script src="assets/js/main.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const userDropdown = document.getElementById("userDropdown");
-        const dropdownMenu = document.querySelector(".dropdown-menu-animate-up");
 
-        userDropdown.addEventListener("click", function(event) {
-            event.stopPropagation();
-            dropdownMenu.classList.toggle("show");
-        });
-
-        document.addEventListener("click", function(event) {
-            if (!dropdownMenu.contains(event.target) && !userDropdown.contains(event.target)) {
-                dropdownMenu.classList.remove("show");
-            }
-        });
-    });
-</script>
 </body>
 </html>

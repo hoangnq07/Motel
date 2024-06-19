@@ -5,18 +5,7 @@
     <title>Thông báo</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <script type="text/javascript">
-        window.onload = function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const status = urlParams.get('status');
-            if (status === 'success') {
-                alert('Gửi thông báo thành công.');
-                window.location.href = 'owner-body.jsp';
-            } else if (status === 'error') {
-                alert('Email không tồn tại trong hệ thống.');
-            }
-        };
-    </script>
+
 </head>
 <body>
 <div class="container mt-4">
@@ -34,4 +23,16 @@
     </form>
 </div>
 </body>
+<script type="text/javascript">
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status');
+        if (status === 'success') {
+            alert('Gửi thông báo thành công.');
+            window.location.href = 'owner-body.jsp';
+        } else if (status === 'error') {
+            alert('Email không tồn tại trong hệ thống.');
+        }
+    };
+</script>
 </html>
