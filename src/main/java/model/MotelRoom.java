@@ -82,6 +82,15 @@ public class MotelRoom {
         this.province = province;
     }
 
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     public String getDetailAddress() {
         return detailAddress;
     }

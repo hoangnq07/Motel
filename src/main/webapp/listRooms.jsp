@@ -56,6 +56,7 @@
 </head>
 <body class="body">
 <jsp:include page="header.jsp" ></jsp:include>
+
 <div class="container mt-5">
     <div class="row">
         <%
@@ -66,7 +67,7 @@
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="room-card">
                 <% if (room.getImage() != null && !room.getImage().isEmpty()) { %>
-                <img src="<%= request.getContextPath()%>/avatar/<%= room.getImage() %>" alt="Room Image">
+                <img src="<%= request.getContextPath()%>/images/<%= room.getImage() %>" alt="Room Image">
                 <% } else { %>
                 <img src="images/default-room.jpg" alt="Default Room Image">
                 <% } %>

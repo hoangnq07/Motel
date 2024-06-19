@@ -29,12 +29,7 @@ public class RoomDetailsServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int roomId = Integer.parseInt(request.getParameter("roomId"));
-        MotelRoom room = null;
-        try {
-            room = motelRoomDAO.getMotelRoomById(roomId);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        MotelRoom room = motelRoomDAO.getMotelRoomById(roomId);
         List<String> images = motelRoomDAO.getImagesForRoom(roomId);
 
         if (room != null) {
@@ -45,6 +40,5 @@ public class RoomDetailsServlet extends HttpServlet {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "Room not found");
         }
     }
-
-
 }
+
