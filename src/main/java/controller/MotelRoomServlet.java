@@ -83,8 +83,13 @@ public class MotelRoomServlet extends HttpServlet {
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
         room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
+        room.setRoomPrice(Double.parseDouble(request.getParameter("roomPrice")));
+        room.setWaterPrice(Double.parseDouble(request.getParameter("waterPrice")));
+        room.setElectricityPrice(Double.parseDouble(request.getParameter("electricityPrice")));
+        room.setWifiPrice(Double.parseDouble(request.getParameter("wifiPrice")));
 //        room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
         room.setMotelId(1);
+        room.setCategoryRoomId(1);
         Account acc = (Account) request.getSession().getAttribute("user");
         room.setAccountId(acc.getAccountId());
         try {

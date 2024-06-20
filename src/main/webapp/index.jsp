@@ -12,6 +12,28 @@
             .container{
                 padding-top: 100px;
             }
+            .room-cards-container {
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+            }
+            .room-card {
+                flex: 1 1 25%; /* Adjust this value as needed to fit more or fewer cards per row */
+                box-sizing: border-box;
+                padding: 10px; /* Adjust padding as needed */
+                height: 500px; /* Set a fixed height for all cards */
+            }
+            .room-card img {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 5px;
+            }
+            .room-image {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
             .room-card {
                 border: none;
                 margin-bottom: 20px;
@@ -101,11 +123,11 @@
                 <c:choose>
                     <c:when test="${not empty rooms}">
                         <c:forEach var="room" items="${rooms}">
-                            <div class="col-lg-4 col-md-6 mb-4">
-                                <div class="room-card">
+                            <div class="col-lg-4 col-md-6 mb-4 room-cards-container" >
+                                <div class="room-card" style="width: auto; height: 500px;">
                                     <c:choose>
                                         <c:when test="${not empty room.image}">
-                                            <img src="${room.image}" alt="Room Image">
+                                            <img src="${pageContext.getRequest().getContextPath()}/images/${room.getImage()}" alt="Room Image"  class="room-image" >
                                         </c:when>
                                         <c:otherwise>
                                             <img src="images/default-room.jpg" alt="Default Room Image">

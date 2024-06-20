@@ -19,7 +19,7 @@ public class MotelRoomDAO {
 
     public List<MotelRoom> getAllMotelRooms(int page, int pageSize) {
         List<MotelRoom> rooms = new ArrayList<>();
-        String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.city, m.province, cr.descriptions as category " +
+        String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category " +
                 "FROM motel_room mr " +
                 "JOIN motels m ON mr.motel_id = m.motel_id " +
                 "JOIN category_room cr ON mr.category_room_id = cr.category_room_id " +
@@ -116,7 +116,7 @@ public class MotelRoomDAO {
 
     public MotelRoom getMotelRoomById(int id) {
         MotelRoom room = null;
-        String query = "SELECT mr.*, cr.descriptions as category, a.fullname, a.phone, m.detail_address, m.ward, m.district, m.city, m.province " +
+        String query = "SELECT mr.*, cr.descriptions as category, a.fullname, a.phone, m.detail_address, m.ward, m.district, m.province " +
                 "FROM motel_room mr " +
                 "JOIN category_room cr ON mr.category_room_id = cr.category_room_id " +
                 "JOIN accounts a ON mr.account_id = a.account_id " +
@@ -146,7 +146,6 @@ public class MotelRoomDAO {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e;
         }
         return room;
     }
@@ -296,21 +295,7 @@ public class MotelRoomDAO {
         }
         return rooms;
     }
-    public List<String> getImagesForRoom(int motelRoomId) {
-        List<String> images = new ArrayList<>();
-        String query = "SELECT name FROM dbo.image WHERE motel_room_id = ?";
-        try (Connection con = DBcontext.getConnection();
-             PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setInt(1, motelRoomId);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                images.add(rs.getString("name"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return images;
-    }
+
     public static void main(String[] args) {
         try {
             MotelRoomDAO dao = new MotelRoomDAO();

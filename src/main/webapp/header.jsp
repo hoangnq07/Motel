@@ -42,7 +42,7 @@
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="index.jsp" class="nav-item nav-link active">Home</a>
+                <a href="home" class="nav-item nav-link active">Home</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
                 <a href="about.jsp" class="nav-item nav-link">Contact Us</a>
             </div>
