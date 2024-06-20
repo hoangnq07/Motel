@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -51,7 +52,7 @@
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
                         <li class="nav-item dropdown " style="list-style-type: none">
-                            <a class="nav-link nav-icon-hover"  id="userDropdown" data-bs-toggle="dropdown" aria-expanded="true">
+                            <a class="nav-link nav-icon-hover" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="true">
                                 <c:choose>
                                     <c:when test="${empty sessionScope.user.avatar}">
                                         <small class="fa fa-user text-body"></small>
@@ -62,13 +63,13 @@
                                 </c:choose>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end show " aria-labelledby="userDropdown" data-bs-popper="none">
-
                                 <div class="message-body">
                                     <a href="account_info.jsp" class="dropdown-item">User Profile</a>
                                     <c:if test="${sessionScope.user.role == 'owner'}">
                                         <a href="owner" class="dropdown-item">Manage Motel</a>
                                     </c:if>
                                     <a href="change_password.jsp" class="dropdown-item">Change Password</a>
+                                    <a href="favorite-rooms" class="dropdown-item">My Favorite Room</a> <!-- Thêm dòng này -->
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
                                 </div>
                             </div>

@@ -26,6 +26,7 @@ public class MotelRoom {
     private String city;
     private String province;
     private String category;
+    private boolean isFavorite;
     public MotelRoom() {
     }
 
@@ -57,7 +58,7 @@ public class MotelRoom {
         this.category = category;
     }
 
-    public MotelRoom(int motelRoomId, Date createDate, String description, double length, double width, double roomPrice, double electricityPrice, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, int accountId, String image, String address, String accountFullname, String accountPhone, String detailAddress, String ward, String district, String city, String province) {
+    public MotelRoom(int motelRoomId, Date createDate, String description, double length, double width, double roomPrice, double electricityPrice, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, int accountId, String image, String detailAddress, String ward, String district, String city, String province, boolean isFavorite) {
         this.motelRoomId = motelRoomId;
         this.createDate = createDate;
         this.description = description;
@@ -72,16 +73,22 @@ public class MotelRoom {
         this.roomStatus = roomStatus;
         this.accountId = accountId;
         this.image = image;
-        this.address = address;
-        this.accountFullname = accountFullname;
-        this.accountPhone = accountPhone;
         this.detailAddress = detailAddress;
         this.ward = ward;
         this.district = district;
         this.city = city;
         this.province = province;
+        this.isFavorite = isFavorite; // Khởi tạo trạng thái yêu thích
     }
 
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean isFavorite) {
+        this.isFavorite = isFavorite;
+    }
     public String getDetailAddress() {
         return detailAddress;
     }

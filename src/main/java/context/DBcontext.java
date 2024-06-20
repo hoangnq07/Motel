@@ -9,7 +9,7 @@ public class DBcontext {
     public static Connection getConnection() throws SQLException {
         String jdbcUrl = "jdbc:sqlserver://Localhost:1433;databaseName=motel7";
         String username = "sa";
-        String password = "123456";
+        String password = "12345";
 
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");

@@ -47,16 +47,49 @@ public class MotelRoomServlet extends HttpServlet {
             createMotelRoom(request, response);
         } else if ("edit".equals(action)) {
             updateMotelRoom(request, response);
+        } else if ("addFavorite".equals(action)) {
+            toggleFavoriteRoom(request, response, true);
+        } else if ("removeFavorite".equals(action)) {
+            toggleFavoriteRoom(request, response, false);
         }
+    }
+    private void toggleFavoriteRoom(HttpServletRequest request, HttpServletResponse response, boolean add) throws IOException {
+        int roomId = Integer.parseInt(request.getParameter("roomId"));
+        int accountId = (Integer) request.getSession().getAttribute("accountId"); // Giả sử ID người dùng đã được lưu trong session
+
+        boolean result;
+        if (add) {
+            result = motelRoomDAO.addFavoriteRoom(accountId, roomId);
+        } else {
+            result = motelRoomDAO.removeFavoriteRoom(accountId, roomId);
+        }
+        response.setContentType("application/json");
+        response.getWriter().write("{\"success\": " + result + "}");
     }
 
     private void listRooms(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        MotelRoomDAO motelRoomDAO;
+        try {
+            motelRoomDAO = new MotelRoomDAO();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         int page = 1;
         int pageSize = 9;
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }
-        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(page, pageSize);
+
+        // Lấy accountId từ session và kiểm tra nó không phải là null trước khi sử dụng
+        Integer accountId = (Integer) request.getSession().getAttribute("accountId");
+//        if (accountId == null) {
+//            // Xử lý trường hợp không có accountId
+//            response.sendRedirect("login.jsp"); // Chuyển hướng đến trang đăng nhập hoặc trang thông báo lỗi
+//            return; // Dừng xử lý nếu không có accountId
+//        }
+
+        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(page, pageSize, accountId);
         int totalRooms = motelRoomDAO.getTotalMotelRooms();
         int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
 
@@ -65,6 +98,7 @@ public class MotelRoomServlet extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("/listRooms.jsp").forward(request, response);
     }
+
 
     private void showForm(HttpServletRequest request, HttpServletResponse response, MotelRoom room) throws ServletException, IOException {
         request.setAttribute("room", room);

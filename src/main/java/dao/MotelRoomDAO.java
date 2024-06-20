@@ -6,7 +6,6 @@ import context.DBcontext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import Account.Account;
 
 public class MotelRoomDAO {
     private Connection connection;
@@ -17,7 +16,84 @@ public class MotelRoomDAO {
         connection = DBcontext.getConnection();
     }
 
-    public List<MotelRoom> getAllMotelRooms(int page, int pageSize) {
+    public List<MotelRoom> getFavoriteRooms(int accountId) {
+        List<MotelRoom> rooms = new ArrayList<>();
+        String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province " +
+                "FROM motel_room mr " +
+                "JOIN motels m ON mr.motel_id = m.motel_id " +
+                "ORDER BY mr.create_date DESC";
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                boolean check = isFavoriteRoom(accountId, rs.getInt("motel_room_id"));
+                if (check){
+                    MotelRoom room = new MotelRoom();
+                    room.setMotelRoomId(rs.getInt("motel_room_id"));
+                    room.setDescription(rs.getString("descriptions"));
+                    room.setLength(rs.getDouble("length"));
+                    room.setWidth(rs.getDouble("width"));
+                    room.setRoomPrice(rs.getDouble("room_price"));
+                    room.setElectricityPrice(rs.getDouble("electricity_price"));
+                    room.setWaterPrice(rs.getDouble("water_price"));
+                    room.setWifiPrice(rs.getDouble("wifi_price"));
+                    room.setImage(getImageByRoomId(rs.getInt("motel_room_id")));
+                    room.setDetailAddress(rs.getString("detail_address"));
+                    room.setWard(rs.getString("ward"));
+                    room.setDistrict(rs.getString("district"));
+                    room.setProvince(rs.getString("province"));
+                    room.setFavorite(check);  // Correct use
+                    rooms.add(room);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rooms;
+    }
+
+    public boolean addFavoriteRoom(int accountId, int roomId) {
+        String query = "INSERT INTO favourite_room (account_id, motel_room_id, create_date) VALUES (?, ?, GETDATE())";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, accountId);
+            ps.setInt(2, roomId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean isFavoriteRoom(int accountId, int roomId) {
+        String query = "SELECT COUNT(*) FROM favourite_room WHERE account_id = ? AND motel_room_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, accountId);
+            ps.setInt(2, roomId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;  // Returns true if the count is more than 0
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+
+    public boolean removeFavoriteRoom(int accountId, int roomId) {
+        String query = "DELETE FROM favourite_room WHERE account_id = ? AND motel_room_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, accountId);
+            ps.setInt(2, roomId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<MotelRoom> getAllMotelRooms(int page, int pageSize, int accountId) {  // Add accountId here
         List<MotelRoom> rooms = new ArrayList<>();
         String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category " +
                 "FROM motel_room mr " +
@@ -45,15 +121,17 @@ public class MotelRoomDAO {
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
                 room.setProvince(rs.getString("province"));
+                room.setFavorite(isFavoriteRoom(accountId, rs.getInt("motel_room_id")));  // Correct use
                 room.setCategory(rs.getString("category"));
                 rooms.add(room);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println("Rooms fetched in DAO: " + rooms.size());
         return rooms;
     }
+
+
     //Get motel rooms by motel id
     public static List<MotelRoom> getMotelRoomsByMotelId(int motelId) {
         List<MotelRoom> rooms = new ArrayList<>();

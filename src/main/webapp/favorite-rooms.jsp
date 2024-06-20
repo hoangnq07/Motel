@@ -16,9 +16,6 @@
             cursor: pointer;
             color: #ccc; /* Màu mặc định */
             font-size: 24px;
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
         }
         .favorite.active {
             color: red; /* Màu khi được kích hoạt */
@@ -60,14 +57,13 @@
 </head>
 <body class="body">
 <jsp:include page="header.jsp" ></jsp:include>
-
 <div class="container mt-5">
     <div class="row">
-        <c:forEach var="room" items="${rooms}">
-            <div class="col-lg-4 col-md-6 mb-4">
+        <c:forEach var="room" items="${favoriteRooms}">
+            <div class="col-lg-4 col-md-6 mb-4" id="fas${room.motelRoomId}">
                 <div class="room-card">
                     <c:if test="${not empty room.image}">
-                        <img src="${pageContext.request.contextPath}/images/${room.image}" alt="Room Image">
+                        <img src="${pageContext.request.contextPath}/avatar/${room.image}" alt="Room Image">
                     </c:if>
                     <c:if test="${empty room.image}">
                         <img src="images/default-room.jpg" alt="Default Room Image">
@@ -78,7 +74,7 @@
                         <p class="price">${room.roomPrice} triệu/tháng</p>
                         <p>${room.detailAddress}, ${room.ward}, ${room.district}, ${room.city}, ${room.province}</p>
                         <i class="favorite ${room.favorite ? 'fas text-danger' : 'far'} fa-heart" onclick="toggleFavorite(this, ${room.motelRoomId})"></i>
-                        <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">View Details</a>
+                        <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">Xem chi tiết</a>
                     </div>
                 </div>
             </div>
@@ -103,12 +99,16 @@
         const isFavorite = element.classList.contains('fas'); // Kiểm tra xem đã là yêu thích chưa
         const action = isFavorite ? 'remove' : 'add'; // Xác định hành động dựa trên trạng thái hiện tại
 
-        fetch("favorite?action="+action+"&roomId="+roomId, { method: 'POST' })
+        fetch(`favorite?action=`+action+`&roomId=`+roomId, { method: 'POST' })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     element.classList.toggle('far'); // Toggle the empty heart
                     element.classList.toggle('fas'); // Toggle the filled heart
+                    if(action == 'remove'){
+                        let ele = document.getElementById('fas'+roomId);
+                        ele.parentNode.removeChild(ele);
+                    }
                 } else {
                     alert('Có lỗi xảy ra khi xử lý yêu cầu của bạn');
                 }
