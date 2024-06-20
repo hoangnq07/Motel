@@ -3,6 +3,8 @@ package controller;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+
+import Account.Account;
 import model.MotelRoom;
 import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
@@ -115,8 +117,15 @@ public class MotelRoomServlet extends HttpServlet {
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
         room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
-        room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
-
+        room.setRoomPrice(Double.parseDouble(request.getParameter("roomPrice")));
+        room.setWaterPrice(Double.parseDouble(request.getParameter("waterPrice")));
+        room.setElectricityPrice(Double.parseDouble(request.getParameter("electricityPrice")));
+        room.setWifiPrice(Double.parseDouble(request.getParameter("wifiPrice")));
+//        room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
+        room.setMotelId(1);
+        room.setCategoryRoomId(1);
+        Account acc = (Account) request.getSession().getAttribute("user");
+        room.setAccountId(acc.getAccountId());
         try {
             motelRoomDAO.addMotelRoom(room);
             response.sendRedirect("motel-rooms");

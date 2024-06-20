@@ -1,15 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="model.MotelRoom" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <jsp:useBean id="room" scope="request" type="model.MotelRoom" />
-
-<!-- Include Bootstrap CSS -->
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Include Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,7 +34,7 @@
                 <div class="carousel-inner">
                     <c:forEach var="image" items="${images}" varStatus="status">
                         <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                            <img src="${pageContext.request.contextPath}/avatar/${image}" class="d-block w-100" alt="Room Image">
+                            <img src="${pageContext.request.contextPath}/images/${image}" class="d-block" alt="Room Image" style="width: 700px; height: 500px;">
                         </div>
                     </c:forEach>
                 </div>

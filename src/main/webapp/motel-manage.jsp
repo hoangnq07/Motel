@@ -35,10 +35,10 @@
             </ul>
         </div>
         <div class="col-10">
-            <div id="motel-management" class="content">
+            <div id="motel-management" class="content d-none">
                 <jsp:include page="motel-list.jsp"></jsp:include>
             </div>
-            <div id="motel-rooms-management" class="content d-none">
+            <div id="motel-rooms-management" class="content">
                 <jsp:include page="motel-rooms-list.jsp"></jsp:include>
             </div>
             <div id="customer-management" class="content d-none">
