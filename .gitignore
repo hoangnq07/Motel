@@ -11,6 +11,9 @@ target/
 *.iws
 *.iml
 *.ipr
+.idea/misc.xml
+.idea/sqldialects.xml
+/src/main/java/context/DBcontext.java
 
 ### Eclipse ###
 .apt_generated

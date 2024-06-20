@@ -30,17 +30,18 @@ public class MotelRoom {
     public MotelRoom() {
     }
 
-    public MotelRoom(int motelRoomId, String description, Date createDate, double length, double electricityPrice, double roomPrice, double width, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, String image, int accountId, String address, String accountFullname, String accountPhone) {
+    public MotelRoom(int motelRoomId, String detailAddress, Date createDate, double length, String description, double width, double roomPrice, double waterPrice, double electricityPrice, int categoryRoomId, double wifiPrice, int motelId, boolean roomStatus, String image, int accountId, String address, String accountFullname, String accountPhone, String ward, String district, String city, String category, String province, boolean isFavorite) {
         this.motelRoomId = motelRoomId;
-        this.description = description;
+        this.detailAddress = detailAddress;
         this.createDate = createDate;
         this.length = length;
-        this.electricityPrice = electricityPrice;
-        this.roomPrice = roomPrice;
+        this.description = description;
         this.width = width;
+        this.roomPrice = roomPrice;
         this.waterPrice = waterPrice;
-        this.wifiPrice = wifiPrice;
+        this.electricityPrice = electricityPrice;
         this.categoryRoomId = categoryRoomId;
+        this.wifiPrice = wifiPrice;
         this.motelId = motelId;
         this.roomStatus = roomStatus;
         this.image = image;
@@ -48,6 +49,12 @@ public class MotelRoom {
         this.address = address;
         this.accountFullname = accountFullname;
         this.accountPhone = accountPhone;
+        this.ward = ward;
+        this.district = district;
+        this.city = city;
+        this.category = category;
+        this.province = province;
+        this.isFavorite = isFavorite;
     }
 
     public String getCategory() {

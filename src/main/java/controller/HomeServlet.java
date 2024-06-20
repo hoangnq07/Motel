@@ -1,5 +1,6 @@
 package controller;
 
+import Account.Account;
 import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,11 +25,8 @@ public class HomeServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        Integer accountId = (Integer) request.getSession().getAttribute("accountId");
-        if (accountId == null) {
-            accountId = 0; // Hoặc xử lý cho trường hợp không có người dùng đăng nhập
-        }
-        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(1, 9, accountId);
+        Account acc = (Account) request.getSession().getAttribute("user");
+        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(1, 9, acc);
         request.setAttribute("rooms", rooms);
         request.getRequestDispatcher("/index.jsp").forward(request, response);
     }

@@ -1,5 +1,6 @@
 package controller;
 
+import Account.Account;
 import dao.MotelRoomDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -14,11 +15,11 @@ import java.util.List;
 @WebServlet(name = "ListFavoriteRoom", value = "/favorite-rooms")
     public class ListFavoriteRoom extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int accountId = (Integer) request.getSession().getAttribute("accountId");
+        Account acc =(Account) request.getSession().getAttribute("user");
 
         try {
             MotelRoomDAO dao = new MotelRoomDAO();
-            List<MotelRoom> favoriteRooms = dao.getFavoriteRooms(accountId);
+            List<MotelRoom> favoriteRooms = dao.getFavoriteRooms(acc.getAccountId());
             request.setAttribute("favoriteRooms", favoriteRooms);
         } catch (SQLException e) {
             e.printStackTrace();

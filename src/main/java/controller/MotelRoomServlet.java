@@ -80,16 +80,8 @@ public class MotelRoomServlet extends HttpServlet {
         if (request.getParameter("page") != null) {
             page = Integer.parseInt(request.getParameter("page"));
         }
-
-        // Lấy accountId từ session và kiểm tra nó không phải là null trước khi sử dụng
-        Integer accountId = (Integer) request.getSession().getAttribute("accountId");
-//        if (accountId == null) {
-//            // Xử lý trường hợp không có accountId
-//            response.sendRedirect("login.jsp"); // Chuyển hướng đến trang đăng nhập hoặc trang thông báo lỗi
-//            return; // Dừng xử lý nếu không có accountId
-//        }
-
-        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(page, pageSize, accountId);
+        Account acc = (Account) request.getSession().getAttribute("user");
+        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(page, pageSize,acc);
         int totalRooms = motelRoomDAO.getTotalMotelRooms();
         int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
 

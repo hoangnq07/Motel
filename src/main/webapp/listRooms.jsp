@@ -2,7 +2,10 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.MotelRoom" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%--<!-- Include Bootstrap JS and dependencies -->--%>
+<%--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>--%>
+<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>--%>
+<%--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>--%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,7 +73,7 @@
                         <img src="${pageContext.request.contextPath}/images/${room.image}" alt="Room Image">
                     </c:if>
                     <c:if test="${empty room.image}">
-                        <img src="images/default-room.jpg" alt="Default Room Image">
+                        <img src="${pageContext.request.contextPath}/images/default-room.jpg" alt="Default Room Image">
                     </c:if>
                     <div class="room-details">
                         <h5>${room.description}</h5>

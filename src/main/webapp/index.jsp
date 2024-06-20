@@ -130,7 +130,7 @@
                                             <img src="${pageContext.getRequest().getContextPath()}/images/${room.getImage()}" alt="Room Image"  class="room-image" >
                                         </c:when>
                                         <c:otherwise>
-                                            <img src="images/default-room.jpg" alt="Default Room Image">
+                                            <img src="${pageContext.getRequest().getContextPath()}/images/default-room.jpg" alt="Default Room Image">
                                         </c:otherwise>
                                     </c:choose>
                                     <div class="room-details">

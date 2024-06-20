@@ -6,7 +6,7 @@ import context.DBcontext;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import Account.Account;
 public class MotelRoomDAO {
     private Connection connection;
 
@@ -93,7 +93,7 @@ public class MotelRoomDAO {
         }
     }
 
-    public List<MotelRoom> getAllMotelRooms(int page, int pageSize, int accountId) {  // Add accountId here
+    public List<MotelRoom> getAllMotelRooms(int page, int pageSize, Account acc) {  // Add accountId here
         List<MotelRoom> rooms = new ArrayList<>();
         String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category " +
                 "FROM motel_room mr " +
@@ -121,7 +121,8 @@ public class MotelRoomDAO {
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
                 room.setProvince(rs.getString("province"));
-                room.setFavorite(isFavoriteRoom(accountId, rs.getInt("motel_room_id")));  // Correct use
+                if(acc!=null)
+                room.setFavorite(isFavoriteRoom(acc.getAccountId(), rs.getInt("motel_room_id")));  // Correct use
                 room.setCategory(rs.getString("category"));
                 rooms.add(room);
             }
@@ -372,19 +373,6 @@ public class MotelRoomDAO {
             e.printStackTrace();
         }
         return rooms;
-    }
-
-    public static void main(String[] args) {
-        try {
-            MotelRoomDAO dao = new MotelRoomDAO();
-            List<MotelRoom> rooms = dao.getAllMotelRooms(1, 9);
-            System.out.println("Rooms fetched: " + rooms.size());
-            for (MotelRoom room : rooms) {
-                System.out.println("Room ID: " + room.getMotelRoomId() + ", Description: " + room.getDescription());
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 
 }
