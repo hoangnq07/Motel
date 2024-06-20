@@ -1,4 +1,3 @@
-
 package controller;
 
 import dao.MotelRoomDAO;
@@ -13,31 +12,30 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- *
- * @author PC
- */
 @WebServlet(name="HomeServlet", urlPatterns={"/home"})
 public class HomeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         MotelRoomDAO motelRoomDAO = null;
         try {
             motelRoomDAO = new MotelRoomDAO();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(1, 9);
+        Integer accountId = (Integer) request.getSession().getAttribute("accountId");
+        if (accountId == null) {
+            accountId = 0; // Hoặc xử lý cho trường hợp không có người dùng đăng nhập
+        }
+        List<MotelRoom> rooms = motelRoomDAO.getAllMotelRooms(1, 9, accountId);
         request.setAttribute("rooms", rooms);
         request.getRequestDispatcher("/index.jsp").forward(request, response);
-    } 
-
+    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         doGet(request, response);
     }
 }

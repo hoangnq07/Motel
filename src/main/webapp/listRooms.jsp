@@ -1,17 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.MotelRoom" %>
-<jsp:useBean id="rooms" scope="request" type="java.util.List" />
-<jsp:useBean id="currentPage" scope="request" type="java.lang.Integer" />
-<jsp:useBean id="totalPages" scope="request" type="java.lang.Integer" />
-
-<!-- Include Bootstrap CSS -->
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-
-<!-- Include Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html>
@@ -19,13 +9,27 @@
     <title>Motel Rooms</title>
     <!-- Include Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
     <style>
+        .favorite {
+            cursor: pointer;
+            color: #ccc; /* Màu mặc định */
+            font-size: 24px;
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+        }
+        .favorite.active {
+            color: red; /* Màu khi được kích hoạt */
+        }
         .body {
             margin-top: 80px;
         }
         .room-card {
             border: none;
             margin-bottom: 20px;
+            position: relative;
         }
         .room-card img {
             width: 100%;
@@ -58,46 +62,59 @@
 <jsp:include page="header.jsp" ></jsp:include>
 <div class="container mt-5">
     <div class="row">
-        <%
-            List<MotelRoom> roomList = (List<MotelRoom>) request.getAttribute("rooms");
-            if (roomList != null && !roomList.isEmpty()) {
-                for (MotelRoom room : roomList) {
-        %>
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="room-card">
-                <% if (room.getImage() != null && !room.getImage().isEmpty()) { %>
-                <img src="<%= request.getContextPath()%>/avatar/<%= room.getImage() %>" alt="Room Image">
-                <% } else { %>
-                <img src="images/default-room.jpg" alt="Default Room Image">
-                <% } %>
-                <div class="room-details">
-                    <h5><%= room.getDescription() %></h5>
-                    <p><%= room.getLength() * room.getWidth() %> m²</p>
-                    <p class="price"><%= room.getRoomPrice() %> triệu/tháng</p>
-                    <p><%= room.getDetailAddress() %>, <%= room.getWard() %>, <%= room.getDistrict() %>, <%= room.getCity() %>, <%= room.getProvince() %></p>
-                    <a href="room-details?roomId=<%= room.getMotelRoomId() %>" class="btn btn-primary">View Details</a>
+        <c:forEach var="room" items="${rooms}">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="room-card">
+                    <c:if test="${not empty room.image}">
+                        <img src="${pageContext.request.contextPath}/avatar/${room.image}" alt="Room Image">
+                    </c:if>
+                    <c:if test="${empty room.image}">
+                        <img src="images/default-room.jpg" alt="Default Room Image">
+                    </c:if>
+                    <div class="room-details">
+                        <h5>${room.description}</h5>
+                        <p>${room.length * room.width} m²</p>
+                        <p class="price">${room.roomPrice} triệu/tháng</p>
+                        <p>${room.detailAddress}, ${room.ward}, ${room.district}, ${room.city}, ${room.province}</p>
+                        <i class="favorite ${room.favorite ? 'fas text-danger' : 'far'} fa-heart" onclick="toggleFavorite(this, ${room.motelRoomId})"></i>
+                        <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">Xem chi tiết</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <%
-            }
-        } else {
-        %>
-        <p class="col-12">No rooms available.</p>
-        <% } %>
+        </c:forEach>
     </div>
 
     <!-- Pagination -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <% for (int i = 1; i <= (Integer)request.getAttribute("totalPages"); i++) { %>
-            <li class="page-item<%= i == (Integer)request.getAttribute("currentPage") ? " active" : "" %>">
-                <a class="page-link" href="motel-rooms?page=<%= i %>"><%= i %></a>
-            </li>
-            <% } %>
+            <c:forEach var="i" begin="1" end="${totalPages}">
+                <li class="page-item ${i == currentPage ? 'active' : ''}">
+                    <a class="page-link" href="motel-rooms?page=${i}">${i}</a>
+                </li>
+            </c:forEach>
         </ul>
     </nav>
 </div>
 <jsp:include page="footer.jsp" />
 </body>
+<script>
+    function toggleFavorite(element, roomId) {
+        const isFavorite = element.classList.contains('fas'); // Kiểm tra xem đã là yêu thích chưa
+        const action = isFavorite ? 'remove' : 'add'; // Xác định hành động dựa trên trạng thái hiện tại
+
+        fetch("favorite?action="+action+"&roomId="+roomId, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    element.classList.toggle('far'); // Toggle the empty heart
+                    element.classList.toggle('fas'); // Toggle the filled heart
+                } else {
+                    alert('Có lỗi xảy ra khi xử lý yêu cầu của bạn');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
 </html>
