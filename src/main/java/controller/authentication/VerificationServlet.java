@@ -1,6 +1,4 @@
-package controller;
-
-
+package controller.authentication;
 import Account.Account;
 import dao.AccountDAO;
 import jakarta.servlet.ServletException;
@@ -9,9 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import java.io.IOException;
-
 @WebServlet(name = "VerificationServlet", urlPatterns = {"/verify"})
 public class VerificationServlet extends HttpServlet {
 

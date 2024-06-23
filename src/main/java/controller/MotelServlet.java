@@ -28,7 +28,7 @@ public class MotelServlet extends HttpServlet {
         try {
             switch (action) {
                 case "/motel/create":
-                    request.getRequestDispatcher("/motel-form.jsp").forward(request, response);
+                    request.getRequestDispatcher("/motelForm.jsp").forward(request, response);
                     break;
                 case "/motel/update":
                     showUpdateForm(request, response);
@@ -87,7 +87,7 @@ public class MotelServlet extends HttpServlet {
         Motel existingMotel = new Motel();
         existingMotel = MotelDAO.getMotelById(id);
         request.setAttribute("motel", existingMotel);
-        request.getRequestDispatcher("/motel-form.jsp").forward(request, response);
+        request.getRequestDispatcher("/motelForm.jsp").forward(request, response);
     }
 
     private void insertMotel(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {

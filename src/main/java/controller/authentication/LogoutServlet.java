@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package controller.authentication;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

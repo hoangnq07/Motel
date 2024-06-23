@@ -55,9 +55,10 @@
         }
     </style>
 </head>
-<body class="body">
 <jsp:include page="header.jsp" ></jsp:include>
-<div class="container mt-5">
+<body class="body"  >
+
+<div class="container mt-5" <c:if test="${empty favoriteRooms}">style="height: 500px"</c:if>>
     <div class="row">
         <c:forEach var="room" items="${favoriteRooms}">
             <div class="col-lg-4 col-md-6 mb-4" id="fas${room.motelRoomId}">
@@ -92,8 +93,9 @@
         </ul>
     </nav>
 </div>
-<jsp:include page="footer.jsp" />
+
 </body>
+<jsp:include page="footer.jsp" />
 <script>
     function toggleFavorite(element, roomId) {
         const isFavorite = element.classList.contains('fas'); // Kiểm tra xem đã là yêu thích chưa

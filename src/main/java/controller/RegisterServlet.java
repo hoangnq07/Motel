@@ -1,6 +1,7 @@
 package controller;
 
 import Account.Account;
+import controller.util.EmailSender;
 import dao.AccountDAO;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.AddressException;
