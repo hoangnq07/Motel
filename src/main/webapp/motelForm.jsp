@@ -80,6 +80,21 @@
         a:hover {
             text-decoration: underline;
         }
+        .textarea{
+            height: 100px;
+        }
+        .image-preview-container {
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+        }
     </style>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -88,26 +103,26 @@
 <body>
 <div class="container h-100">
     <h1>${motel == null ? "Create New Motel" : "Edit Motel"}</h1>
-    <form action="/Project/motel/${motel == null ? 'create' : 'update'}" method="post">
+    <form action="/Project/motel/${motel == null ? 'create' : 'update'}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="${motel.motelId}" />
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" value="${motel.name}" />
 
         <label for="descriptions">Descriptions:</label>
-        <input type="text" id="descriptions" name="descriptions" value="${motel.descriptions}" />
+        <input class="textarea" type="text" id="descriptions" name="descriptions" value="${motel.descriptions}" />
 
         <label for="province">Province:</label>
-        <select id="province" name="province">
+        <select id="province" name="province" onchange="updateHiddenInputs()">
             <option value="-1">Chọn tỉnh thành</option>
         </select>
 
         <label for="district">District:</label>
-        <select id="district" name="district">
+        <select id="district" name="district" onchange="updateHiddenInputs()">
             <option value="-1">Chọn quận/huyện</option>
         </select>
 
         <label for="town">Town:</label>
-        <select id="town" name="town">
+        <select id="town" name="town" onchange="updateHiddenInputs()">
             <option value="-1">Chọn phường/xã</option>
         </select>
 
@@ -123,16 +138,58 @@
             <label for="statusFalse">Unavailable</label>
         </div>
 
-        <label for="image" >Image:</label>
-        <input type="file" class="form-control" id="image" name="image">
-
+        <div class="row">
+            <div class="col-md-6">
+                <label for="image">Image:</label>
+                <input type="file" class="form-control" id="image" name="image" onchange="previewImage(event)">
+            </div>
+            <div class="col-md-6">
+                <div >
+                    <label>Image Preview:</label>
+                    <div class="image-preview-container">
+                        <img id="preview" class="image-preview" src="#" alt="" style="display: none;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Hidden inputs to store the selected text -->
+        <input type="hidden" id="provinceText" name="provinceText" value="">
+        <input type="hidden" id="districtText" name="districtText" value="">
+        <input type="hidden" id="townText" name="townText" value="">
         <input type="hidden" name="accountId" value="${user.accountId}" />
         <input type="submit" value="${motel == null ? 'Create' : 'Update'}" />
     </form>
     <a href="/Project/owner">Back to List</a>
 </div>
-
 <!-- Optional JavaScript -->
+<script>
+    function previewImage(event) {
+        var input = event.target;
+        var reader = new FileReader();
+        reader.onload = function () {
+            var img = document.getElementById('preview');
+            img.src = reader.result;
+            img.style.display = 'block'; // Show image
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+    function updateHiddenInputs() {
+        // Get the selected text from each select element
+        var provinceSelect = document.getElementById('province');
+        var districtSelect = document.getElementById('district');
+        var townSelect = document.getElementById('town');
+
+        var selectedProvinceText = provinceSelect.options[provinceSelect.selectedIndex].text;
+        var selectedDistrictText = districtSelect.options[districtSelect.selectedIndex].text;
+        var selectedTownText = townSelect.options[townSelect.selectedIndex].text;
+
+        // Update the hidden inputs with the selected text
+        document.getElementById('provinceText').value = selectedProvinceText;
+        document.getElementById('districtText').value = selectedDistrictText;
+        document.getElementById('townText').value = selectedTownText;
+    }
+</script>
+</script>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

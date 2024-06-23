@@ -1,26 +1,30 @@
 package controller;
 import Account.Account;
-import context.DBcontext;
 import dao.MotelDAO;
 import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import model.Motel;
+
+import java.io.File;
 import java.io.IOException;
-import java.sql.Connection;
+import java.io.InputStream;
+import java.nio.file.Paths;
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+@MultipartConfig
 @WebServlet(name = "MotelServlet", urlPatterns = {"/motel", "/motel/create", "/motel/update", "/motel/delete","/motel/manage"})
 public class MotelServlet extends HttpServlet {
-
+    private static final String UPLOAD_DIRECTORY = "uploads";
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
@@ -60,7 +64,7 @@ public class MotelServlet extends HttpServlet {
         try {
             switch (action) {
                 case "/motel/create":
-                    insertMotel(request, response);
+                    createMotel(request, response);
                     break;
                 case "/motel/update":
                     updateMotel(request, response);
@@ -90,28 +94,51 @@ public class MotelServlet extends HttpServlet {
         request.getRequestDispatcher("/motelForm.jsp").forward(request, response);
     }
 
-    private void insertMotel(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+    private void createMotel(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
         String descriptions = request.getParameter("descriptions");
         String name = request.getParameter("name");
         String detailAddress = request.getParameter("detailAddress");
-        String district = request.getParameter("district");
-        String image = request.getParameter("image");
         String province = request.getParameter("province");
+        String provinceText = request.getParameter("provinceText");
+        String district = request.getParameter("district");
+        String districtText = request.getParameter("districtText");
+        String wardText = request.getParameter("townText");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
-        String ward = request.getParameter("ward");
         int accountId = Integer.parseInt(request.getParameter("accountId"));
-        Motel motel = new Motel();
-        motel.setName(name);
-        motel.setDescriptions(descriptions);
-        motel.setDetailAddress(detailAddress);
-        motel.setDistrict(district);
-        motel.setImage(image);
-        motel.setProvince(province);
-        motel.setStatus(status);
-        motel.setWard(ward);
-        motel.setAccountId(accountId);
-        MotelDAO.addMotel(motel);
-        response.sendRedirect("/Project/owner");
+        // Get file part
+        try {
+            Part filePart = request.getPart("image");
+            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+            String newFileName = null;
+            if(fileName!=null && !fileName.isEmpty()) {
+                String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+                newFileName = UUID.randomUUID().toString() + fileExtension;
+                String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdir();
+                }
+                String filePath = uploadPath + File.separator + newFileName;
+                filePart.write(filePath);
+            }
+            //add motel
+            Motel motel = new Motel();
+            motel.setName(name);
+            motel.setDescriptions(descriptions);
+            motel.setDetailAddress(detailAddress);
+            motel.setDistrict(districtText);
+            if(newFileName!=null) motel.setImage(newFileName);
+            motel.setProvince(provinceText);
+            motel.setStatus(status);
+            motel.setWard(wardText);
+            motel.setProvinceId(province);
+            motel.setDistrictId(district);
+            motel.setAccountId(accountId);
+            MotelDAO.addMotel(motel);
+            response.sendRedirect("/Project/owner");
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void updateMotel(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
@@ -123,7 +150,7 @@ public class MotelServlet extends HttpServlet {
         String image = request.getParameter("image");
         String province = request.getParameter("province");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
-        String ward = request.getParameter("ward");
+        String ward = request.getParameter("town");
         int accountId = Integer.parseInt(request.getParameter("accountId"));
         MotelDAO.updateMotel(new Motel(id, name, new Date(System.currentTimeMillis()), descriptions, detailAddress, district, image, province, status, ward, accountId));
         response.sendRedirect("/Project/owner");

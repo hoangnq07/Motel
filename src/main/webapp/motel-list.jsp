@@ -73,10 +73,7 @@
         <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Province</th>
-            <th>District</th>
-            <th>Ward</th>
-            <th>Detail Address</th>
+            <th>Address</th>
             <th>Image</th>
             <th>Status</th>
             <th>Actions</th>
@@ -85,11 +82,8 @@
             <tr>
                 <td>${motel.name}</td>
                 <td>${motel.descriptions}</td>
-                <td>${motel.province}</td>
-                <td>${motel.district}</td>
-                <td>${motel.ward}</td>
-                <td>${motel.detailAddress}</td>
-                <td><img src="${pageContext.request.contextPath}/images/${motel.image}" width="100px" height="100px"></td>
+                <td>${motel.detailAddress}, ${motel.ward}, ${motel.district}, ${motel.province}</td>
+                <td><img src="${pageContext.request.contextPath}/uploads/${motel.image}" width="100px" height="100px"></td>
                 <td><c:choose>
                     <c:when test="${motel.status}">Available</c:when>
                     <c:otherwise>Unavailable</c:otherwise>
