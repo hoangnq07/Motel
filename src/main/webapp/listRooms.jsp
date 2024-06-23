@@ -2,10 +2,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.MotelRoom" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%--<!-- Include Bootstrap JS and dependencies -->--%>
-<%--<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>--%>
-<%--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>--%>
-<%--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>--%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,14 +13,14 @@
     <style>
         .favorite {
             cursor: pointer;
-            color: #ccc; /* Màu mặc định */
+            color: #ccc; /* Default color */
             font-size: 24px;
             position: absolute;
             bottom: 10px;
             right: 10px;
         }
         .favorite.active {
-            color: red; /* Màu khi được kích hoạt */
+            color: red; /* Active color */
         }
         .body {
             margin-top: 80px;
@@ -62,10 +58,36 @@
     </style>
 </head>
 <body class="body">
-<jsp:include page="header.jsp" ></jsp:include>
+<jsp:include page="header.jsp"></jsp:include>
 
 <div class="container mt-5">
-    <div class="row">
+    <!-- Search Form -->
+    <form id="searchForm">
+        <div class="form-group">
+            <label for="description">Description:</label>
+            <input type="text" class="form-control" id="description" name="description">
+        </div>
+        <div class="form-group">
+            <label for="minPrice">Min Price:</label>
+            <input type="number" class="form-control" id="minPrice" name="minPrice" step="0.01">
+        </div>
+        <div class="form-group">
+            <label for="maxPrice">Max Price:</label>
+            <input type="number" class="form-control" id="maxPrice" name="maxPrice" step="0.01">
+        </div>
+        <div class="form-group">
+            <label for="status">Status:</label>
+            <select class="form-control" id="status" name="status">
+                <option value="">Any</option>
+                <option value="true">Available</option>
+                <option value="false">Unavailable</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Room Listings -->
+    <div class="row mt-4">
         <c:forEach var="room" items="${rooms}">
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="room-card">
@@ -103,17 +125,17 @@
 </body>
 <script>
     function toggleFavorite(element, roomId) {
-        const isFavorite = element.classList.contains('fas'); // Kiểm tra xem đã là yêu thích chưa
-        const action = isFavorite ? 'remove' : 'add'; // Xác định hành động dựa trên trạng thái hiện tại
+        const isFavorite = element.classList.contains('fas'); // Check if already favorite
+        const action = isFavorite ? 'remove' : 'add'; // Determine action based on current state
 
-        fetch("favorite?action="+action+"&roomId="+roomId, { method: 'POST' })
+        fetch("favorite?action=" + action + "&roomId=" + roomId, { method: 'POST' })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     element.classList.toggle('far'); // Toggle the empty heart
                     element.classList.toggle('fas'); // Toggle the filled heart
                 } else {
-                    alert('Có lỗi xảy ra khi xử lý yêu cầu của bạn');
+                    alert('An error occurred while processing your request');
                 }
             })
             .catch(error => {
@@ -121,4 +143,27 @@
             });
     }
 </script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#searchForm').submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url: '${pageContext.request.contextPath}/searchMotelRooms',
+                type: 'GET',
+                data: $(this).serialize(),
+                success: function(response) {
+                    $('.row.mt-4').html(response);
+                    // Hide pagination if showing search results
+                    $('.pagination').hide();
+                },
+                error: function() {
+                    alert('An error occurred while processing your request');
+                }
+            });
+        });
+    });
+</script>
+
 </html>

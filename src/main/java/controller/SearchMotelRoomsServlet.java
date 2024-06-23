@@ -1,4 +1,4 @@
-package servlet;
+package controller;
 
 import dao.MotelRoomDAO;
 import model.MotelRoom;
@@ -48,8 +48,7 @@ public class SearchMotelRoomsServlet extends HttpServlet {
         }
 
         List<MotelRoom> motelRooms = motelRoomDAO.searchMotelRooms(description, minPrice, maxPrice, status);
-        request.setAttribute("motelRooms", motelRooms);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/searchMotelRooms.jsp");
-        dispatcher.forward(request, response);
+        request.setAttribute("rooms", motelRooms);
+        request.getRequestDispatcher("/WEB-INF/partials/roomList.jsp").forward(request, response);
     }
 }
