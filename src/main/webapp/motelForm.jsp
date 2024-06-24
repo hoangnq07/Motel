@@ -114,6 +114,7 @@
         <label for="province">Province:</label>
         <select id="province" name="province" onchange="updateHiddenInputs()">
             <option value="-1">Chọn tỉnh thành</option>
+
         </select>
 
         <label for="district">District:</label>
@@ -188,7 +189,6 @@
         document.getElementById('districtText').value = selectedDistrictText;
         document.getElementById('townText').value = selectedTownText;
     }
-</script>
 </script>
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
