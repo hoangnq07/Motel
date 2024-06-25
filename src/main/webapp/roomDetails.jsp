@@ -49,17 +49,17 @@
             </div>
         </div>
         <div class="col-md-6">
-            <h3><%= room.getDescription() %></h3>
-            <p><strong>Category:</strong> <%= room.getCategory() %></p>
-            <p><strong>Room Price:</strong> <%= room.getRoomPrice() %> triệu/tháng</p>
-            <p><strong>Length:</strong> <%= room.getLength() %> m</p>
-            <p><strong>Width:</strong> <%= room.getWidth() %> m</p>
-            <p><strong>Electricity Price:</strong> <%= room.getElectricityPrice() %> per unit</p>
-            <p><strong>Water Price:</strong> <%= room.getWaterPrice() %> per unit</p>
-            <p><strong>WiFi Price:</strong> <%= room.getWifiPrice() %></p>
-            <p><strong>Owner's Name:</strong> <%= room.getAccountFullname() %></p>
-            <p><strong>Owner's Phone:</strong> <%= room.getAccountPhone() %></p>
-            <p><strong>Address:</strong> <%= room.getDetailAddress() %>, <%= room.getWard() %>, <%= room.getDistrict() %>, <%= room.getCity() %>, <%= room.getProvince() %></p>
+            <h3>${room.description}</h3>
+            <p><strong>Category:</strong> ${room.category}</p>
+            <p><strong>Room Price:</strong> ${room.roomPrice} triệu/tháng</p>
+            <p><strong>Length:</strong> ${room.length} m</p>
+            <p><strong>Width:</strong> ${room.width} m</p>
+            <p><strong>Electricity Price:</strong> ${room.electricityPrice} per unit</p>
+            <p><strong>Water Price:</strong> ${room.waterPrice} per unit</p>
+            <p><strong>WiFi Price:</strong> ${room.wifiPrice}</p>
+            <p><strong>Owner's Name:</strong> ${room.accountFullname}</p>
+            <p><strong>Owner's Phone:</strong> ${room.accountPhone}</p>
+            <p><strong>Address:</strong> ${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
         </div>
     </div>
 </div>

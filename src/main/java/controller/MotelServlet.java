@@ -152,23 +152,23 @@ public class MotelServlet extends HttpServlet {
         String districtText = request.getParameter("districtText");
         String wardText = request.getParameter("townText");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        String newFileName = null;
         // Get file part
         try {
             Part filePart = request.getPart("image");
-            String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-            String newFileName = null;
-            if(fileName!=null && !fileName.isEmpty()) {
-                String fileExtension = fileName.substring(fileName.lastIndexOf("."));
-                newFileName = UUID.randomUUID().toString() + fileExtension;
-                String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdir();
-                }
-                String filePath = uploadPath + File.separator + newFileName;
-                filePart.write(filePath);
+            if (filePart != null && filePart.getSize() > 0) {
+                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+                    String fileExtension = fileName.substring(fileName.lastIndexOf("."));
+                    newFileName = UUID.randomUUID().toString() + fileExtension;
+                    String uploadPath = getServletContext().getRealPath("") + File.separator + UPLOAD_DIRECTORY;
+                    File uploadDir = new File(uploadPath);
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdir();
+                    }
+                    String filePath = uploadPath + File.separator + newFileName;
+                    filePart.write(filePath);
             }
-        int accountId = Integer.parseInt(request.getParameter("accountId"));
+            int accountId = Integer.parseInt(request.getParameter("accountId"));
             Motel motel = new Motel();
             motel.setMotelId(id);
             motel.setName(name);

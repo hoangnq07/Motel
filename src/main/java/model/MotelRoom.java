@@ -1,9 +1,11 @@
 package model;
 
 import java.sql.Date;
+import java.util.List;
 
 public class MotelRoom {
     private int motelRoomId;
+    private String name;
     private Date createDate;
     private String description;
     private double length;
@@ -16,7 +18,7 @@ public class MotelRoom {
     private int motelId;
     private boolean roomStatus;
     private int accountId;
-    private String image;
+    private List<String> image;
     private String address;
     private String accountFullname;
     private String accountPhone;
@@ -30,7 +32,7 @@ public class MotelRoom {
     public MotelRoom() {
     }
 
-    public MotelRoom(int motelRoomId, String detailAddress, Date createDate, double length, String description, double width, double roomPrice, double waterPrice, double electricityPrice, int categoryRoomId, double wifiPrice, int motelId, boolean roomStatus, String image, int accountId, String address, String accountFullname, String accountPhone, String ward, String district, String city, String category, String province, boolean isFavorite) {
+    public MotelRoom(int motelRoomId, String detailAddress, Date createDate, double length, String description, double width, double roomPrice, double waterPrice, double electricityPrice, int categoryRoomId, double wifiPrice, int motelId, boolean roomStatus, List<String> image, int accountId, String address, String accountFullname, String accountPhone, String ward, String district, String city, String category, String province, boolean isFavorite) {
         this.motelRoomId = motelRoomId;
         this.detailAddress = detailAddress;
         this.createDate = createDate;
@@ -57,15 +59,55 @@ public class MotelRoom {
         this.isFavorite = isFavorite;
     }
 
-    public String getCategory() {
-        return category;
+    public MotelRoom(int motelRoomId, String name, Date createDate, String description, String province) {
+        this.motelRoomId = motelRoomId;
+        this.name = name;
+        this.createDate = createDate;
+        this.description = description;
+        this.province = province;
+    }
+
+    public MotelRoom(int motelRoomId, String name, Date createDate, String description, double length, double width, double roomPrice, double electricityPrice, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, int accountId, List<String> image, String address, String accountFullname, String accountPhone, String detailAddress, String ward, String district, String city, String province, String category, boolean isFavorite) {
+        this.motelRoomId = motelRoomId;
+        this.name = name;
+        this.createDate = createDate;
+        this.description = description;
+        this.length = length;
+        this.width = width;
+        this.roomPrice = roomPrice;
+        this.electricityPrice = electricityPrice;
+        this.waterPrice = waterPrice;
+        this.wifiPrice = wifiPrice;
+        this.categoryRoomId = categoryRoomId;
+        this.motelId = motelId;
+        this.roomStatus = roomStatus;
+        this.accountId = accountId;
+        this.image = image;
+        this.address = address;
+        this.accountFullname = accountFullname;
+        this.accountPhone = accountPhone;
+        this.detailAddress = detailAddress;
+        this.ward = ward;
+        this.district = district;
+        this.city = city;
+        this.province = province;
+        this.category = category;
+        this.isFavorite = isFavorite;
     }
 
     public void setCategory(String category) {
         this.category = category;
     }
 
-    public MotelRoom(int motelRoomId, Date createDate, String description, double length, double width, double roomPrice, double electricityPrice, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, int accountId, String image, String detailAddress, String ward, String district, String city, String province, boolean isFavorite) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public MotelRoom(int motelRoomId, Date createDate, String description, double length, double width, double roomPrice, double electricityPrice, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, int accountId, List<String> image, String detailAddress, String ward, String district, String city, String province, boolean isFavorite) {
         this.motelRoomId = motelRoomId;
         this.createDate = createDate;
         this.description = description;
@@ -136,12 +178,16 @@ public class MotelRoom {
         this.province = province;
     }
 
-    public String getImage() {
+    public List<String> getImage() {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(List<String> image) {
         this.image = image;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public String getAddress() {

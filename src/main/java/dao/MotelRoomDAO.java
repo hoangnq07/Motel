@@ -9,9 +9,6 @@ import java.util.List;
 import Account.Account;
 public class MotelRoomDAO {
     private Connection connection;
-
-
-
     public MotelRoomDAO() throws SQLException {
         connection = DBcontext.getConnection();
     }
@@ -37,7 +34,7 @@ public class MotelRoomDAO {
                     room.setElectricityPrice(rs.getDouble("electricity_price"));
                     room.setWaterPrice(rs.getDouble("water_price"));
                     room.setWifiPrice(rs.getDouble("wifi_price"));
-                    room.setImage(getImageByRoomId(rs.getInt("motel_room_id")));
+                    room.setImage(getImagesForRoom(rs.getInt("motel_room_id")));
                     room.setDetailAddress(rs.getString("detail_address"));
                     room.setWard(rs.getString("ward"));
                     room.setDistrict(rs.getString("district"));
@@ -63,6 +60,7 @@ public class MotelRoomDAO {
             return false;
         }
     }
+
     public boolean isFavoriteRoom(int accountId, int roomId) {
         String query = "SELECT COUNT(*) FROM favourite_room WHERE account_id = ? AND motel_room_id = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -78,8 +76,6 @@ public class MotelRoomDAO {
         }
         return false;
     }
-
-
 
     public boolean removeFavoriteRoom(int accountId, int roomId) {
         String query = "DELETE FROM favourite_room WHERE account_id = ? AND motel_room_id = ?";
@@ -116,7 +112,7 @@ public class MotelRoomDAO {
                 room.setElectricityPrice(rs.getDouble("electricity_price"));
                 room.setWaterPrice(rs.getDouble("water_price"));
                 room.setWifiPrice(rs.getDouble("wifi_price"));
-                room.setImage(getImageByRoomId(rs.getInt("motel_room_id")));
+                room.setImage(getImagesForRoom(rs.getInt("motel_room_id")));
                 room.setDetailAddress(rs.getString("detail_address"));
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
@@ -132,15 +128,15 @@ public class MotelRoomDAO {
         return rooms;
     }
 
-
     //Get motel rooms by motel id
     public static List<MotelRoom> getMotelRoomsByMotelId(int motelId) {
         List<MotelRoom> rooms = new ArrayList<>();
-        String query = "SELECT * FROM motel_room WHERE motel_id = ?";
+        String query = "SELECT mr.*, cr.descriptions as category, cr.category_room_id FROM motel_room mr JOIN category_room cr ON mr.category_room_id = cr.category_room_id WHERE motel_id = ?";
         try {
             PreparedStatement ps =DBcontext.getConnection().prepareStatement(query);
             ps.setInt(1, motelId);
             ResultSet rs = ps.executeQuery();
+            MotelRoomDAO motelRoomDAO = new MotelRoomDAO();
             while (rs.next()) {
                 MotelRoom room = new MotelRoom();
                 room.setMotelRoomId(rs.getInt("motel_room_id"));
@@ -152,10 +148,11 @@ public class MotelRoomDAO {
                 room.setWaterPrice(rs.getDouble("water_price"));
                 room.setWifiPrice(rs.getDouble("wifi_price"));
                 room.setRoomStatus(rs.getBoolean("room_status"));
+                room.setCategory(rs.getString("category"));
                 room.setCategoryRoomId(rs.getInt("category_room_id"));
                 room.setMotelId(rs.getInt("motel_id"));
                 room.setAccountId(rs.getInt("account_id"));
-                room.setImage(getImageByRoomId(rs.getInt("motel_room_id")));
+                room.setImage(motelRoomDAO.getImagesForRoom(rs.getInt("motel_room_id")));
                 rooms.add(room);
             }
         } catch (SQLException e) {
@@ -178,35 +175,22 @@ public class MotelRoomDAO {
         return 0;
     }
 
-    private static String getImageByRoomId(int roomId) {
-        String query = "SELECT name FROM image WHERE motel_room_id = ?";
-        try {
-            PreparedStatement ps = DBcontext.getConnection().prepareStatement(query);
-            ps.setInt(1, roomId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getString("name");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public MotelRoom getMotelRoomById(int id) {
+    public static MotelRoom getMotelRoomById(int id) {
         MotelRoom room = null;
-        String query = "SELECT mr.*, cr.descriptions as category, a.fullname, a.phone, m.detail_address, m.ward, m.district, m.province " +
+        String query = "SELECT mr.*, cr.descriptions as category, cr.category_room_id, a.fullname, a.phone, m.detail_address, m.ward, m.district, m.province " +
                 "FROM motel_room mr " +
                 "JOIN category_room cr ON mr.category_room_id = cr.category_room_id " +
                 "JOIN accounts a ON mr.account_id = a.account_id " +
                 "JOIN motels m ON mr.motel_id = m.motel_id " +
                 "WHERE mr.motel_room_id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = DBcontext.getConnection().prepareStatement(query)) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
+            MotelRoomDAO motelRoomDAO = new MotelRoomDAO();
             if (rs.next()) {
                 room = new MotelRoom();
                 room.setMotelRoomId(rs.getInt("motel_room_id"));
+                room.setName(rs.getString("name"));
                 room.setDescription(rs.getString("descriptions"));
                 room.setLength(rs.getDouble("length"));
                 room.setWidth(rs.getDouble("width"));
@@ -219,9 +203,10 @@ public class MotelRoomDAO {
                 room.setDetailAddress(rs.getString("detail_address"));
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
-                room.setCity(rs.getString("city"));
                 room.setProvince(rs.getString("province"));
                 room.setCategory(rs.getString("category"));
+                room.setCategoryRoomId(rs.getInt("category_room_id"));
+                room.setImage(motelRoomDAO.getImagesForRoom(rs.getInt("motel_room_id")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -267,21 +252,21 @@ public class MotelRoomDAO {
     public void updateMotelRoom(MotelRoom room) throws SQLException {
         int motelRoomId = room.getMotelRoomId();
         if (isMotelRoomExists(motelRoomId)) {
-            String sql = "UPDATE motel_room SET descriptions = ?, length = ?, width = ?, room_price = ?, electricity_price = ?, water_price = ?, wifi_price = ?, room_status = ?, category_room_id = ?, motel_id = ?, account_id = ? " +
-                    "WHERE motel_room_id = ?";
+            String sql = "UPDATE motel_room SET name = ?, descriptions = ?, length = ?, width = ?, room_price = ?, electricity_price = ?, water_price = ?, wifi_price = ?, room_status = ?, category_room_id = ?, motel_id = ?, account_id = ? WHERE motel_room_id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setString(1, room.getDescription());
-                stmt.setDouble(2, room.getLength());
-                stmt.setDouble(3, room.getWidth());
-                stmt.setDouble(4, room.getRoomPrice());
-                stmt.setDouble(5, room.getElectricityPrice());
-                stmt.setDouble(6, room.getWaterPrice());
-                stmt.setDouble(7, room.getWifiPrice());
-                stmt.setBoolean(8, room.isRoomStatus());
-                stmt.setInt(9, room.getCategoryRoomId());
-                stmt.setInt(10, room.getMotelId());
-                stmt.setInt(11, room.getAccountId());
-                stmt.setInt(12, motelRoomId);
+                stmt.setString(1, room.getName());
+                stmt.setString(2, room.getDescription());
+                stmt.setDouble(3, room.getLength());
+                stmt.setDouble(4, room.getWidth());
+                stmt.setDouble(5, room.getRoomPrice());
+                stmt.setDouble(6, room.getElectricityPrice());
+                stmt.setDouble(7, room.getWaterPrice());
+                stmt.setDouble(8, room.getWifiPrice());
+                stmt.setBoolean(9, room.isRoomStatus());
+                stmt.setInt(10, room.getCategoryRoomId());
+                stmt.setInt(11, room.getMotelId());
+                stmt.setInt(12, room.getAccountId());
+                stmt.setInt(13, motelRoomId);
                 stmt.executeUpdate();
             }
         } else {
@@ -361,7 +346,7 @@ public class MotelRoomDAO {
                 room.setElectricityPrice(rs.getDouble("electricity_price"));
                 room.setWaterPrice(rs.getDouble("water_price"));
                 room.setWifiPrice(rs.getDouble("wifi_price"));
-                room.setImage(getImageByRoomId(rs.getInt("motel_room_id")));
+                room.setImage(getImagesForRoom(rs.getInt("motel_room_id")));
                 room.setDetailAddress(rs.getString("detail_address"));
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
@@ -374,5 +359,4 @@ public class MotelRoomDAO {
         }
         return rooms;
     }
-
 }

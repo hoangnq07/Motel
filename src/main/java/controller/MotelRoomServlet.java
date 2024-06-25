@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import Account.Account;
+import com.google.gson.Gson;
 import model.MotelRoom;
 import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
@@ -17,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class MotelRoomServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private MotelRoomDAO motelRoomDAO;
-
+    private Gson gson = new Gson();
     public void init() {
         try {
             motelRoomDAO = new MotelRoomDAO();
@@ -32,12 +33,25 @@ public class MotelRoomServlet extends HttpServlet {
             listRooms(request, response);
         } else if (action.equals("create")) {
             showForm(request, response, new MotelRoom());
+        } else if ("getRoomDetails".equals(action)) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            MotelRoom room = MotelRoomDAO.getMotelRoomById(id);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            if (room != null) {
+                String jsonResponse = gson.toJson(room);
+                response.getWriter().write(jsonResponse);
+            } else {
+                sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, "Room not found");
+            }
         } else if (action.equals("edit")) {
             try {
                 showEditForm(request, response);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        }else if(action.equals("delete")){
+            deleteMotelRoom(request,response);
         }
     }
 
@@ -128,13 +142,14 @@ public class MotelRoomServlet extends HttpServlet {
 
     private void updateMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MotelRoom room = new MotelRoom();
-        room.setMotelRoomId(Integer.parseInt(request.getParameter("motelRoomId")));
+        room.setMotelRoomId(Integer.parseInt(request.getParameter("id")));
         room.setDescription(request.getParameter("description"));
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
         room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
         room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
-
+        room.setCategoryRoomId(Integer.parseInt(request.getParameter("categoryRoomId")));
+        room.setAccountId(((Account)request.getSession().getAttribute("user")).getAccountId());
         try {
             motelRoomDAO.updateMotelRoom(room);
             response.sendRedirect("motel-rooms");
@@ -144,12 +159,23 @@ public class MotelRoomServlet extends HttpServlet {
     }
 
     private void deleteMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
+        int id = Integer.parseInt(request.getParameter("id"));
         try {
-            motelRoomDAO.deleteMotelRoom(motelRoomId);
-            response.sendRedirect("motel-rooms");
+            motelRoomDAO.deleteMotelRoom(id);
         } catch (SQLException ex) {
             throw new ServletException(ex);
+        }
+    }
+    private void sendErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
+        response.setStatus(status);
+        response.getWriter().write(gson.toJson(new ErrorResponse(message)));
+    }
+
+    // Inner class for error responses
+    private static class ErrorResponse {
+        private String error;
+        ErrorResponse(String error) {
+            this.error = error;
         }
     }
 }
