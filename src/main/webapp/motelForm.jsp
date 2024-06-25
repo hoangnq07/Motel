@@ -96,6 +96,11 @@
             height: auto;
         }
     </style>
+    <script>
+        var motelProvince = "${motel != null ? motel.province : ''}";
+        var motelDistrict = "${motel != null ? motel.district : ''}";
+        var motelTown = "${motel != null ? motel.ward : ''}";
+    </script>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -110,18 +115,14 @@
 
         <label for="descriptions">Descriptions:</label>
         <input class="textarea" type="text" id="descriptions" name="descriptions" value="${motel.descriptions}" />
-
         <label for="province">Province:</label>
         <select id="province" name="province" onchange="updateHiddenInputs()">
             <option value="-1">Chọn tỉnh thành</option>
-
         </select>
-
         <label for="district">District:</label>
         <select id="district" name="district" onchange="updateHiddenInputs()">
             <option value="-1">Chọn quận/huyện</option>
         </select>
-
         <label for="town">Town:</label>
         <select id="town" name="town" onchange="updateHiddenInputs()">
             <option value="-1">Chọn phường/xã</option>
@@ -175,21 +176,24 @@
         reader.readAsDataURL(input.files[0]);
     }
     function updateHiddenInputs() {
-        // Get the selected text from each select element
         var provinceSelect = document.getElementById('province');
         var districtSelect = document.getElementById('district');
         var townSelect = document.getElementById('town');
 
-        var selectedProvinceText = provinceSelect.options[provinceSelect.selectedIndex].text;
-        var selectedDistrictText = districtSelect.options[districtSelect.selectedIndex].text;
-        var selectedTownText = townSelect.options[townSelect.selectedIndex].text;
+        var selectedProvinceText = provinceSelect.selectedIndex > 0 ? provinceSelect.options[provinceSelect.selectedIndex].text : '';
+        var selectedDistrictText = districtSelect.selectedIndex > 0 ? districtSelect.options[districtSelect.selectedIndex].text : '';
+        var selectedTownText = townSelect.selectedIndex > 0 ? townSelect.options[townSelect.selectedIndex].text : '';
 
-        // Update the hidden inputs with the selected text
         document.getElementById('provinceText').value = selectedProvinceText;
         document.getElementById('districtText').value = selectedDistrictText;
         document.getElementById('townText').value = selectedTownText;
     }
+    var motelProvince = "${motel != null ? motel.provinceId : ''}";
+    var motelDistrict = "${motel != null ? motel.districtId : ''}";
+    var motelTown = "${motel != null ? motel.ward : ''}";
+    console.log('Motel data:', motelProvince, motelDistrict, motelTown);
 </script>
+
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
