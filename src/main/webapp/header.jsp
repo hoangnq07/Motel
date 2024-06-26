@@ -13,8 +13,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/lib/animate/animate.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
 </head>
 <body>
 <!-- Spinner Start -->
@@ -43,7 +43,7 @@
                 <button class="btn btn-outline-primary" type="submit">Search</button>
             </form>
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="home" class="nav-item nav-link active">Home</a>
+                <a href="index.jsp" class="nav-item nav-link active">Home</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
                 <a href="about.jsp" class="nav-item nav-link">Contact Us</a>
             </div>
@@ -51,7 +51,7 @@
 
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
-                        <li class="nav-item dropdown " style="list-style-type: none">
+                        <li class="nav-item dropdown" style="list-style-type: none">
                             <a class="nav-link nav-icon-hover" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="true">
                                 <c:choose>
                                     <c:when test="${empty sessionScope.user.avatar}">
@@ -62,14 +62,15 @@
                                     </c:otherwise>
                                 </c:choose>
                             </a>
-                            <div class="dropdown-menu dropdown-menu-end show " aria-labelledby="userDropdown" data-bs-popper="none">
+                            <div class="dropdown-menu dropdown-menu-end show" aria-labelledby="userDropdown" data-bs-popper="none">
                                 <div class="message-body">
                                     <a href="account_info.jsp" class="dropdown-item">User Profile</a>
                                     <c:if test="${sessionScope.user.role == 'owner'}">
                                         <a href="owner" class="dropdown-item">Manage Motel</a>
                                     </c:if>
+                                    <a href="feedback.jsp" class="dropdown-item">Feedback</a>
                                     <a href="change_password.jsp" class="dropdown-item">Change Password</a>
-                                    <a href="favorite-rooms" class="dropdown-item">My Favorite Room</a> <!-- Thêm dòng này -->
+                                    <a href="favorite-rooms" class="dropdown-item">My Favorite Room</a>
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
                                 </div>
                             </div>
@@ -80,6 +81,7 @@
                         <a class="btn btn-primary ms-3" href="registration.jsp">Đăng ký</a>
                     </c:otherwise>
                 </c:choose>
+
             </div>
         </div>
 
