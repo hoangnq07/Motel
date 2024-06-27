@@ -29,8 +29,11 @@
                     <a class="nav-link" href="createInvoice.jsp" data-target="createinvoice">Hóa đơn</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="notify.jsp" data-target="notifications">Thông báo</a>
+                    <a class="nav-link" href="sendNotification.jsp" data-target="notifications">Thông báo</a>
                 </li>
+<%--                <li class="nav-item">--%>
+<%--                    <a class="nav-link" href="notify.jsp" data-target="notifications">Thông báo</a>--%>
+<%--                </li>--%>
                     <a href="logout" >Logout</a>
             </ul>
         </div>
@@ -45,8 +48,11 @@
                 <jsp:include page="renters.jsp"></jsp:include>
             </div>
             <div id="notifications" class="content d-none">
-                <jsp:include page="notify.jsp"></jsp:include>
+                <jsp:include page="sendNotification.jsp"></jsp:include>
             </div>
+<%--            <div id="notifications" class="content d-none">--%>
+<%--                <jsp:include page="notify.jsp"></jsp:include>--%>
+<%--            </div>--%>
             <div id="createinvoice" class="content d-none">
                 <jsp:include page="createInvoice.jsp"></jsp:include>
             </div>
