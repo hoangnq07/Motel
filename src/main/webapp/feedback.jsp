@@ -30,16 +30,19 @@
             width: 100%;
             margin-top: 20px;
         }
+        .body{
+            margin-top: 50px !important;
+        }
     </style>
 </head>
-<body>
+<body class="body">
 
 <!-- Header Start -->
 <jsp:include page="header.jsp" ></jsp:include>
 <!-- Header End -->
 
 <!-- Feedback Form Start -->
-<div class="container feedback-form">
+<div class="container feedback-form" style="margin-top: 150px !important">
     <h3>Gửi Feedback</h3>
     <div id="notificationArea" style="display: none;"></div> <!-- Khu vực hiển thị thông báo -->
     <form action="sendFeedback" method="POST">

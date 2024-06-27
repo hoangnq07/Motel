@@ -1,5 +1,6 @@
 package controller;
 
+import Account.Account;
 import com.google.gson.Gson;
 import dao.RenterDAO;
 import jakarta.servlet.ServletException;
@@ -19,12 +20,12 @@ public class FeedbackHistoryServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("accountId") == null) {
+        if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("login.jsp");
             return;
         }
 
-        int userId = (Integer) session.getAttribute("accountId");
+        int userId = ((Account) session.getAttribute("user")).getAccountId();
         response.setContentType("application/json");
         PrintWriter out = response.getWriter();
 

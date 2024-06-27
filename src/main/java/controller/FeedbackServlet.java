@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
+import Account.Account;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,7 +28,7 @@ public class FeedbackServlet extends HttpServlet {
         String feedbackText = request.getParameter("feedback");
         String tag = request.getParameter("tag");
         HttpSession session = request.getSession();
-        Integer accountId = (Integer) session.getAttribute("accountId");
+        Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
 
         if (accountId == null) {
             response.getWriter().write("{\"error\": \"User not logged in.\"}");
