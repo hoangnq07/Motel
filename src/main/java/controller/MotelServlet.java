@@ -10,12 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import model.Motel;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Paths;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +42,14 @@ public class MotelServlet extends HttpServlet {
                     Account account = (Account) request.getSession().getAttribute("user");
                     motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
                     request.setAttribute("motels", motels);
-                    request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(Integer.parseInt(request.getParameter("id"))));
+                    int motelId =-1;
+                    try {
+                        motelId = Integer.parseInt(request.getParameter("id"));
+                        request.getSession().setAttribute("motelId", motelId);
+                    }catch (Exception e){
+                        motelId = (int) request.getSession().getAttribute("motelId");
+                    }
+                    request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(motelId));
                     request.getRequestDispatcher("/motel-manage.jsp").forward(request, response);
                     break;
                 default:

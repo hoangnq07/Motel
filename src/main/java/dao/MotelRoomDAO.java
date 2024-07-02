@@ -141,6 +141,7 @@ public class MotelRoomDAO {
                 MotelRoom room = new MotelRoom();
                 room.setMotelRoomId(rs.getInt("motel_room_id"));
                 room.setDescription(rs.getString("descriptions"));
+                room.setName(rs.getString("name"));
                 room.setLength(rs.getDouble("length"));
                 room.setWidth(rs.getDouble("width"));
                 room.setRoomPrice(rs.getDouble("room_price"));
@@ -205,6 +206,7 @@ public class MotelRoomDAO {
                 room.setDistrict(rs.getString("district"));
                 room.setProvince(rs.getString("province"));
                 room.setCategory(rs.getString("category"));
+                room.setRoomStatus(rs.getBoolean("room_status"));
                 room.setCategoryRoomId(rs.getInt("category_room_id"));
                 room.setImage(motelRoomDAO.getImagesForRoom(rs.getInt("motel_room_id")));
             }
@@ -230,8 +232,8 @@ public class MotelRoomDAO {
     }
 
     public void addMotelRoom(MotelRoom room) throws SQLException {
-        String sql = "INSERT INTO motel_room (create_date, descriptions, length, width, room_price, electricity_price, water_price, wifi_price, room_status, category_room_id, motel_id, account_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO motel_room (create_date, descriptions, length, width, room_price, electricity_price, water_price, wifi_price, room_status, category_room_id, motel_id, account_id, name) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setDate(1, new java.sql.Date(System.currentTimeMillis()));
             stmt.setString(2, room.getDescription());
@@ -245,6 +247,7 @@ public class MotelRoomDAO {
             stmt.setInt(10, room.getCategoryRoomId());
             stmt.setInt(11, room.getMotelId());
             stmt.setInt(12, room.getAccountId());
+            stmt.setString(13, room.getName());
             stmt.executeUpdate();
         }
     }
@@ -252,7 +255,7 @@ public class MotelRoomDAO {
     public void updateMotelRoom(MotelRoom room) throws SQLException {
         int motelRoomId = room.getMotelRoomId();
         if (isMotelRoomExists(motelRoomId)) {
-            String sql = "UPDATE motel_room SET name = ?, descriptions = ?, length = ?, width = ?, room_price = ?, electricity_price = ?, water_price = ?, wifi_price = ?, room_status = ?, category_room_id = ?, motel_id = ?, account_id = ? WHERE motel_room_id = ?";
+            String sql = "UPDATE motel_room SET name = ?, descriptions = ?, length = ?, width = ?, room_price = ?, electricity_price = ?, water_price = ?, wifi_price = ?, room_status = ?, category_room_id = ? WHERE motel_room_id = ?";
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setString(1, room.getName());
                 stmt.setString(2, room.getDescription());
@@ -264,9 +267,7 @@ public class MotelRoomDAO {
                 stmt.setDouble(8, room.getWifiPrice());
                 stmt.setBoolean(9, room.isRoomStatus());
                 stmt.setInt(10, room.getCategoryRoomId());
-                stmt.setInt(11, room.getMotelId());
-                stmt.setInt(12, room.getAccountId());
-                stmt.setInt(13, motelRoomId);
+                stmt.setInt(11, motelRoomId);
                 stmt.executeUpdate();
             }
         } else {
@@ -276,10 +277,36 @@ public class MotelRoomDAO {
 
     public void deleteMotelRoom(int motelRoomId) throws SQLException {
         if (isMotelRoomExists(motelRoomId)) {
-            String sql = "DELETE FROM motel_room WHERE motel_room_id = ?";
-            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-                stmt.setInt(1, motelRoomId);
-                stmt.executeUpdate();
+            connection.setAutoCommit(false);
+            try {
+                // First, delete associated favourite room entries
+                String deleteFavouritesSql = "DELETE FROM favourite_room WHERE motel_room_id = ?";
+                try (PreparedStatement favouritesStmt = connection.prepareStatement(deleteFavouritesSql)) {
+                    favouritesStmt.setInt(1, motelRoomId);
+                    favouritesStmt.executeUpdate();
+                }
+
+                // Second, delete associated images
+                String deleteImagesSql = "DELETE FROM image WHERE motel_room_id = ?";
+                try (PreparedStatement imageStmt = connection.prepareStatement(deleteImagesSql)) {
+                    imageStmt.setInt(1, motelRoomId);
+                    imageStmt.executeUpdate();
+                }
+
+                // Finally, delete the motel room
+                String deleteRoomSql = "DELETE FROM motel_room WHERE motel_room_id = ?";
+                try (PreparedStatement roomStmt = connection.prepareStatement(deleteRoomSql)) {
+                    roomStmt.setInt(1, motelRoomId);
+                    roomStmt.executeUpdate();
+                }
+
+                connection.commit();
+                System.out.println("Motel room, associated images, and favourite entries deleted successfully.");
+            } catch (SQLException e) {
+                connection.rollback();
+                throw new SQLException("Error deleting motel room, images, and favourite entries: " + e.getMessage());
+            } finally {
+                connection.setAutoCommit(true);
             }
         } else {
             System.out.println("Motel room with id " + motelRoomId + " does not exist.");

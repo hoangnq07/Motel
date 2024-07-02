@@ -6,6 +6,7 @@ import java.util.List;
 
 import Account.Account;
 import com.google.gson.Gson;
+import jakarta.servlet.annotation.MultipartConfig;
 import model.MotelRoom;
 import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
@@ -15,8 +16,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/motel-rooms")
+@MultipartConfig
 public class MotelRoomServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
     private MotelRoomDAO motelRoomDAO;
     private Gson gson = new Gson();
     public void init() {
@@ -58,13 +59,15 @@ public class MotelRoomServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if ("create".equals(action)) {
-            createMotelRoom(request, response);
+           createMotelRoom(request, response);
         } else if ("edit".equals(action)) {
             updateMotelRoom(request, response);
         } else if ("addFavorite".equals(action)) {
             toggleFavoriteRoom(request, response, true);
         } else if ("removeFavorite".equals(action)) {
             toggleFavoriteRoom(request, response, false);
+        }else {
+            sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
         }
     }
     private void toggleFavoriteRoom(HttpServletRequest request, HttpServletResponse response, boolean add) throws IOException {
@@ -119,6 +122,8 @@ public class MotelRoomServlet extends HttpServlet {
 
     private void createMotelRoom(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         MotelRoom room = new MotelRoom();
+        int motelId = (Integer)(request.getSession().getAttribute("motelId"));
+        room.setName(request.getParameter("name"));
         room.setDescription(request.getParameter("description"));
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
@@ -127,32 +132,35 @@ public class MotelRoomServlet extends HttpServlet {
         room.setWaterPrice(Double.parseDouble(request.getParameter("waterPrice")));
         room.setElectricityPrice(Double.parseDouble(request.getParameter("electricityPrice")));
         room.setWifiPrice(Double.parseDouble(request.getParameter("wifiPrice")));
-//        room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
-        room.setMotelId(1);
-        room.setCategoryRoomId(1);
+        room.setMotelId(motelId);
+        room.setCategoryRoomId(Integer.parseInt(request.getParameter("category")));
         Account acc = (Account) request.getSession().getAttribute("user");
         room.setAccountId(acc.getAccountId());
         try {
             motelRoomDAO.addMotelRoom(room);
-            response.sendRedirect("motel-rooms");
-        } catch (SQLException ex) {
+            response.sendRedirect("/Project/motel/manage");
+        } catch (Exception ex) {
             throw new ServletException(ex);
         }
     }
 
     private void updateMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MotelRoom room = new MotelRoom();
+        int motelId = (Integer)(request.getSession().getAttribute("motelId"));
+        room.setName(request.getParameter("name"));
         room.setMotelRoomId(Integer.parseInt(request.getParameter("id")));
         room.setDescription(request.getParameter("description"));
         room.setLength(Double.parseDouble(request.getParameter("length")));
         room.setWidth(Double.parseDouble(request.getParameter("width")));
         room.setRoomStatus(Boolean.parseBoolean(request.getParameter("status")));
-        room.setMotelId(Integer.parseInt(request.getParameter("motelId")));
-        room.setCategoryRoomId(Integer.parseInt(request.getParameter("categoryRoomId")));
-        room.setAccountId(((Account)request.getSession().getAttribute("user")).getAccountId());
+        room.setCategoryRoomId(Integer.parseInt(request.getParameter("category")));
+        room.setRoomPrice(Double.parseDouble(request.getParameter("roomPrice")));
+        room.setWaterPrice(Double.parseDouble(request.getParameter("waterPrice")));
+        room.setElectricityPrice(Double.parseDouble(request.getParameter("electricityPrice")));
+        room.setWifiPrice(Double.parseDouble(request.getParameter("wifiPrice")));
         try {
             motelRoomDAO.updateMotelRoom(room);
-            response.sendRedirect("motel-rooms");
+            response.sendRedirect("/Project/motel/manage");
         } catch (SQLException ex) {
             throw new ServletException(ex);
         }
@@ -162,6 +170,7 @@ public class MotelRoomServlet extends HttpServlet {
         int id = Integer.parseInt(request.getParameter("id"));
         try {
             motelRoomDAO.deleteMotelRoom(id);
+            response.sendRedirect("/Project/motel/manage");
         } catch (SQLException ex) {
             throw new ServletException(ex);
         }
