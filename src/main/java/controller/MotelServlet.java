@@ -21,7 +21,7 @@ import java.util.UUID;
 @MultipartConfig
 @WebServlet(name = "MotelServlet", urlPatterns = {"/motel", "/motel/create", "/motel/update", "/motel/delete","/motel/manage"})
 public class MotelServlet extends HttpServlet {
-    private static final String UPLOAD_DIRECTORY = "uploads";
+    private static final String UPLOAD_DIRECTORY = "images";
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();

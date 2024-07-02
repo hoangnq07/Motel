@@ -92,7 +92,7 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="room-card">
                     <c:if test="${not empty room.image}">
-                        <img src="${pageContext.request.contextPath}/images/${room.image.get(1)}" alt="Room Image">
+                        <img src="${pageContext.request.contextPath}/images/${room.image.get(0)}" alt="Room Image">
                     </c:if>
                     <c:if test="${empty room.image}">
                         <img src="${pageContext.request.contextPath}/images/default-room.jpg" alt="Default Room Image">

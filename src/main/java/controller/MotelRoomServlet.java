@@ -1,12 +1,15 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import Account.Account;
 import com.google.gson.Gson;
 import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
 import model.MotelRoom;
 import dao.MotelRoomDAO;
 import jakarta.servlet.ServletException;
@@ -136,6 +139,20 @@ public class MotelRoomServlet extends HttpServlet {
         room.setCategoryRoomId(Integer.parseInt(request.getParameter("category")));
         Account acc = (Account) request.getSession().getAttribute("user");
         room.setAccountId(acc.getAccountId());
+        // Xử lý các file ảnh
+        List<String> imageNames = new ArrayList<>();
+        for (Part part : request.getParts()) {
+            if ("images".equals(part.getName()) && part.getSize() > 0) {
+                String fileName = getUniqueFileName(part.getSubmittedFileName());
+                String uploadPath = getServletContext().getRealPath("") + File.separator + "images";
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) uploadDir.mkdir();
+
+                part.write(uploadPath + File.separator + fileName);
+                imageNames.add(fileName);
+            }
+        }
+        room.setImage(imageNames);
         try {
             motelRoomDAO.addMotelRoom(room);
             response.sendRedirect("/Project/motel/manage");
@@ -143,7 +160,9 @@ public class MotelRoomServlet extends HttpServlet {
             throw new ServletException(ex);
         }
     }
-
+    private String getUniqueFileName(String originalFileName) {
+        return System.currentTimeMillis() + "_" + originalFileName;
+    }
     private void updateMotelRoom(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         MotelRoom room = new MotelRoom();
         int motelId = (Integer)(request.getSession().getAttribute("motelId"));
@@ -158,6 +177,20 @@ public class MotelRoomServlet extends HttpServlet {
         room.setWaterPrice(Double.parseDouble(request.getParameter("waterPrice")));
         room.setElectricityPrice(Double.parseDouble(request.getParameter("electricityPrice")));
         room.setWifiPrice(Double.parseDouble(request.getParameter("wifiPrice")));
+        // Xử lý các file ảnh
+        List<String> imageNames = new ArrayList<>();
+        for (Part part : request.getParts()) {
+            if ("images".equals(part.getName()) && part.getSize() > 0) {
+                String fileName = getUniqueFileName(part.getSubmittedFileName());
+                String uploadPath = getServletContext().getRealPath("") + File.separator + "images";
+                File uploadDir = new File(uploadPath);
+                if (!uploadDir.exists()) uploadDir.mkdir();
+
+                part.write(uploadPath + File.separator + fileName);
+                imageNames.add(fileName);
+            }
+        }
+        room.setImage(imageNames);
         try {
             motelRoomDAO.updateMotelRoom(room);
             response.sendRedirect("/Project/motel/manage");

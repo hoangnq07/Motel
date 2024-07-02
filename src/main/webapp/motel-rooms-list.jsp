@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -138,40 +139,109 @@
                 });
         }
 
+        let selectedFiles = [];
+
         function handleImageUpload(event) {
             var files = event.target.files;
             var previewsContainer = document.getElementById('image-previews');
 
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
+                selectedFiles.push(file);
                 var reader = new FileReader();
 
-                reader.onload = function(e) {
-                    var preview = document.createElement('div');
-                    preview.classList.add('image-preview');
-                    preview.innerHTML = '<img src="' + e.target.result + '"><button class="remove-image" onclick="removeImage(this)">X</button>';
-                    previewsContainer.appendChild(preview);
-                }
+                reader.onload = (function(file, index) {
+                    return function(e) {
+                        var preview = document.createElement('div');
+                        preview.classList.add('image-preview');
+                        preview.innerHTML = '<img src="' + e.target.result + '"><button class="remove-image" onclick="removeImage(this, ' + index + ')">X</button>';
+                        previewsContainer.appendChild(preview);
+                    }
+                })(file, selectedFiles.length - 1);
 
                 reader.readAsDataURL(file);
             }
+
+            updateFileCountDisplay(event.target);
         }
 
-        function removeImage(button) {
+        function removeImage(button, index) {
             button.parentElement.remove();
+            selectedFiles.splice(index, 1);
+            updateFileInput();
+        }
+
+        function updateFileInput() {
+            var dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => {
+                dataTransfer.items.add(file);
+            });
+            var fileInput = document.getElementById('images');
+            fileInput.files = dataTransfer.files;
+
+            // Cập nhật text hiển thị số lượng file
+            updateFileCountDisplay(fileInput);
+        }
+
+        function updateFileCountDisplay(input) {
+            var fileCount = input.files.length;
+            var fileCountDisplay = document.getElementById('file-count-display');
+            if (fileCountDisplay) {
+                fileCountDisplay.textContent = fileCount + (fileCount === 1 ? ' tệp' : ' tệp');
+            }
         }
 
         function displayUploadedImages(images) {
             var previewsContainer = document.getElementById('image-previews');
             previewsContainer.innerHTML = '';
+            selectedFiles = [];
 
-            images.forEach(function(image) {
+            images.forEach(function(image, index) {
                 var preview = document.createElement('div');
                 preview.classList.add('image-preview');
-                preview.innerHTML = '<img src="' + contextPath + '/uploads/' + image + '"><button class="remove-image" onclick="removeImage(this)">X</button>';
+                preview.innerHTML = '<img src="' + contextPath + '/uploads/' + image + '"><button class="remove-image" onclick="removeUploadedImage(this, \'' + image + '\', ' + index + ')">X</button>';
                 previewsContainer.appendChild(preview);
             });
         }
+
+        function removeUploadedImage(button, imageName, index) {
+            button.parentElement.remove();
+            // Thêm logic để xóa hình ảnh trên server nếu cần
+            // Ví dụ: gửi request đến server để xóa file
+        }
+        document.getElementById('roomForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            var formData = new FormData(this);
+
+            // Đảm bảo rằng tất cả các file đã chọn được thêm vào formData
+            var fileInput = document.getElementById('images');
+            for (var i = 0; i < fileInput.files.length; i++) {
+                formData.append('images', fileInput.files[i]);
+            }
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', this.action, true);
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    if (response.success) {
+                        alert('Room added/updated successfully');
+                        // Refresh trang hoặc cập nhật UI
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                } else {
+                    alert('An error occurred');
+                }
+            };
+            xhr.onerror = function() {
+                console.error('Error:', xhr.statusText);
+                alert('An error occurred');
+            };
+            xhr.send(formData);
+        });
     </script>
 </head>
 <body>
@@ -209,11 +279,11 @@
                 <td class="wifiPrice">${room.wifiPrice}</td>
                 <td class="category">${room.category}</td>
                 <c:choose>
-                    <c:when test="not empty ${room.image} ">
-                    <td class="image"><img src="${pageContext.request.contextPath}/images/${room.image.get(0)}" width="100px" height="100px"/></td>
+                    <c:when test="${not empty room.image}">
+                        <td><img src="${pageContext.request.contextPath}/images/${room.image[0]}" width="100px" height="100px"/></td>
                     </c:when>
                     <c:otherwise>
-                    <td class="image"><img src="${pageContext.request.contextPath}/images/default-room.jpg" width="100px" height="100px"/></td>
+                        <td><img src="${pageContext.request.contextPath}/images/default-room.jpg" width="100px" height="100px"/></td>
                     </c:otherwise>
                 </c:choose>
                 <td class="roomStatus">
@@ -281,6 +351,7 @@
                             <div class="col-md-6">
                                 <label for="images">Upload Images:</label>
                                 <input type="file" id="images" name="images" class="form-control-file" multiple onchange="handleImageUpload(event)"><br>
+                                <span id="file-count-display"></span>
                                 <div id="image-previews" class="d-flex flex-wrap"></div>
                             </div>
                         </div>

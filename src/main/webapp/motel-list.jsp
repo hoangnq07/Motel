@@ -88,7 +88,7 @@
                         <td><img src="${pageContext.request.contextPath}/images/default-room.jpg" width="100px" height="100px"></td>
                     </c:when>
                     <c:otherwise>
-                        <td><img src="${pageContext.request.contextPath}/uploads/${motel.image}" width="100px" height="100px"></td>
+                        <td><img src="${pageContext.request.contextPath}/images/${motel.image}" width="100px" height="100px"></td>
                     </c:otherwise>
                 </c:choose>
                 <td><c:choose>
