@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, java.util.*, model.Invoice, context.DBcontext" %>
 <%@ page import="java.util.Date" %>
+<%@ page import="Account.Account" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,7 +40,7 @@
     </tr>
 
     <%
-        Integer accountId = (Integer) session.getAttribute("accountId");
+        Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
         if (accountId != null) {
             try (Connection conn = DBcontext.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(

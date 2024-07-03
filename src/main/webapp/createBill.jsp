@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, context.DBcontext" %>
+<%@ page import="Account.Account" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +20,7 @@
       <option value="">Select a room</option>
       <%
         // Get the accountId from the session
-        Integer accountId = (Integer) session.getAttribute("accountId");
+        Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
         if (accountId != null) {
           try (Connection conn = DBcontext.getConnection();
                PreparedStatement pstmt = conn.prepareStatement(
