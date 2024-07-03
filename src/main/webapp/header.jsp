@@ -46,6 +46,7 @@
                 <a href="home" class="nav-item nav-link active">Home</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
                 <a href="about.jsp" class="nav-item nav-link">Contact Us</a>
+                <a href="viewNotifications" class="nav-item nav-link">Notification</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
 
