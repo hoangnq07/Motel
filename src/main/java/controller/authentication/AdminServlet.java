@@ -1,4 +1,4 @@
-package controller;
+package controller.authentication;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
