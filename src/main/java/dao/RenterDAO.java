@@ -1,6 +1,4 @@
 package dao;
-import java.util.Calendar;
-import java.util.Date;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,20 +167,26 @@ public class RenterDAO {
         }
     }
 
-    public void saveFeedback(String feedbackText, int fromUserId, int toUserId, String tag) throws SQLException {
+    public void saveFeedback(String feedbackText, int fromUserId, Integer toUserId, String tag) throws SQLException {
         String sql = "INSERT INTO feedback (feedback_text, account_id, to_user_id, tag) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBcontext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, feedbackText);
             ps.setInt(2, fromUserId);
-            ps.setInt(3, toUserId);
-            ps.setString(4, tag);  // Thêm tag vào câu lệnh SQL
+            if (toUserId != null) {
+                ps.setInt(3, toUserId);
+            } else {
+                ps.setNull(3, java.sql.Types.INTEGER); // Xử lý trường hợp toUserId là null
+            }
+            ps.setString(4, tag);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Ném lỗi ra ngoài để xử lý bên ngoài
+            throw e;
         }
     }
+
+
 
     public List<Integer> getAllAdminIds() throws SQLException {
         List<Integer> adminIds = new ArrayList<>();

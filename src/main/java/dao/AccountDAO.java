@@ -2,11 +2,15 @@ package dao;
 
 import Account.Account;
 import context.DBcontext;
+import model.Feedback;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AccountDAO {
 
@@ -170,7 +174,8 @@ public class AccountDAO {
 
         return false;
     }
-    public  boolean addRenter(int accountId, int roomId) {
+
+    public boolean addRenter(int accountId, int roomId) {
         String QUERY = "INSERT INTO [dbo].[renter]([account_id]\n" +
                 "           ,[motel_room_id]) VALUES (?,?)";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
@@ -182,7 +187,8 @@ public class AccountDAO {
             return false;
         }
     }
-    public  boolean deleteAccount(int accountId) {
+
+    public boolean deleteAccount(int accountId) {
         String QUERY = "DELETE FROM [dbo].[accounts]\n" +
                 "      WHERE account_id = ?";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
@@ -194,6 +200,33 @@ public class AccountDAO {
             return false;
         }
     }
+
+    public List<Feedback> getFeedbacksForAdmin() {
+        List<Feedback> feedbacks = new ArrayList<>();
+        // Cập nhật câu truy vấn để lấy feedback với tag là 'Admin'
+        String sql = "SELECT f.feedback_id, f.feedback_text, f.create_date, a.fullname as senderName " +
+                "FROM feedback f " +
+                "JOIN accounts a ON f.account_id = a.account_id " + // Người gửi
+                "WHERE f.tag = 'Admin';"; // Chỉ lấy feedback có tag là 'Admin'
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Feedback feedback = new Feedback();
+                feedback.setFeedbackId(rs.getInt("feedback_id"));
+                feedback.setFeedbackText(rs.getString("feedback_text"));
+                feedback.setCreateDate(rs.getTimestamp("create_date"));
+                feedback.setSenderName(rs.getString("senderName")); // Tên người gửi
+                feedbacks.add(feedback);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return feedbacks;
+    }
+
+
 
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
