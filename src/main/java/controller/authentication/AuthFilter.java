@@ -13,17 +13,13 @@ import Account.Account;
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
-    private static final List<String> PUBLIC_PAGES = Arrays.asList("/home", "/login", "/register","registration.jsp","login.jsp","/motel-rooms", "/404.jsp","/room-details","/categories");
+    private static final List<String> PUBLIC_PAGES = Arrays.asList("/home", "/login", "/register","/registration.jsp","/login.jsp","/motel-rooms", "/404.jsp","/room-details","/categories","/about.jsp");
     private static final List<String> ADMIN_PAGES = Arrays.asList("/admin", "/dashboard_admin");
     private static final List<String> OWNER_PAGES = Arrays.asList("/owner","/motel");
     private static final List<String> USER_PAGES = Arrays.asList("/user");
-    private static final List<String> ALL_VALID_PAGES = new ArrayList<>();
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        ALL_VALID_PAGES.addAll(PUBLIC_PAGES);
-        ALL_VALID_PAGES.addAll(ADMIN_PAGES);
-        ALL_VALID_PAGES.addAll(OWNER_PAGES);
-        ALL_VALID_PAGES.addAll(USER_PAGES);
+
     }
 
     @Override
@@ -37,57 +33,47 @@ public class AuthFilter implements Filter {
         String requestURI = httpRequest.getRequestURI();
         String contextPath = httpRequest.getContextPath();
         String path = requestURI.substring(contextPath.length());
+        try {
+            // Xử lý trường hợp root URL
+            if (path.equals("/") || path.isEmpty()) {
+                httpResponse.sendRedirect(contextPath + "/home");
+                return;
+            }
 
-        // Xử lý trường hợp root URL
-        if (path.equals("/") || path.isEmpty()) {
-            httpResponse.sendRedirect(contextPath + "/home");
-            return;
-        }
-        // Kiểm tra đường dẫn hợp lệ
-        if (!isValidPath(path)) {
-            httpRequest.getRequestDispatcher("/404.jsp").forward(request, response);
-            return;
-        }
+            boolean isLoggedIn = (session != null && session.getAttribute("user") != null);
 
-        boolean isLoggedIn = (session != null && session.getAttribute("user") != null);
+            if (isPublicResource(path) || isPublicPage(path)) {
+                chain.doFilter(request, response);
+                return;
+            }
 
-        if (isPublicResource(path) || isPublicPage(path)) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        if (!isLoggedIn) {
-            httpResponse.sendRedirect(contextPath + "/login");
-            return;
-        }
-
-        Account user = (Account) session.getAttribute("user");
-        String userRole = user.getRole();
-
-        if (isAdminPage(path)) {
-            if (!"admin".equals(userRole) || !isAdminSessionValid(session)) {
+            if (!isLoggedIn) {
                 httpResponse.sendRedirect(contextPath + "/login");
                 return;
             }
-            session.setAttribute("adminLastAccessTime", System.currentTimeMillis());
-        } else if (isOwnerPage(path) && !"owner".equals(userRole)) {
-            httpResponse.sendRedirect(contextPath + "/home");
-            return;
-        } else if (isUserPage(path) && !"user".equals(userRole)) {
-            httpResponse.sendRedirect(contextPath + "/home");
-            return;
-        }
 
-        chain.doFilter(request, response);
-    }
-    private boolean isValidPath(String path) {
-        for (String validPage : ALL_VALID_PAGES) {
-            if (path.startsWith(validPage)) {
-                return true;
+            Account user = (Account) session.getAttribute("user");
+            String userRole = user.getRole();
+
+            if (isAdminPage(path)) {
+                if (!"admin".equals(userRole) || !isAdminSessionValid(session)) {
+                    httpResponse.sendRedirect(contextPath + "/login");
+                    return;
+                }
+                session.setAttribute("adminLastAccessTime", System.currentTimeMillis());
+            } else if (isOwnerPage(path) && !"owner".equals(userRole)) {
+                httpResponse.sendRedirect(contextPath + "/home");
+                return;
             }
+
+            chain.doFilter(request, response);
+        }catch (Exception e){
+            e.printStackTrace();
+            httpRequest.getRequestDispatcher("/404.jsp").forward(request, response);
         }
-        return isPublicResource(path);
     }
+
+
     private boolean isPublicResource(String uri) {
         return uri.endsWith(".css") || uri.endsWith(".js") || uri.endsWith(".json")|| uri.endsWith(".png") || uri.endsWith(".jpg") || uri.endsWith(".gif");
     }
