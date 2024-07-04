@@ -26,10 +26,11 @@ public class DeleteInvoiceServlet extends HttpServlet {
 
         try {
             invoiceDAO.deleteInvoice(invoiceId);
-            response.sendRedirect("invoiceList.jsp");
+            response.sendRedirect("manageInvoices.jsp");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to delete invoice.");
+            log("Error details: " + e.getMessage());
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to delete invoice: " + e.getMessage());
         }
     }
 }

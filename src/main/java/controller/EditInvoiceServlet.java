@@ -37,22 +37,64 @@ public class EditInvoiceServlet extends HttpServlet {
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int invoiceId = Integer.parseInt(request.getParameter("invoiceId"));
-        float totalPrice = Float.parseFloat(request.getParameter("totalPrice"));
-        String invoiceStatus = request.getParameter("invoiceStatus");
-        int renterId = Integer.parseInt(request.getParameter("renterId"));
-        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
-        float electricityIndex = Float.parseFloat(request.getParameter("electricityIndex"));
-        float waterIndex = Float.parseFloat(request.getParameter("waterIndex"));
-
-        Invoice invoice = new Invoice(invoiceId, null, null, totalPrice, invoiceStatus, renterId, motelRoomId, electricityIndex, waterIndex);
-
         try {
-            invoiceDAO.updateInvoice(invoice);
-            response.sendRedirect("invoiceList.jsp");
-        } catch (SQLException | ClassNotFoundException e) {
+            int invoiceId = Integer.parseInt(request.getParameter("invoiceId"));
+
+            // Use default values or handle null/empty inputs
+            float totalPrice = parseFloatSafely(request.getParameter("totalPrice"), 0.0f);
+            String invoiceStatus = request.getParameter("invoiceStatus");
+            int renterId = parseIntSafely(request.getParameter("renterId"), 0);
+            int motelRoomId = parseIntSafely(request.getParameter("motelRoomId"), 0);
+            float electricityIndex = parseFloatSafely(request.getParameter("electricityIndex"), 0.0f);
+            float waterIndex = parseFloatSafely(request.getParameter("waterIndex"), 0.0f);
+
+            Invoice invoice = new Invoice(invoiceId, null, null, totalPrice, invoiceStatus, renterId, motelRoomId, electricityIndex, waterIndex);
+
+            try {
+                invoiceDAO.updateInvoice(invoice);
+                response.sendRedirect("manageInvoices.jsp");
+            } catch (SQLException e) {
+                e.printStackTrace();
+                String errorMessage = "Unable to update invoice: " + e.getMessage();
+                if (e.getMessage().contains("FK__invoice__renter_")) {
+                    errorMessage = "The specified renter does not exist.";
+                } else if (e.getMessage().contains("FK__invoice__motel_room_")) {
+                    errorMessage = "The specified motel room does not exist.";
+                }
+                request.setAttribute("errorMessage", errorMessage);
+                request.setAttribute("invoice", invoice);
+                request.getRequestDispatcher("/editInvoice.jsp").forward(request, response);
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Database connection error: " + e.getMessage());
+            }
+        } catch (NumberFormatException e) {
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to update invoice.");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid input format: " + e.getMessage());
+        }
+    }
+
+    // Helper method to safely parse int values
+    private int parseIntSafely(String value, int defaultValue) {
+        if (value == null || value.trim().isEmpty()) {
+            return defaultValue;
+        }
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    // Helper method to safely parse float values
+    private float parseFloatSafely(String value, float defaultValue) {
+        if (value == null || value.trim().isEmpty()) {
+            return defaultValue;
+        }
+        try {
+            return Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return defaultValue;
         }
     }
 }

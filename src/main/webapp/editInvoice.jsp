@@ -9,18 +9,18 @@
 <body>
 <%
     Invoice invoice = (Invoice) request.getAttribute("invoice");
+    String errorMessage = (String) request.getAttribute("errorMessage");
 %>
 <h1>Edit Invoice</h1>
-<form action="EditInvoiceServlet" method="post">
+<% if (errorMessage != null && !errorMessage.isEmpty()) { %>
+<p style="color: red;"><%= errorMessage %></p>
+<% } %>
+<form action="editInvoice" method="post">
     <input type="hidden" name="invoiceId" value="<%= invoice.getInvoiceId() %>" />
     <label>Total Price:</label>
     <input type="text" name="totalPrice" value="<%= invoice.getTotalPrice() %>" /><br />
     <label>Invoice Status:</label>
     <input type="text" name="invoiceStatus" value="<%= invoice.getInvoiceStatus() %>" /><br />
-    <label>Renter ID:</label>
-    <input type="text" name="renterId" value="<%= invoice.getRenterId() %>" /><br />
-    <label>Motel Room ID:</label>
-    <input type="text" name="motelRoomId" value="<%= invoice.getMotelRoomId() %>" /><br />
     <label>Electricity Index:</label>
     <input type="text" name="electricityIndex" value="<%= invoice.getElectricityIndex() %>" /><br />
     <label>Water Index:</label>
