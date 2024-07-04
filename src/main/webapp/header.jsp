@@ -68,6 +68,27 @@
                                     <c:if test="${sessionScope.user.role == 'owner'}">
                                         <a href="owner" class="dropdown-item">Manage Motel</a>
                                     </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'owner'}">
+                                        <a href="manageInvoices.jsp" class="dropdown-item">Manage Bills</a>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'owner'}">
+                                        <a href="createBill.jsp" class="dropdown-item">Create Bills</a>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'admin'}">
+                                        <a href="authorityRequests.jsp" class="dropdown-item">Authority Requests</a>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'user'}">
+                                        <a href="requestAuthority.jsp" class="dropdown-item">Request to become Owner</a>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'user'}">
+                                        <a href="bills.jsp" class="dropdown-item">Your Bills</a>
+                                    </c:if>
+
                                     <a href="change_password.jsp" class="dropdown-item">Change Password</a>
                                     <a href="favorite-rooms" class="dropdown-item">My Favorite Room</a> <!-- Thêm dòng này -->
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
