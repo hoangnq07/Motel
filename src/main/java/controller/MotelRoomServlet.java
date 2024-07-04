@@ -35,8 +35,6 @@ public class MotelRoomServlet extends HttpServlet {
         String action = request.getParameter("action");
         if (action == null || action.equals("list")) {
             listRooms(request, response);
-        } else if (action.equals("create")) {
-            showForm(request, response, new MotelRoom());
         } else if ("getRoomDetails".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
             MotelRoom room = MotelRoomDAO.getMotelRoomById(id);
@@ -47,12 +45,6 @@ public class MotelRoomServlet extends HttpServlet {
                 response.getWriter().write(jsonResponse);
             } else {
                 sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, "Room not found");
-            }
-        } else if (action.equals("edit")) {
-            try {
-                showEditForm(request, response);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
         }else if(action.equals("delete")){
             deleteMotelRoom(request,response);

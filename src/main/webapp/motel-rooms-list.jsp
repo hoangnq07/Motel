@@ -209,39 +209,7 @@
             // Thêm logic để xóa hình ảnh trên server nếu cần
             // Ví dụ: gửi request đến server để xóa file
         }
-        document.getElementById('roomForm').addEventListener('submit', function(e) {
-            e.preventDefault();
 
-            var formData = new FormData(this);
-
-            // Đảm bảo rằng tất cả các file đã chọn được thêm vào formData
-            var fileInput = document.getElementById('images');
-            for (var i = 0; i < fileInput.files.length; i++) {
-                formData.append('images', fileInput.files[i]);
-            }
-
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', this.action, true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        alert('Room added/updated successfully');
-                        // Refresh trang hoặc cập nhật UI
-                        location.reload();
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                } else {
-                    alert('An error occurred');
-                }
-            };
-            xhr.onerror = function() {
-                console.error('Error:', xhr.statusText);
-                alert('An error occurred');
-            };
-            xhr.send(formData);
-        });
     </script>
 </head>
 <body>
@@ -382,9 +350,9 @@
 
             // Tính toán các hàng cần hiển thị cho trang hiện tại
             var startIndex = (page - 1) * roomsPerPage;
-            var endIndex = startIndex + roomsPerPage;
+            var endIndex = Math.min(startIndex + roomsPerPage, rooms.length);
 
-            for (var i = startIndex; i < endIndex && i < rooms.length; i++) {
+            for (var i = startIndex; i < endIndex; i++) {
                 rooms[i].style.display = '';
             }
         }
@@ -450,8 +418,43 @@
             createPagination();
         }
     });
-</script>
 
+</script>
+<script>
+    document.getElementById('roomForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        var formData = new FormData(this);
+
+        // Đảm bảo rằng tất cả các file đã chọn được thêm vào formData
+        var fileInput = document.getElementById('images');
+        for (var i = 0; i < fileInput.files.length; i++) {
+            formData.append('images', fileInput.files[i]);
+        }
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', this.action, true);
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    alert('Room added/updated successfully');
+                    // Refresh trang hoặc cập nhật UI
+                    location.reload();
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            } else {
+                alert('An error occurred');
+            }
+        };
+        xhr.onerror = function() {
+            console.error('Error:', xhr.statusText);
+            alert('An error occurred');
+        };
+        xhr.send(formData);
+    });
+</script>
 
 </body>
 </html>

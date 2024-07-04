@@ -3,12 +3,10 @@ package controller;
 import java.io.IOException;
 import java.sql.*;
 import context.DBcontext;
+import controller.util.EmailSender;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
-import java.util.Properties;
-import jakarta.mail.*;
-import jakarta.mail.internet.*;
 
 @WebServlet("/SendBillServlet")
 public class SendBillServlet extends HttpServlet {
@@ -21,24 +19,14 @@ public class SendBillServlet extends HttpServlet {
         float waterBill = Float.parseFloat(request.getParameter("waterBill"));
         float wifiBill = Float.parseFloat(request.getParameter("wifiBill"));
 
-        HttpSession session = request.getSession();
-        String ownerEmail = (String) session.getAttribute("email");
-        String ownerPassword = (String) session.getAttribute("password");
-
-        if (ownerEmail == null || ownerPassword == null) {
-            response.sendRedirect("sendBill.jsp?status=not_logged_in");
-            return;
-        }
-
         if (email == null || email.isEmpty()) {
             response.sendRedirect("sendBill.jsp?status=empty_email");
             return;
         }
 
-        DBcontext dbContext = new DBcontext();
         String status;
 
-        try (Connection conn = dbContext.getConnection();
+        try (Connection conn = DBcontext.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(
                      "SELECT a.email, mr.descriptions AS room_description " +
                              "FROM renter r " +
@@ -60,8 +48,8 @@ public class SendBillServlet extends HttpServlet {
                         roomDescription, roomBill, electricityBill, waterBill, wifiBill, totalBill
                 );
 
-                sendEmail(ownerEmail, ownerPassword, renterEmail, "Hóa đơn thanh toán", messageContent);
-                status = "success";
+                boolean emailSent = EmailSender.sendEmail(renterEmail, "Hóa đơn thanh toán", messageContent);
+                status = emailSent ? "success" : "email_error";
             } else {
                 status = "not_found";
             }
@@ -72,34 +60,5 @@ public class SendBillServlet extends HttpServlet {
         }
 
         response.sendRedirect("sendBill.jsp?status=" + status);
-    }
-
-    private void sendEmail(String from, String password, String to, String subject, String content) {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-
-        Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(from, password);
-            }
-        });
-
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
-            message.setSubject(subject);
-            message.setText(content);
-
-            Transport.send(message);
-
-            System.out.println("Hóa đơn đã được gửi thành công!");
-
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

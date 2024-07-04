@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, context.DBcontext" %>
 <%@ page import="jakarta.servlet.http.*, jakarta.servlet.*" %>
+<%@ page import="Account.Account" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,7 +31,7 @@
         <th>Action</th>
     </tr>
     <%
-        int accountId = (int) session.getAttribute("accountId");
+        Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
 
         try (Connection connection = DBcontext.getConnection()) {
             // Get the renter's invoices
