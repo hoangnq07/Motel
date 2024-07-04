@@ -101,20 +101,40 @@ public class MotelDAO {
         }
     }
     public static void  updateMotel(Motel motel) throws SQLException {
-        String sql = "UPDATE dbo.motels SET descriptions = ?, detail_address = ?, district = ?, image = ?, province = ?, status = ?, ward = ?, account_id = ? ,name =? WHERE motel_id = ?";
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, motel.getDescriptions());
-            stmt.setString(2, motel.getDetailAddress());
-            stmt.setString(3, motel.getDistrict());
-            stmt.setString(4, motel.getImage());
-            stmt.setString(5, motel.getProvince());
-            stmt.setBoolean(6, motel.isStatus());
-            stmt.setString(7, motel.getWard());
-            stmt.setInt(8, motel.getAccountId());
-            stmt.setString(9, motel.getName());
-            stmt.setInt(10, motel.getMotelId());
-            stmt.executeUpdate();
-        }
+        String sql = "UPDATE dbo.motels SET descriptions = ?, detail_address = ?, district = ?, province = ?, status = ?, ward = ?, account_id = ? ,name =?,district_id =?, province_id=?, image = ? WHERE motel_id = ?";
+        String sql1 = "UPDATE dbo.motels SET descriptions = ?, detail_address = ?, district = ?, province = ?, status = ?, ward = ?, account_id = ? ,name =?,district_id =?, province_id=? WHERE motel_id = ?";
+        try (Connection conn = DBcontext.getConnection();) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            if(motel.getImage()!=null) {
+                stmt.setString(1, motel.getDescriptions());
+                stmt.setString(2, motel.getDetailAddress());
+                stmt.setString(3, motel.getDistrict());
+                stmt.setString(4, motel.getProvince());
+                stmt.setBoolean(5, motel.isStatus());
+                stmt.setString(6, motel.getWard());
+                stmt.setInt(7, motel.getAccountId());
+                stmt.setString(8, motel.getName());
+                stmt.setString(9, motel.getDistrictId());
+                stmt.setString(10, motel.getProvinceId());
+                stmt.setString(11, motel.getImage());
+                stmt.setInt(12, motel.getMotelId());
+                }
+                else{
+                stmt = conn.prepareStatement(sql1);
+                stmt.setString(1, motel.getDescriptions());
+                stmt.setString(2, motel.getDetailAddress());
+                stmt.setString(3, motel.getDistrict());
+                stmt.setString(4, motel.getProvince());
+                stmt.setBoolean(5, motel.isStatus());
+                stmt.setString(6, motel.getWard());
+                stmt.setInt(7, motel.getAccountId());
+                stmt.setString(8, motel.getName());
+                stmt.setString(9, motel.getDistrictId());
+                stmt.setString(10, motel.getProvinceId());
+                stmt.setInt(11, motel.getMotelId());
+                }
+                stmt.executeUpdate();
+            }
     }
     public static void deleteMotel(int motelId) throws SQLException {
         String sql = "DELETE FROM dbo.motels WHERE motel_id = ?";

@@ -1,4 +1,4 @@
-package controller;
+package controller.authentication;
 
 import Account.GooglePojo;
 import Account.GoogleUtils;

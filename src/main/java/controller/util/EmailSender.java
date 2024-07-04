@@ -1,4 +1,4 @@
-package controller;
+package controller.util;
 
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
