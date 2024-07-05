@@ -34,11 +34,17 @@ public class LoginServlet extends HttpServlet {
         Account user = AccountDAO.authenticateUser(email, password);
 
         if (user != null) {
+            Account account = AccountDAO.searchUser(email);
+            if(!account.isActive()){
+                setErrorStatus("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với quản trị viên để biết thêm chi tiết.", request);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
             int accountId = AccountDAO.getAccountIdByEmail(email); // Fetch accountId separately
             if (accountId != -1) {
                 LOGGER.info("User authenticated successfully: " + accountId);
                 session.setAttribute("accountId", accountId);
-                session.setAttribute("user", AccountDAO.searchUser(email));
+                session.setAttribute("user", account);
 
                 if (user.getRole().equals("admin")) {
                     request.getRequestDispatcher("dashboard_admin.jsp").forward(request, response);
