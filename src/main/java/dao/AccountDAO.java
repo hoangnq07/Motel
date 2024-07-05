@@ -315,6 +315,37 @@ public class AccountDAO {
             ps.setDate(8, new java.sql.Date(account.getDob().getTime()));
         }
 
+    public List<Account> searchAccounts(String searchTerm) throws SQLException {
+        List<Account> accounts = new ArrayList<>();
+        String sql = "SELECT * FROM accounts WHERE email LIKE ? OR phone LIKE ? OR citizen_id LIKE ?";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            String searchPattern = "%" + searchTerm + "%";
+            stmt.setString(1, searchPattern);
+            stmt.setString(2, searchPattern);
+            stmt.setString(3, searchPattern);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Account account = new Account();
+                    account.setAccountId(rs.getInt("account_id"));
+                    account.setEmail(rs.getString("email"));
+                    account.setPhone(rs.getString("phone"));
+                    account.setCitizenId(rs.getString("citizen_id"));
+                    account.setFullname(rs.getString("fullname"));
+                    // Set other fields as needed
+
+                    accounts.add(account);
+                }
+            }
+        }
+
+        return accounts;
+    }
+
+
         int index = 9;
 
         if (updatePassword) {

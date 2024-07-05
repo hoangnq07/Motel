@@ -1,47 +1,76 @@
 package dao;
 
+import context.DBcontext;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import context.DBcontext;
 
 public class NotificationDAO {
-
-    public static List<Notification> getNotificationsByUserId(int userId) {
-        List<Notification> notifications = new ArrayList<>();
-        String query = "SELECT * FROM notifications WHERE user_id = ?";
-
-        try (Connection con = DBcontext.getConnection()) {
-            PreparedStatement st = con.prepareStatement(query);
-            st.setInt(1, userId);
-            ResultSet rs = st.executeQuery();
-
+    public List<Notification> getNotificationsByAccountId(int accountId) throws Exception {
+        List<Notification> list = new ArrayList<>();
+        String query = "SELECT n.notification_id, n.message, n.create_date " +
+                "FROM notifications n " +
+                "JOIN account_notifications an ON n.notification_id = an.notification_id " +
+                "WHERE an.account_id = ?";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            conn = new DBcontext().getConnection();
+            ps = conn.prepareStatement(query);
+            ps.setInt(1, accountId);
+            rs = ps.executeQuery();
             while (rs.next()) {
-                Notification notification = new Notification();
-                notification.setId(rs.getInt("notification_id"));
-                notification.setUserId(rs.getInt("user_id"));
-                notification.setMessage(rs.getString("message"));
-                notification.setCreateDate(rs.getTimestamp("create_date"));
-                notifications.add(notification);
+                Notification notification = new Notification(rs.getInt("notification_id"),
+                        rs.getString("message"), rs.getString("create_date"));
+                list.add(notification);
             }
         } catch (Exception e) {
             e.printStackTrace();
+            throw e;
+        } finally {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (conn != null) conn.close();
         }
-        return notifications;
+        return list;
     }
 
-    public static void saveNotification(int userId, String message) {
-        String query = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
+    public void addNotification(String message, int motelRoomId) throws Exception {
+        String queryNotification = "INSERT INTO notifications (message) VALUES (?)";
+        String queryAccountNotifications = "INSERT INTO account_notifications (account_id, notification_id) " +
+                "SELECT r.renter_id, n.notification_id " +
+                "FROM renter r, notifications n " +
+                "WHERE r.motel_room_id = ? AND n.message = ?";
+        Connection conn = null;
+        PreparedStatement psNotification = null;
+        PreparedStatement psAccountNotifications = null;
+        try {
+            conn = new DBcontext().getConnection();
+            conn.setAutoCommit(false);
 
-        try (Connection con = DBcontext.getConnection()) {
-            PreparedStatement st = con.prepareStatement(query);
-            st.setInt(1, userId);
-            st.setString(2, message);
-            st.executeUpdate();
+            // Insert into notifications table
+            psNotification = conn.prepareStatement(queryNotification);
+            psNotification.setString(1, message);
+            psNotification.executeUpdate();
+
+            // Insert into account_notifications table
+            psAccountNotifications = conn.prepareStatement(queryAccountNotifications);
+            psAccountNotifications.setInt(1, motelRoomId);
+            psAccountNotifications.setString(2, message);
+            psAccountNotifications.executeUpdate();
+
+            conn.commit();
         } catch (Exception e) {
+            if (conn != null) conn.rollback();
             e.printStackTrace();
+            throw e;
+        } finally {
+            if (psNotification != null) psNotification.close();
+            if (psAccountNotifications != null) psAccountNotifications.close();
+            if (conn != null) conn.close();
         }
     }
 }

@@ -1,31 +1,30 @@
 package controller;
 
+import Account.Account;
 import dao.NotificationDAO;
-
+import dao.Notification;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet(name = "NotificationServlet", urlPatterns = {"/sendNotification"})
-public class NotificationServlet extends HttpServlet {
+@WebServlet(name = "ViewNotificationsServlet", urlPatterns = {"/viewNotifications"})
+public class ViewNotificationsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String message = request.getParameter("message");
-        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
+        int accountId = ((Account) request.getSession().getAttribute("user")).getAccountId();
 
         NotificationDAO dao = new NotificationDAO();
-        String status;
         try {
-            dao.addNotification(message, motelRoomId);
-            status = "Notification sent successfully.";
+            List<Notification> notifications = dao.getNotificationsByAccountId(accountId);
+            request.setAttribute("notifications", notifications);
+            request.getRequestDispatcher("/viewNotifications.jsp").forward(request, response);
         } catch (Exception e) {
             e.printStackTrace();
-            status = "Failed to send notification: " + e.getMessage();
+            response.sendRedirect("error.jsp");
         }
-        request.setAttribute("status", status);
-        request.getRequestDispatcher("/notify.jsp").forward(request, response); // Correct path to your JSP file
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
