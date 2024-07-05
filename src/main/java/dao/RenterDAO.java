@@ -6,6 +6,7 @@ import Account.Account;
 import context.DBcontext;
 import model.Feedback;
 import model.Renter;
+import java.util.logging.Logger;
 
 public class RenterDAO {
 
@@ -56,19 +57,32 @@ public class RenterDAO {
         return renters;
     }
 
-    public void addRenter(Renter renter) {
+    private static final Logger logger = Logger.getLogger(RenterDAO.class.getName());
+
+    public boolean addRenter(Renter renter) throws SQLException {
         String sql = "INSERT INTO renter (renter_id, check_out_date, renter_date, motel_room_id) VALUES (?, ?, ?, ?)";
+        logger.info("RenterDAO: Executing SQL: " + sql);
 
         try (Connection conn = DBcontext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, renter.getRenterId());
-            ps.setDate(2, new java.sql.Date(renter.getCheckOutDate().getTime()));
+            ps.setNull(2, java.sql.Types.DATE);  // check_out_date is null
             ps.setDate(3, new java.sql.Date(renter.getRenterDate().getTime()));
             ps.setInt(4, renter.getMotelRoomId());
 
-            ps.executeUpdate();
+            logger.info("RenterDAO: Prepared statement values: " +
+                    "renter_id=" + renter.getRenterId() +
+                    ", check_out_date=null" +
+                    ", renter_date=" + renter.getRenterDate() +
+                    ", motel_room_id=" + renter.getMotelRoomId());
+
+            int rowsAffected = ps.executeUpdate();
+            logger.info("RenterDAO: Rows affected: " + rowsAffected);
+            return rowsAffected > 0;
         } catch (SQLException e) {
+            logger.severe("RenterDAO: SQL Exception: " + e.getMessage());
             e.printStackTrace();
+            throw e;
         }
     }
 
