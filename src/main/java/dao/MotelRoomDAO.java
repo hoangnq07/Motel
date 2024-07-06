@@ -1,5 +1,6 @@
 package dao;
 
+import model.CategoryRoom;
 import model.MotelRoom;
 import context.DBcontext;
 
@@ -7,10 +8,33 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import Account.Account;
+
 public class MotelRoomDAO {
     private Connection connection;
+
     public MotelRoomDAO() throws SQLException {
         connection = DBcontext.getConnection();
+    }
+
+    public List<CategoryRoom> getAllCategoryRooms() {
+        List<CategoryRoom> categoryRooms = new ArrayList<>();
+        String query = "SELECT category_room_id, descriptions FROM category_room WHERE status = 1";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                CategoryRoom categoryRoom = new CategoryRoom();
+                categoryRoom.setCategoryRoomId(rs.getInt("category_room_id"));
+                categoryRoom.setDescriptions(rs.getString("descriptions"));
+                categoryRooms.add(categoryRoom);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return categoryRooms;
     }
 
     public List<MotelRoom> getFavoriteRooms(int accountId) {
@@ -89,7 +113,7 @@ public class MotelRoomDAO {
         }
     }
 
-    public List<MotelRoom> getAllMotelRooms(int page, int pageSize, Account acc) {  // Add accountId here
+    public List<MotelRoom> getAllMotelRooms(int page, int pageSize, Account acc) {
         List<MotelRoom> rooms = new ArrayList<>();
         String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category " +
                 "FROM motel_room mr " +
@@ -117,8 +141,8 @@ public class MotelRoomDAO {
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
                 room.setProvince(rs.getString("province"));
-                if(acc!=null)
-                room.setFavorite(isFavoriteRoom(acc.getAccountId(), rs.getInt("motel_room_id")));  // Correct use
+                if (acc != null)
+                    room.setFavorite(isFavoriteRoom(acc.getAccountId(), rs.getInt("motel_room_id")));  // Correct use
                 room.setCategory(rs.getString("category"));
                 rooms.add(room);
             }
@@ -128,12 +152,11 @@ public class MotelRoomDAO {
         return rooms;
     }
 
-    //Get motel rooms by motel id
     public static List<MotelRoom> getMotelRoomsByMotelId(int motelId) {
         List<MotelRoom> rooms = new ArrayList<>();
         String query = "SELECT mr.*, cr.descriptions as category, cr.category_room_id FROM motel_room mr JOIN category_room cr ON mr.category_room_id = cr.category_room_id WHERE motel_id = ?";
         try {
-            PreparedStatement ps =DBcontext.getConnection().prepareStatement(query);
+            PreparedStatement ps = DBcontext.getConnection().prepareStatement(query);
             ps.setInt(1, motelId);
             ResultSet rs = ps.executeQuery();
             MotelRoomDAO motelRoomDAO = new MotelRoomDAO();
@@ -381,44 +404,82 @@ public class MotelRoomDAO {
         }
     }
 
-
-    public List<MotelRoom> searchMotelRooms(String description, Double minPrice, Double maxPrice, Boolean status) {
+    public List<MotelRoom> searchRooms(String search, String province, String district, String town, String category, String minPrice, String maxPrice, String minArea, String maxArea, String sortPrice, String sortArea, String sortDate, int page, int pageSize, Account acc) {
         List<MotelRoom> rooms = new ArrayList<>();
-        StringBuilder query = new StringBuilder("SELECT mr.*, m.detail_address, m.ward, m.district, m.province " +
-                "FROM motel_room mr " +
-                "JOIN motels m ON mr.motel_id = m.motel_id " +
-                "WHERE 1=1");
+        StringBuilder query = new StringBuilder("SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category FROM motel_room mr JOIN motels m ON mr.motel_id = m.motel_id JOIN category_room cr ON mr.category_room_id = cr.category_room_id WHERE 1=1");
 
-        if (description != null && !description.isEmpty()) {
-            query.append(" AND mr.descriptions LIKE ?");
+        List<Object> params = new ArrayList<>();
+
+        if (search != null && !search.isEmpty()) {
+            query.append(" AND (mr.descriptions LIKE ? OR m.detail_address LIKE ? OR m.ward LIKE ? OR m.district LIKE ? OR m.province LIKE ?)");
+            String searchPattern = "%" + search.toLowerCase() + "%";
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
         }
-        if (minPrice != null) {
+
+        if (province != null && !province.equals("-1")) {
+            query.append(" AND m.province_id = ?");
+            params.add(Integer.parseInt(province));
+        }
+
+        if (district != null && !district.equals("-1")) {
+            query.append(" AND m.district_id = ?");
+            params.add(Integer.parseInt(district));
+        }
+
+        if (town != null && !town.equals("-1")) {
+            query.append(" AND m.ward_id = ?");
+            params.add(Integer.parseInt(town));
+        }
+
+        if (category != null && !category.equals("-1")) {
+            query.append(" AND mr.category_room_id = ?");
+            params.add(Integer.parseInt(category));
+        }
+
+        if (minPrice != null && !minPrice.isEmpty()) {
             query.append(" AND mr.room_price >= ?");
+            params.add(Double.parseDouble(minPrice));
         }
-        if (maxPrice != null) {
+
+        if (maxPrice != null && !maxPrice.isEmpty()) {
             query.append(" AND mr.room_price <= ?");
-        }
-        if (status != null) {
-            query.append(" AND mr.room_status = ?");
+            params.add(Double.parseDouble(maxPrice));
         }
 
-        try {
-            PreparedStatement ps = connection.prepareStatement(query.toString());
-            int paramIndex = 1;
+        if (minArea != null && !minArea.isEmpty()) {
+            query.append(" AND (mr.length * mr.width) >= ?");
+            params.add(Double.parseDouble(minArea));
+        }
 
-            if (description != null && !description.isEmpty()) {
-                ps.setString(paramIndex++, "%" + description + "%");
-            }
-            if (minPrice != null) {
-                ps.setDouble(paramIndex++, minPrice);
-            }
-            if (maxPrice != null) {
-                ps.setDouble(paramIndex++, maxPrice);
-            }
-            if (status != null) {
-                ps.setBoolean(paramIndex++, status);
-            }
+        if (maxArea != null && !maxArea.isEmpty()) {
+            query.append(" AND (mr.length * mr.width) <= ?");
+            params.add(Double.parseDouble(maxArea));
+        }
 
+        if (sortPrice != null && !sortPrice.equals("-1")) {
+            query.append(" ORDER BY mr.room_price ").append(sortPrice);
+        } else if (sortArea != null && !sortArea.equals("-1")) {
+            query.append(" ORDER BY (mr.length * mr.width) ").append(sortArea);
+        } else if (sortDate != null && sortDate.equals("newest")) {
+            query.append(" ORDER BY mr.create_date DESC");
+        } else if (sortDate != null && sortDate.equals("oldest")) {
+            query.append(" ORDER BY mr.create_date ASC");
+        } else {
+            query.append(" ORDER BY mr.create_date DESC");
+        }
+
+        query.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        params.add((page - 1) * pageSize);
+        params.add(pageSize);
+
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 MotelRoom room = new MotelRoom();
@@ -435,12 +496,83 @@ public class MotelRoomDAO {
                 room.setWard(rs.getString("ward"));
                 room.setDistrict(rs.getString("district"));
                 room.setProvince(rs.getString("province"));
-                room.setRoomStatus(rs.getBoolean("room_status"));
+                if (acc != null) {
+                    room.setFavorite(isFavoriteRoom(acc.getAccountId(), rs.getInt("motel_room_id")));
+                }
+                room.setCategory(rs.getString("category"));
                 rooms.add(room);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return rooms;
+    }
+
+    public int getTotalSearchResults(String search, String province, String district, String town, String category, String minPrice, String maxPrice, String minArea, String maxArea) {
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM motel_room mr JOIN motels m ON mr.motel_id = m.motel_id WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        if (search != null && !search.isEmpty()) {
+            query.append(" AND (mr.descriptions LIKE ? OR m.detail_address LIKE ? OR m.ward LIKE ? OR m.district LIKE ? OR m.province LIKE ?)");
+            String searchPattern = "%" + search.toLowerCase() + "%";
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+            params.add(searchPattern);
+        }
+
+        if (province != null && !province.equals("-1")) {
+            query.append(" AND m.province_id = ?");
+            params.add(Integer.parseInt(province));
+        }
+
+        if (district != null && !district.equals("-1")) {
+            query.append(" AND m.district_id = ?");
+            params.add(Integer.parseInt(district));
+        }
+
+        if (town != null && !town.equals("-1")) {
+            query.append(" AND m.ward_id = ?");
+            params.add(town.toLowerCase());
+        }
+
+        if (category != null && !category.equals("-1")) {
+            query.append(" AND mr.category_room_id = ?");
+            params.add(Integer.parseInt(category));
+        }
+
+        if (minPrice != null && !minPrice.isEmpty()) {
+            query.append(" AND mr.room_price >= ?");
+            params.add(Double.parseDouble(minPrice));
+        }
+
+        if (maxPrice != null && !maxPrice.isEmpty()) {
+            query.append(" AND mr.room_price <= ?");
+            params.add(Double.parseDouble(maxPrice));
+        }
+
+        if (minArea != null && !minArea.isEmpty()) {
+            query.append(" AND (mr.length * mr.width) >= ?");
+            params.add(Double.parseDouble(minArea));
+        }
+
+        if (maxArea != null && !maxArea.isEmpty()) {
+            query.append(" AND (mr.length * mr.width) <= ?");
+            params.add(Double.parseDouble(maxArea));
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

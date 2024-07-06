@@ -9,7 +9,7 @@ public class DBcontext {
     public static Connection getConnection() throws SQLException {
         String jdbcUrl = "jdbc:sqlserver://Localhost:1433;databaseName=motel7";
         String username = "sa";
-        String password = "123456";
+        String password = "123";
 
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -19,14 +19,14 @@ public class DBcontext {
         }
         return DriverManager.getConnection(jdbcUrl, username, password);
     }
-    
+
     public static void main(String[] args) {
         try(Connection con= getConnection()) {
             if(con!=null)
-            System.out.println("Connect success");
+                System.out.println("Connect success");
             else
-            System.out.println("Connect fail");
-            
+                System.out.println("Connect fail");
+
         } catch (Exception e) {
         }
     }

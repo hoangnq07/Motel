@@ -38,10 +38,7 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
 
-            <form class="d-flex ms-auto me-4">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-            </form>
+
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="home" class="nav-item nav-link active">Home</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
