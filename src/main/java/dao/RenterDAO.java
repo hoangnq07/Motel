@@ -1,6 +1,4 @@
 package dao;
-import java.util.Calendar;
-import java.util.Date;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +6,7 @@ import Account.Account;
 import context.DBcontext;
 import model.Feedback;
 import model.Renter;
+import java.util.logging.Logger;
 
 public class RenterDAO {
 
@@ -58,19 +57,32 @@ public class RenterDAO {
         return renters;
     }
 
-    public void addRenter(Renter renter) {
+    private static final Logger logger = Logger.getLogger(RenterDAO.class.getName());
+
+    public boolean addRenter(Renter renter) throws SQLException {
         String sql = "INSERT INTO renter (renter_id, check_out_date, renter_date, motel_room_id) VALUES (?, ?, ?, ?)";
+        logger.info("RenterDAO: Executing SQL: " + sql);
 
         try (Connection conn = DBcontext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, renter.getRenterId());
-            ps.setDate(2, new java.sql.Date(renter.getCheckOutDate().getTime()));
+            ps.setNull(2, java.sql.Types.DATE);  // check_out_date is null
             ps.setDate(3, new java.sql.Date(renter.getRenterDate().getTime()));
             ps.setInt(4, renter.getMotelRoomId());
 
-            ps.executeUpdate();
+            logger.info("RenterDAO: Prepared statement values: " +
+                    "renter_id=" + renter.getRenterId() +
+                    ", check_out_date=null" +
+                    ", renter_date=" + renter.getRenterDate() +
+                    ", motel_room_id=" + renter.getMotelRoomId());
+
+            int rowsAffected = ps.executeUpdate();
+            logger.info("RenterDAO: Rows affected: " + rowsAffected);
+            return rowsAffected > 0;
         } catch (SQLException e) {
+            logger.severe("RenterDAO: SQL Exception: " + e.getMessage());
             e.printStackTrace();
+            throw e;
         }
     }
 
@@ -169,20 +181,26 @@ public class RenterDAO {
         }
     }
 
-    public void saveFeedback(String feedbackText, int fromUserId, int toUserId, String tag) throws SQLException {
+    public void saveFeedback(String feedbackText, int fromUserId, Integer toUserId, String tag) throws SQLException {
         String sql = "INSERT INTO feedback (feedback_text, account_id, to_user_id, tag) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBcontext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, feedbackText);
             ps.setInt(2, fromUserId);
-            ps.setInt(3, toUserId);
-            ps.setString(4, tag);  // Thêm tag vào câu lệnh SQL
+            if (toUserId != null) {
+                ps.setInt(3, toUserId);
+            } else {
+                ps.setNull(3, java.sql.Types.INTEGER); // Xử lý trường hợp toUserId là null
+            }
+            ps.setString(4, tag);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-            throw e; // Ném lỗi ra ngoài để xử lý bên ngoài
+            throw e;
         }
     }
+
+
 
     public List<Integer> getAllAdminIds() throws SQLException {
         List<Integer> adminIds = new ArrayList<>();

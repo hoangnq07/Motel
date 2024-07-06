@@ -1,83 +1,77 @@
 package controller;
 
-import context.DBcontext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Invoice;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.Date;
 
 @WebServlet("/createBill")
 public class CreateBillServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private InvoiceService invoiceService;
+
+    public void init() {
+        invoiceService = new InvoiceService();
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
-        float totalPrice = Float.parseFloat(request.getParameter("totalPrice"));
-        String invoiceStatus = request.getParameter("invoiceStatus");
-        Date endDate = java.sql.Date.valueOf(request.getParameter("endDate"));
-        float electricityIndex = Float.parseFloat(request.getParameter("electricityIndex"));
-        float waterIndex = Float.parseFloat(request.getParameter("waterIndex"));
+        response.setContentType("application/json");
+        PrintWriter out = response.getWriter();
+        String action = request.getParameter("action");
 
-        try (Connection connection = DBcontext.getConnection()) {
-            // Find the renter_id from the motel_room_id
-            String selectRenterIdSQL = "SELECT renter_id FROM dbo.renter WHERE motel_room_id = ?";
-            int renterId = -1;
-            try (PreparedStatement psSelectRenter = connection.prepareStatement(selectRenterIdSQL)) {
-                psSelectRenter.setInt(1, motelRoomId);
-                var rs = psSelectRenter.executeQuery();
-                if (rs.next()) {
-                    renterId = rs.getInt("renter_id");
+        try {
+            if ("preview".equals(action)) {
+                // Forward to the confirmation JSP
+                request.getRequestDispatcher("billConfirmation.jsp").forward(request, response);
+            } else if ("confirm".equals(action)) {
+                // Parse and validate input
+                String motelRoomIdStr = request.getParameter("motelRoomId");
+                String totalPriceStr = request.getParameter("totalPrice");
+                String invoiceStatus = request.getParameter("invoiceStatus");
+                String endDateStr = request.getParameter("endDate");
+                String electricityUsageStr = request.getParameter("electricityUsage");
+                String waterUsageStr = request.getParameter("waterUsage");
+
+                if (motelRoomIdStr == null || totalPriceStr == null || invoiceStatus == null ||
+                        endDateStr == null || electricityUsageStr == null || waterUsageStr == null) {
+                    throw new IllegalArgumentException("All fields are required");
                 }
-            }
-            if (renterId == -1) {
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "No renter found for the specified room.");
-                return;
-            }
 
-            // Insert into Invoice table
-            String insertInvoiceSQL = "INSERT INTO dbo.invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (GETDATE(), ?, ?, ?, ?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(insertInvoiceSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
-                preparedStatement.setDate(1, (java.sql.Date) endDate);
-                preparedStatement.setFloat(2, totalPrice);
-                preparedStatement.setString(3, invoiceStatus);
-                preparedStatement.setInt(4, renterId);
-                preparedStatement.setInt(5, motelRoomId);
-                preparedStatement.executeUpdate();
+                int motelRoomId = Integer.parseInt(motelRoomIdStr);
+                float totalPrice = Float.parseFloat(totalPriceStr);
+                Date endDate = java.sql.Date.valueOf(endDateStr);
+                float electricityUsage = Float.parseFloat(electricityUsageStr);
+                float waterUsage = Float.parseFloat(waterUsageStr);
 
-                try (var rs = preparedStatement.getGeneratedKeys()) {
-                    if (rs.next()) {
-                        int invoiceId = rs.getInt(1);
+                // Create the invoice
+                Invoice invoice = invoiceService.createInvoice(motelRoomId, totalPrice, invoiceStatus, endDate, electricityUsage, waterUsage);
 
-                        // Insert into Electricity table
-                        String insertElectricitySQL = "INSERT INTO dbo.electricity (create_date, electricity_index, invoice_id) VALUES (GETDATE(), ?, ?)";
-                        try (PreparedStatement psElectricity = connection.prepareStatement(insertElectricitySQL)) {
-                            psElectricity.setFloat(1, electricityIndex);
-                            psElectricity.setInt(2, invoiceId);
-                            psElectricity.executeUpdate();
-                        }
-
-                        // Insert into Water table
-                        String insertWaterSQL = "INSERT INTO dbo.water (create_date, water_index, invoice_id) VALUES (GETDATE(), ?, ?)";
-                        try (PreparedStatement psWater = connection.prepareStatement(insertWaterSQL)) {
-                            psWater.setFloat(1, waterIndex);
-                            psWater.setInt(2, invoiceId);
-                            psWater.executeUpdate();
-                        }
-                    }
+                if (invoice != null && invoice.getInvoiceId() > 0) {
+                    out.print("{\"status\":\"success\", \"invoiceId\":" + invoice.getInvoiceId() + "}");
+                } else {
+                    throw new Exception("Invoice creation failed");
                 }
+            } else {
+                throw new IllegalArgumentException("Invalid action");
             }
-
-            response.sendRedirect("bills.jsp");
+        } catch (IllegalArgumentException e) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            out.print("{\"status\":\"error\", \"message\":\"" + e.getMessage() + "\"}");
         } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"status\":\"error\", \"message\":\"Database error: " + e.getMessage() + "\"}");
             e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error creating bill");
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.print("{\"status\":\"error\", \"message\":\"Unexpected error: " + e.getMessage() + "\"}");
+            e.printStackTrace();
         }
     }
 }

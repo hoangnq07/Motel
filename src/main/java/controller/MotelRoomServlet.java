@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/motel-rooms")
+@MultipartConfig
 public class MotelRoomServlet extends HttpServlet {
     private MotelRoomDAO motelRoomDAO;
     private Gson gson = new Gson();
@@ -65,7 +66,7 @@ public class MotelRoomServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         if ("create".equals(action)) {
-            createMotelRoom(request, response);
+           createMotelRoom(request, response);
         } else if ("edit".equals(action)) {
             updateMotelRoom(request, response);
         } else if ("addFavorite".equals(action)) {
@@ -88,7 +89,6 @@ public class MotelRoomServlet extends HttpServlet {
             response.getWriter().write(jsonResponse);
         } else {
             sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, "Room not found");
-        }
     }
 
     private void toggleFavoriteRoom(HttpServletRequest request, HttpServletResponse response, boolean add) throws IOException {

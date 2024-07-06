@@ -127,7 +127,7 @@
                                 <div class="room-card" style="width: auto; height: 500px;">
                                     <c:choose>
                                         <c:when test="${not empty room.image}">
-                                            <img src="${pageContext.getRequest().getContextPath()}/images/${room.image.get(1)}" alt="Room Image"  class="room-image" >
+                                            <img src="${pageContext.getRequest().getContextPath()}/images/${room.image.get(0)}" alt="Room Image"  class="room-image" >
                                         </c:when>
                                         <c:otherwise>
                                             <img src="${pageContext.getRequest().getContextPath()}/images/default-room.jpg" alt="Default Room Image">

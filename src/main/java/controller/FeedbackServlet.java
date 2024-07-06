@@ -56,9 +56,8 @@ public class FeedbackServlet extends HttpServlet {
     }
 
     private void sendFeedbackToAdmin(String feedbackText, int fromUserId) throws SQLException {
-        List<Integer> adminIds = renterDAO.getAllAdminIds();
-        for (int adminId : adminIds) {
-            renterDAO.saveFeedback(feedbackText, fromUserId, adminId, "Admin");  // Thêm tag "admin"
-        }
+        // Không cần lấy danh sách các admin, chỉ lưu một lần với to_user_id là NULL
+        renterDAO.saveFeedback(feedbackText, fromUserId, null, "Admin");
     }
+
 }

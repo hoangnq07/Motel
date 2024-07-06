@@ -43,6 +43,7 @@
                 <a href="home" class="nav-item nav-link active">Home</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
                 <a href="about.jsp" class="nav-item nav-link">Contact Us</a>
+                <a href="viewNotifications" class="nav-item nav-link">Notification</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
 
@@ -65,7 +66,29 @@
                                     <c:if test="${sessionScope.user.role == 'owner'}">
                                         <a href="owner" class="dropdown-item">Manage Motel</a>
                                     </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'owner'}">
+                                        <a href="manageInvoices.jsp" class="dropdown-item">Manage Bills</a>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'owner'}">
+                                        <a href="createBill.jsp" class="dropdown-item">Create Bills</a>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'admin'}">
+                                        <a href="authorityRequests.jsp" class="dropdown-item">Authority Requests</a>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'user'}">
+                                        <a href="requestAuthority.jsp" class="dropdown-item">Request to become Owner</a>
+                                    </c:if>
+
+                                    <c:if test="${sessionScope.user.role == 'user'}">
+                                        <a href="bills.jsp" class="dropdown-item">Your Bills</a>
+                                    </c:if>
+
                                     <a href="feedback.jsp" class="dropdown-item">Feedback</a>
+
                                     <a href="change_password.jsp" class="dropdown-item">Change Password</a>
                                     <a href="favorite-rooms" class="dropdown-item">My Favorite Room</a>
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
