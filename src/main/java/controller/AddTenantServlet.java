@@ -25,45 +25,30 @@ public class AddTenantServlet extends HttpServlet {
         response.setContentType("text/plain");
         PrintWriter out = response.getWriter();
 
-        logger.info("AddTenantServlet: doPost method started");
-
-        // Log all parameters
-        logger.info("All received parameters:");
-        for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet()) {
-            logger.info(entry.getKey() + ": " + Arrays.toString(entry.getValue()));
-        }
-
-        String accountIdStr = request.getParameter("accountId");
-        String startDateStr = request.getParameter("startDate");
-        String motelRoomIdStr = request.getParameter("motelRoomId");
-
-        logger.info("Parsed parameters: accountId=" + accountIdStr + ", startDate=" + startDateStr + ", motelRoomId=" + motelRoomIdStr);
-
-
         try {
-            if (accountIdStr == null || accountIdStr.isEmpty() || motelRoomIdStr == null || motelRoomIdStr.isEmpty()) {
-                throw new IllegalArgumentException("accountId and motelRoomId must not be empty");
-            }
+            int accountId = Integer.parseInt(request.getParameter("accountId"));
+            String startDateStr = request.getParameter("startDate");
+            int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
 
-            int accountId = Integer.parseInt(accountIdStr);
-            int motelRoomId = Integer.parseInt(motelRoomIdStr);
+            logger.info("Received request to add tenant: accountId=" + accountId + ", startDate=" + startDateStr + ", motelRoomId=" + motelRoomId);
 
-            if (startDateStr == null || startDateStr.isEmpty()) {
-                throw new IllegalArgumentException("startDate must not be empty");
+            RenterDAO renterDAO = new RenterDAO();
+
+            // Check if user is already renting
+            if (renterDAO.isUserAlreadyRenting(accountId)) {
+                logger.warning("User is already renting a room");
+                out.write("User is already renting a room!");
+                return;
             }
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = dateFormat.parse(startDateStr);
-
-            RenterDAO renterDAO = new RenterDAO();
 
             Renter renter = new Renter();
             renter.setRenterId(accountId);
             renter.setRenterDate(startDate);
             renter.setMotelRoomId(motelRoomId);
             renter.setCheckOutDate(null);
-
-            logger.info("Attempting to add renter: " + renter);
 
             boolean success = renterDAO.addRenter(renter);
 
@@ -72,26 +57,21 @@ public class AddTenantServlet extends HttpServlet {
                 out.write("success");
             } else {
                 logger.warning("Failed to add tenant");
-                out.write("error: Failed to add tenant");
+                out.write("Failed to add tenant");
             }
         } catch (NumberFormatException e) {
             logger.severe("Invalid number format: " + e.getMessage());
-            out.write("error: Invalid number format - " + e.getMessage());
+            out.write("Invalid number format");
         } catch (ParseException e) {
             logger.severe("Invalid date format: " + e.getMessage());
-            out.write("error: Invalid date format - " + e.getMessage());
-        } catch (IllegalArgumentException e) {
-            logger.severe("Invalid argument: " + e.getMessage());
-            out.write("error: " + e.getMessage());
+            out.write("Invalid date format");
         } catch (SQLException e) {
             logger.severe("Database error: " + e.getMessage());
-            out.write("error: Database error - " + e.getMessage());
+            out.write("Database error");
         } catch (Exception e) {
             logger.severe("Unexpected error: " + e.getMessage());
             e.printStackTrace();
-            out.write("error: Unexpected error - " + e.getMessage());
+            out.write("Unexpected error");
         }
-
-        logger.info("AddTenantServlet: doPost method ended");
     }
 }

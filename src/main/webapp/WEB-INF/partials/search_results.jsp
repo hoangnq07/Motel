@@ -9,6 +9,7 @@
             <th>Email</th>
             <th>Phone</th>
             <th>Citizen ID</th>
+            <th>Renting Date</th>
             <th>Action</th>
         </tr>
         <c:forEach var="account" items="${accounts}">
@@ -19,8 +20,10 @@
                 <td>${account.citizenId}</td>
                 <td>
                     <input type="date" id="startDate_${account.accountId}" required>
-                    <input type="hidden" id="motelRoomId_${account.accountId}" value="${param.motel_room_id}">
-                    <button onclick="addTenant(${account.accountId}, ${param.motel_room_id})">Add as Tenant</button>
+                    <span id="dateError_${account.accountId}" style="color: red; display: none;">Please select a date.</span>
+                </td>
+                <td>
+                    <button onclick="addTenant(${account.accountId}, ${motelRoomId})">Add as Tenant</button>
                 </td>
             </tr>
         </c:forEach>
