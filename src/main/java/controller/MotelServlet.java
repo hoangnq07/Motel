@@ -102,6 +102,7 @@ public class MotelServlet extends HttpServlet {
         String provinceText = request.getParameter("provinceText");
         String district = request.getParameter("district");
         String districtText = request.getParameter("districtText");
+        String ward = request.getParameter("town");
         String wardText = request.getParameter("townText");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
         int accountId = Integer.parseInt(request.getParameter("accountId"));
@@ -133,6 +134,7 @@ public class MotelServlet extends HttpServlet {
             motel.setWard(wardText);
             motel.setProvinceId(province);
             motel.setDistrictId(district);
+            motel.setWardId(ward);
             motel.setAccountId(accountId);
             MotelDAO.addMotel(motel);
             response.sendRedirect("/Project/owner");
@@ -150,6 +152,7 @@ public class MotelServlet extends HttpServlet {
         String provinceText = request.getParameter("provinceText");
         String district = request.getParameter("district");
         String districtText = request.getParameter("districtText");
+        String ward = request.getParameter("town");
         String wardText = request.getParameter("townText");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
         String newFileName = null;
@@ -181,6 +184,7 @@ public class MotelServlet extends HttpServlet {
                 motel.setWard(wardText);
                 motel.setProvinceId(province);
                 motel.setDistrictId(district);
+                motel.setWardId(ward);
             }
             motel.setStatus(status);
             motel.setAccountId(accountId);

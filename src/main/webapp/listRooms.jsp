@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="model.MotelRoom" %>
+<%@ page import="model.CategoryRoom" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
@@ -9,7 +10,6 @@
     <!-- Include Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
     <style>
         .favorite {
             cursor: pointer;
@@ -61,38 +61,96 @@
 <jsp:include page="header.jsp"></jsp:include>
 
 <div class="container mt-5">
-    <!-- Search Form -->
-    <form id="searchForm">
-        <div class="form-group">
-            <label for="description">Description:</label>
-            <input type="text" class="form-control" id="description" name="description">
+    <form id="searchForm" method="GET" action="${pageContext.request.contextPath}/motel-rooms">
+        <input type="hidden" name="action" value="search">
+        <div class="row mb-3">
+            <div class="col-md-10">
+                <input type="text" id="search" name="search" class="form-control" placeholder="Search by name..." value="${param.search}">
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="minPrice">Min Price:</label>
-            <input type="number" class="form-control" id="minPrice" name="minPrice" step="0.01">
-        </div>
-        <div class="form-group">
-            <label for="maxPrice">Max Price:</label>
-            <input type="number" class="form-control" id="maxPrice" name="maxPrice" step="0.01">
-        </div>
-        <div class="form-group">
-            <label for="status">Status:</label>
-            <select class="form-control" id="status" name="status">
-                <option value="">Any</option>
-                <option value="true">Available</option>
-                <option value="false">Unavailable</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Search</button>
-    </form>
 
+        <div class="row">
+            <div class="form-group col-md-2">
+                <label for="province">Province:</label>
+                <select id="province" name="province" class="form-control" onchange="updateHiddenInputs()">
+                    <option value="-1">Chọn tỉnh thành</option>
+                    <!-- Populate with provinces -->
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="district">District:</label>
+                <select id="district" name="district" class="form-control" onchange="updateHiddenInputs()">
+                    <option value="-1">Chọn quận/huyện</option>
+                    <!-- Populate with districts -->
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="town">Town:</label>
+                <select id="town" name="town" class="form-control" onchange="updateHiddenInputs()">
+                    <option value="-1">Chọn phường/xã</option>
+                    <!-- Populate with towns -->
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="category">Category:</label>
+                <select id="category" name="category" class="form-control">
+                    <option value="-1">Chọn loại phòng</option>
+                    <c:forEach var="categoryRoom" items="${categoryRooms}">
+                        <option value="${categoryRoom.categoryRoomId}" ${categoryRoom.categoryRoomId == param.category ? 'selected' : ''}>${categoryRoom.descriptions}</option>
+                    </c:forEach>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-2">
+                <label for="sortPrice">Sort by Price:</label>
+                <select id="sortPrice" name="sortPrice" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="asc" ${param.sortPrice == 'asc' ? 'selected' : ''}>Low to High</option>
+                    <option value="desc" ${param.sortPrice == 'desc' ? 'selected' : ''}>High to Low</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="sortArea">Sort by Area:</label>
+                <select id="sortArea" name="sortArea" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="asc" ${param.sortArea == 'asc' ? 'selected' : ''}>Small to Large</option>
+                    <option value="desc" ${param.sortArea == 'desc' ? 'selected' : ''}>Large to Small</option>
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="sortDate">Sort by Date:</label>
+                <select id="sortDate" name="sortDate" class="form-control">
+                    <option value="-1">Select</option>
+                    <option value="newest" ${param.sortDate == 'newest' ? 'selected' : ''}>Newest</option>
+                    <option value="oldest" ${param.sortDate == 'oldest' ? 'selected' : ''}>Oldest</option>
+                </select>
+            </div>
+        </div>
+
+        <input type="hidden" id="provinceText" name="provinceText" value="">
+        <input type="hidden" id="districtText" name="districtText" value="">
+        <input type="hidden" id="townText" name="townText" value="">
+
+        <input type="hidden" id="minPrice" name="minPrice" value="${param.minPrice}">
+        <input type="hidden" id="maxPrice" name="maxPrice" value="${param.maxPrice}">
+        <input type="hidden" id="minArea" name="minArea" value="${param.minArea}">
+        <input type="hidden" id="maxArea" name="maxArea" value="${param.maxArea}">
+        <div class="form-group col-md-2 align-self-end">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+    </form>
     <!-- Room Listings -->
-    <div class="row mt-4">
+    <div class="row mt-4" id="roomList">
         <c:forEach var="room" items="${rooms}">
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="room-card">
                     <c:if test="${not empty room.image}">
-                        <img src="${pageContext.request.contextPath}/images/${room.image.get(1)}" alt="Room Image">
+                        <img src="${pageContext.request.contextPath}/images/${room.image.get(0)}" alt="Room Image">
                     </c:if>
                     <c:if test="${empty room.image}">
                         <img src="${pageContext.request.contextPath}/images/default-room.jpg" alt="Default Room Image">
@@ -115,15 +173,26 @@
         <ul class="pagination justify-content-center">
             <c:forEach var="i" begin="1" end="${totalPages}">
                 <li class="page-item ${i == currentPage ? 'active' : ''}">
-                    <a class="page-link" href="motel-rooms?page=${i}">${i}</a>
+                    <c:choose>
+                        <c:when test="${param.action == 'search'}">
+                            <a class="page-link" href="${pageContext.request.contextPath}/motel-rooms?action=search&search=${param.search}&province=${param.province}&district=${param.district}&town=${param.town}&category=${param.category}&minPrice=${param.minPrice}&maxPrice=${param.maxPrice}&minArea=${param.minArea}&maxArea=${param.maxArea}&sortPrice=${param.sortPrice}&sortArea=${param.sortArea}&sortDate=${param.sortDate}&page=${i}">${i}</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a class="page-link" href="${pageContext.request.contextPath}/motel-rooms?page=${i}">${i}</a>
+                        </c:otherwise>
+                    </c:choose>
                 </li>
             </c:forEach>
         </ul>
     </nav>
 </div>
 <jsp:include page="footer.jsp" />
-</body>
+
 <script>
+    function submitSearchForm() {
+        document.getElementById('searchForm').submit();
+    }
+
     function toggleFavorite(element, roomId) {
         const isFavorite = element.classList.contains('fas'); // Check if already favorite
         const action = isFavorite ? 'remove' : 'add'; // Determine action based on current state
@@ -142,28 +211,109 @@
                 console.error('Error:', error);
             });
     }
-</script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
     $(document).ready(function() {
         $('#searchForm').submit(function(e) {
             e.preventDefault();
-            $.ajax({
-                url: '${pageContext.request.contextPath}/searchMotelRooms',
-                type: 'GET',
-                data: $(this).serialize(),
-                success: function(response) {
-                    $('.row.mt-4').html(response);
-                    // Hide pagination if showing search results
-                    $('.pagination').hide();
-                },
-                error: function() {
-                    alert('An error occurred while processing your request');
-                }
-            });
+            submitSearchForm();
         });
+
+        function updateHiddenInputs() {
+            var provinceSelect = document.getElementById('province');
+            var districtSelect = document.getElementById('district');
+            var townSelect = document.getElementById('town');
+
+            var selectedProvinceText = provinceSelect.selectedIndex > 0 ? provinceSelect.options[provinceSelect.selectedIndex].text : '';
+            var selectedDistrictText = districtSelect.selectedIndex > 0 ? districtSelect.options[districtSelect.selectedIndex].text : '';
+            var selectedTownText = townSelect.selectedIndex > 0 ? townSelect.options[townSelect.selectedIndex].text : '';
+
+            document.getElementById('provinceText').value = selectedProvinceText;
+            document.getElementById('districtText').value = selectedDistrictText;
+            document.getElementById('townText').value = selectedTownText;
+        }
+
+        // Populate province, district, and town dropdowns (fetch data from backend)
+        $.getJSON('${pageContext.request.contextPath}/assets/province/data.json', function(data) {
+            let provinceOptions = '<option value="-1">Chọn tỉnh thành</option>';
+            $.each(data.provinces, function(key, value) {
+                provinceOptions += '<option value="' + value.name + '">' + value.name + '</option>';
+            });
+            $('#province').html(provinceOptions);
+        });
+
+        $('#province').change(function() {
+            const provinceName = $(this).val();
+            if (provinceName != "-1") {
+                $.getJSON('${pageContext.request.contextPath}/assets/districts/' + provinceName + '.json', function(data) {
+                    let districtOptions = '<option value="-1">Chọn quận/huyện</option>';
+                    $.each(data.districts, function(key, value) {
+                        districtOptions += '<option value="' + value.name + '">' + value.name + '</option>';
+                    });
+                    $('#district').html(districtOptions);
+                    $('#town').html('<option value="-1">Chọn phường/xã</option>');
+                });
+            } else {
+                $('#district').html('<option value="-1">Chọn quận/huyện</option>');
+                $('#town').html('<option value="-1">Chọn phường/xã</option>');
+            }
+        });
+
+        $('#district').change(function() {
+            const districtName = $(this).val();
+            if (districtName != "-1") {
+                $.getJSON('${pageContext.request.contextPath}/assets/towns/' + districtName + '.json', function(data) {
+                    let townOptions = '<option value="-1">Chọn phường/xã</option>';
+                    $.each(data.towns, function(key, value) {
+                        townOptions += '<option value="' + value.name + '">' + value.name + '</option>';
+                    });
+                    $('#town').html(townOptions);
+                });
+            } else {
+                $('#town').html('<option value="-1">Chọn phường/xã</option>');
+            }
+        });
+
+        // Populate inputs with selected values if any
+        if('${param.province}' != '') {
+            $('#province').val('${param.province}');
+        }
+        if('${param.district}' != '') {
+            $('#district').val('${param.district}');
+        }
+        if('${param.town}' != '') {
+            $('#town').val('${param.town}');
+        }
+        if('${param.category}' != '') {
+            $('#category').val('${param.category}');
+        }
+
+        updateHiddenInputs();
     });
+
+    function updateHiddenInputs() {
+        var provinceSelect = document.getElementById('province');
+        var districtSelect = document.getElementById('district');
+        var townSelect = document.getElementById('town');
+
+        var selectedProvinceText = provinceSelect.selectedIndex > 0 ? provinceSelect.options[provinceSelect.selectedIndex].text : '';
+        var selectedDistrictText = districtSelect.selectedIndex > 0 ? districtSelect.options[districtSelect.selectedIndex].text : '';
+        var selectedTownText = townSelect.selectedIndex > 0 ? townSelect.options[townSelect.selectedIndex].text : '';
+
+        document.getElementById('provinceText').value = selectedProvinceText;
+        document.getElementById('districtText').value = selectedDistrictText;
+        document.getElementById('townText').value = selectedTownText;
+    }
 </script>
 
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDzwrnQq4xF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/assets/province/data.json"></script>
+<script src="${pageContext.request.contextPath}/assets/province/api1.js"></script>
+</body>
 </html>

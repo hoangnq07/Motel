@@ -15,6 +15,7 @@ public class Motel {
     private String provinceId;
     private boolean status;
     private String ward;
+    private String wardId;
     private int accountId;
 
     // Constructor
@@ -48,6 +49,23 @@ public class Motel {
         this.province = province;
         this.status = status;
         this.ward = ward;
+        this.accountId = accountId;
+    }
+
+    public Motel(int motelId, String name, Date createDate, String descriptions, String detailAddress, String district, String districtId, String image, String province, String provinceId, boolean status, String ward, String wardId, int accountId) {
+        this.motelId = motelId;
+        this.name = name;
+        this.createDate = createDate;
+        this.descriptions = descriptions;
+        this.detailAddress = detailAddress;
+        this.district = district;
+        this.districtId = districtId;
+        this.image = image;
+        this.province = province;
+        this.provinceId = provinceId;
+        this.status = status;
+        this.ward = ward;
+        this.wardId = wardId;
         this.accountId = accountId;
     }
 
@@ -155,5 +173,11 @@ public class Motel {
         this.ward = ward;
     }
 
+    public String getWardId() {
+        return wardId;
+    }
 
+    public void setWardId(String wardId) {
+        this.wardId = wardId;
+    }
 }
