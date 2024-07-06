@@ -1,5 +1,4 @@
 package controller;
-
 import Account.Account;
 import dao.MotelDAO;
 import dao.MotelRoomDAO;
@@ -7,9 +6,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.Motel;
-import model.MotelRoom;
-import org.apache.http.client.fluent.Response;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,15 +20,11 @@ public class OwnerServlet extends HttpServlet {
         try {
             motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
             request.setAttribute("motels", motels);
-            request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(10));
+            request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(account.getAccountId()));
         } catch (SQLException e) {
-            response.sendRedirect("404.jsp");
+            e.printStackTrace();
         }
         request.getRequestDispatcher("owner.jsp").forward(request, response);
     }
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }

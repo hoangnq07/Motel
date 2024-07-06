@@ -315,6 +315,23 @@ public class AccountDAO {
             ps.setDate(8, new java.sql.Date(account.getDob().getTime()));
         }
 
+        int index = 9;
+
+        if (updatePassword) {
+            // Hash the password if it's being updated
+            String hashedPassword = BCrypt.hashpw(account.getPassword(), BCrypt.gensalt());
+            ps.setString(index++, hashedPassword);
+        }
+
+        ps.setInt(index, account.getAccountId());
+
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+        }
+    }
     public List<Account> searchAccounts(String searchTerm) throws SQLException {
         List<Account> accounts = new ArrayList<>();
         String sql = "SELECT * FROM accounts WHERE email LIKE ? OR phone LIKE ? OR citizen_id LIKE ?";
@@ -345,24 +362,6 @@ public class AccountDAO {
         return accounts;
     }
 
-
-        int index = 9;
-
-        if (updatePassword) {
-            // Hash the password if it's being updated
-            String hashedPassword = BCrypt.hashpw(account.getPassword(), BCrypt.gensalt());
-            ps.setString(index++, hashedPassword);
-        }
-
-        ps.setInt(index, account.getAccountId());
-
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
-        }
-    }
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
 //        System.out.println(searchUser("hoangnq417@gmail.com"));

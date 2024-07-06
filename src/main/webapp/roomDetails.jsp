@@ -32,6 +32,11 @@
             <!-- Carousel -->
             <div id="roomImagesCarousel" class="carousel slide" data-ride="carousel">
                 <div class="carousel-inner">
+                    <c:if test="${empty images}">
+                        <div class="carousel-item active">
+                            <img src="${pageContext.request.contextPath}/images/default-room.jpg" class="d-block" alt="Room Image" style="width: 700px; height: 500px;">
+                        </div>
+                    </c:if>
                     <c:forEach var="image" items="${images}" varStatus="status">
                         <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
                             <img src="${pageContext.request.contextPath}/images/${image}" class="d-block" alt="Room Image" style="width: 700px; height: 500px;">

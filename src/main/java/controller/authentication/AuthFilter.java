@@ -1,6 +1,5 @@
 package controller.authentication;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import jakarta.servlet.*;
@@ -65,7 +64,6 @@ public class AuthFilter implements Filter {
                 httpResponse.sendRedirect(contextPath + "/home");
                 return;
             }
-
             chain.doFilter(request, response);
         }catch (Exception e){
             e.printStackTrace();
