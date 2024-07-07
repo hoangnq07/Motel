@@ -9,6 +9,8 @@
     <title>Your Bills</title>
 </head>
 <body>
+<jsp:include page="header.jsp" />
+
 <h1>Your Bills</h1>
 
 <%
@@ -69,5 +71,6 @@
         }
     %>
 </table>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

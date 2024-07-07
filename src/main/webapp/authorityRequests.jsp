@@ -7,6 +7,8 @@
     <title>Authority Requests</title>
 </head>
 <body>
+<jsp:include page="header.jsp" />
+
 <h2>Authority Requests</h2>
 
 <%
@@ -90,6 +92,6 @@
     </select>
     <input type="submit" value="Filter">
 </form>
-
+<jsp:include page="footer.jsp" />
 </body>
 </html>
