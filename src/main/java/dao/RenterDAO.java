@@ -241,4 +241,70 @@ public class RenterDAO {
         }
         return feedbacks;
     }
+
+    public List<Renter> getCurrentTenants(int motelRoomId) {
+        List<Renter> tenants = new ArrayList<>();
+        String sql = "SELECT r.*, a.fullname, a.email, a.phone, a.gender, a.dob, a.citizen_id, a.avatar, a.active " +
+                "FROM renter r JOIN accounts a ON r.renter_id = a.account_id " +
+                "WHERE r.motel_room_id = ? AND r.check_out_date IS NULL";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, motelRoomId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Renter renter = new Renter();
+                renter.setRenterId(rs.getInt("renter_id"));
+                renter.setChangeRoomDate(rs.getDate("change_room_date"));
+                renter.setCheckOutDate(rs.getDate("check_out_date"));
+                renter.setRenterDate(rs.getDate("renter_date"));
+                renter.setMotelRoomId(rs.getInt("motel_room_id"));
+
+                Account account = new Account(
+                        rs.getInt("renter_id"),
+                        "user",
+                        rs.getString("phone"),
+                        "",
+                        rs.getBoolean("gender"),
+                        rs.getString("fullname"),
+                        rs.getString("email"),
+                        rs.getDate("dob"),
+                        null,
+                        rs.getString("citizen_id"),
+                        rs.getString("avatar"),
+                        rs.getBoolean("active")
+                );
+
+                renter.setAccount(account);
+                tenants.add(renter);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return tenants;
+    }
+
+
+    public boolean isUserAlreadyRenting(int accountId) {
+        String sql = "SELECT COUNT(*) FROM renter WHERE renter_id = ? AND (check_out_date IS NULL OR check_out_date > GETDATE())";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, accountId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int count = rs.getInt(1);
+                return count > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 }
