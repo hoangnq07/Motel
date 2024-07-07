@@ -96,5 +96,6 @@
         }
     %>
 </table>
+<jsp:include page="createBill.jsp"/>
 </body>
 </html>

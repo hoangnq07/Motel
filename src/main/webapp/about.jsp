@@ -26,7 +26,7 @@
             color: #343a40;
         }
         .body {
-        margin-top: 50px;
+        margin-top: 100px;
         }
 
     </style>

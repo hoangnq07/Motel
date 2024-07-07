@@ -5,10 +5,7 @@ import context.DBcontext;
 import model.Feedback;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,14 +135,15 @@ public class AccountDAO {
     }
 
     public static boolean updateUser(Account user) {
-        String QUERY = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen_id = ?, avatar = ? WHERE account_id = ?";
+        String QUERY = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen_id = ?, avatar = ? ,dob =? WHERE account_id = ?";
         try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
             pst.setString(1, user.getFullname());
             pst.setBoolean(2, user.isGender());
             pst.setString(3, user.getPhone());
             pst.setString(4, user.getCitizenId());
             pst.setString(5, user.getAvatar());
-            pst.setInt(6, user.getAccountId());
+            pst.setDate(6, new java.sql.Date(user.getDob().getTime()));
+            pst.setInt(7, user.getAccountId());
 
             int rowsAffected = pst.executeUpdate();
             return rowsAffected > 0;
@@ -361,7 +359,6 @@ public class AccountDAO {
 
         return accounts;
     }
-
     public static void main(String[] args) {
 //        listUsers().forEach(p -> System.out.println(p));
 //        System.out.println(searchUser("hoangnq417@gmail.com"));

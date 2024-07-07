@@ -48,14 +48,6 @@ public class MotelRoomServlet extends HttpServlet {
             } else {
                 sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, "Room not found");
             }
-        } else if (action.equals("create")) {
-            showForm(request, response, new MotelRoom());
-        } else if (action.equals("edit")) {
-            try {
-                showEditForm(request, response);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
         } else if (action.equals("delete")) {
             deleteMotelRoom(request, response);
         } else if ("search".equals(action) || "filter".equals(action)) {
@@ -129,19 +121,6 @@ public class MotelRoomServlet extends HttpServlet {
             request.getRequestDispatcher("/listRooms.jsp").forward(request, response);
         }
 
-        private void showForm (HttpServletRequest request, HttpServletResponse response, MotelRoom room) throws
-        ServletException, IOException {
-            request.setAttribute("room", room);
-            request.getRequestDispatcher("/room-form.jsp").forward(request, response);
-        }
-
-        private void showEditForm (HttpServletRequest request, HttpServletResponse response) throws
-        ServletException, IOException, SQLException {
-            int id = Integer.parseInt(request.getParameter("id"));
-            MotelRoom existingRoom = motelRoomDAO.getMotelRoomById(id);
-            showForm(request, response, existingRoom);
-        }
-
         private void createMotelRoom (HttpServletRequest request, HttpServletResponse response) throws
         IOException, ServletException {
             MotelRoom room = new MotelRoom();
@@ -175,7 +154,7 @@ public class MotelRoomServlet extends HttpServlet {
             room.setImage(imageNames);
             try {
                 motelRoomDAO.addMotelRoom(room);
-                response.sendRedirect("/Project/motel/manage");
+                response.sendRedirect("/Project/owner?page=room-list");
             } catch (Exception ex) {
                 throw new ServletException(ex);
             }
@@ -216,7 +195,7 @@ public class MotelRoomServlet extends HttpServlet {
             room.setImage(imageNames);
             try {
                 motelRoomDAO.updateMotelRoom(room);
-                response.sendRedirect("/Project/motel/manage");
+                response.sendRedirect("/Project/owner?page=room-list");
             } catch (SQLException ex) {
                 throw new ServletException(ex);
             }

@@ -106,7 +106,7 @@
                     } else {
                         document.getElementById('statusFalse').checked = true;
                     }
-                    displayUploadedImages(room.images);
+                    // displayUploadedImages(room.images);
                 })
                 .catch(function(error) {
                     console.error('Error:', error);
@@ -421,39 +421,68 @@
 
 </script>
 <script>
+    // Update the form submission handler
     document.getElementById('roomForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
         var formData = new FormData(this);
 
-        // Đảm bảo rằng tất cả các file đã chọn được thêm vào formData
-        var fileInput = document.getElementById('images');
-        for (var i = 0; i < fileInput.files.length; i++) {
-            formData.append('images', fileInput.files[i]);
+        // Log formData contents for debugging
+        for (var pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
         }
 
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', this.action, true);
-        xhr.onload = function() {
-            if (xhr.status === 200) {
-                var response = JSON.parse(xhr.responseText);
-                if (response.success) {
-                    alert('Room added/updated successfully');
-                    // Refresh trang hoặc cập nhật UI
-                    location.reload();
+        xhr.open('POST', '${pageContext.request.contextPath}/motel-rooms', true);
+        xhr.onreadystatechange = function() {
+            console.log('ReadyState:', xhr.readyState);
+            if (xhr.readyState === 4) {
+                console.log('Status:', xhr.status);
+                console.log('Response:', xhr.responseText);
+
+                if (xhr.status === 200) {
+                    try {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.success) {
+                            alert('Room ' + (formData.get('action') === 'edit' ? 'updated' : 'added') + ' successfully');
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (response.message || 'Unknown error occurred'));
+                        }
+                    } catch (e) {
+                        console.error('Error parsing response:', e);
+                        console.error('Raw response:', xhr.responseText);
+                        alert('An error occurred while processing the response. Check the console for details.');
+                    }
                 } else {
-                    alert('Error: ' + response.message);
+                    console.error('Server error:', xhr.status, xhr.statusText);
+                    console.error('Response:', xhr.responseText);
+                    alert('An error occurred: ' + xhr.status + ' ' + xhr.statusText + '\nCheck the console for details.');
                 }
-            } else {
-                alert('An error occurred');
             }
         };
         xhr.onerror = function() {
-            console.error('Error:', xhr.statusText);
-            alert('An error occurred');
+            console.error('Network error:', xhr.status, xhr.statusText);
+            alert('A network error occurred');
         };
         xhr.send(formData);
     });
+
+    // Add this function to your JavaScript
+    function showForm(action, roomId, motelId) {
+        $('#roomModal').modal('show');
+        document.getElementById('form-action').value = action;
+        loadCategories();
+        if (action === 'edit' && roomId) {
+            document.getElementById('roomId').value = roomId;
+            fetchRoomDetails(roomId);
+        } else {
+            document.getElementById('roomForm').reset();
+            document.getElementById('image-previews').innerHTML = '';
+        }
+        // Set the motelId in the form
+        document.getElementById('motelId').value = motelId;
+    }
 </script>
 
 </body>

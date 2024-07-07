@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Admin
-  Date: 6/6/2024
-  Time: 5:15 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -13,8 +6,32 @@
     <meta charset="utf-8">
     <title>HOME</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1;
+        }
+        .footer {
+            background: #343a40;
+            color: white;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .footer a {
+            color: #d1d1d1;
+        }
+    </style>
 </head>
 <body>
+<div class="content">
+    <!-- Your page content here -->
+</div>
+
 <div class="container-fluid bg-dark footer mt-5 pt-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container py-5">
         <div class="row g-5">
@@ -36,16 +53,11 @@
             </div>
             <div class="col-lg-3 col-md-6">
                 <h4 class="text-light mb-4">Quick Links</h4>
-                <a class="btn btn-link" href="">About Us</a>
-                <a class="btn btn-link" href="">Contact Us</a>
-                <a class="btn btn-link" href="">Our Services</a>
-                <a class="btn btn-link" href="">Terms & Condition</a>
-                <a class="btn btn-link" href="">Support</a>
+                <a class="btn btn-link" href="about.jsp">About Us</a>
+                <a class="btn btn-link" href="about.jsp">Contact Us</a>
             </div>
         </div>
     </div>
 </div>
-<!-- Footer End -->
-
 </body>
 </html>

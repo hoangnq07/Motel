@@ -15,16 +15,51 @@ import java.util.List;
 public class OwnerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Motel> motels = new ArrayList<>();
+        String page = request.getParameter("page");
         Account account = (Account) request.getSession().getAttribute("user");
-        try {
-            motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
-            request.setAttribute("motels", motels);
-            request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(account.getAccountId()));
-        } catch (SQLException e) {
-            e.printStackTrace();
+        List<Motel> motels = new ArrayList<>();
+        if (page == null) {
+            try {
+                motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
+                request.setAttribute("motels", motels);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            request.getRequestDispatcher("owner.jsp").forward(request, response);
+        }else{
+            switch (page) {
+                case "motel-list":
+                    try {
+                        motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
+                        request.setAttribute("motels", motels);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "room-list":
+                    try {
+                        int motelId = -1;
+                        try {
+                            motelId = Integer.parseInt(request.getParameter("id"));
+                            request.getSession().setAttribute("motelId", motelId);
+                        } catch (Exception e) {
+                            motelId = (int) request.getSession().getAttribute("motelId");
+                        }
+                        request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(motelId));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+                case "notify":
+
+                    break;
+                case "createInvoice":
+
+                    break;
+            }
+            request.getRequestDispatcher("motel-manage.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("owner.jsp").forward(request, response);
+
     }
 
 }

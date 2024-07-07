@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @MultipartConfig
-@WebServlet(name = "MotelServlet", urlPatterns = {"/motel", "/motel/create", "/motel/update", "/motel/delete","/motel/manage"})
+@WebServlet(name = "MotelServlet", urlPatterns = {"/motel", "/motel/create", "/motel/update", "/motel/delete"})
 public class MotelServlet extends HttpServlet {
     private static final String UPLOAD_DIRECTORY = "images";
     @Override
@@ -36,21 +36,6 @@ public class MotelServlet extends HttpServlet {
                     break;
                 case "/motel/delete":
                     deleteMotel(request, response);
-                    break;
-                case "/motel/manage":
-                    List<Motel> motels = new ArrayList<>();
-                    Account account = (Account) request.getSession().getAttribute("user");
-                    motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
-                    request.setAttribute("motels", motels);
-                    int motelId =-1;
-                    try {
-                        motelId = Integer.parseInt(request.getParameter("id"));
-                        request.getSession().setAttribute("motelId", motelId);
-                    }catch (Exception e){
-                        motelId = (int) request.getSession().getAttribute("motelId");
-                    }
-                    request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(motelId));
-                    request.getRequestDispatcher("/motel-manage.jsp").forward(request, response);
                     break;
                 default:
                     listMotels(request, response);
