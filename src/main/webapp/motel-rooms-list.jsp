@@ -51,6 +51,13 @@
             border-radius: 50%;
             cursor: pointer;
         }
+        #pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+        }
     </style>
     <script>
         var contextPath = '${pageContext.request.contextPath}';
@@ -216,7 +223,7 @@
 <div class="container">
     <h2>Motel Room List</h2>
 
-    <a href="javascript:void(0);" onclick="showForm('create');" class="btn btn-primary">Add New Room</a>
+    <a href="javascript:void(0);" onclick="showForm('create');" class="btn btn-primary mb-2">Add New Room</a>
     <table class="table">
         <thead>
         <tr>
@@ -263,6 +270,7 @@
                 <td class="actions">
                     <a href="javascript:void(0);" onclick="showForm('edit', ${room.motelRoomId},${room.motelId});">Edit</a>
                     <a href="${pageContext.request.contextPath}/motel-rooms?action=delete&id=${room.motelRoomId}" onclick="return confirm('Are you sure?');">Delete</a>
+                    <a href="${pageContext.request.contextPath}/add_tenants.jsp?motel_room_id=${room.motelRoomId}">Manage</a>
                 </td>
             </tr>
         </c:forEach>

@@ -1,24 +1,21 @@
+// RequestAuthority.java
 package model;
 
-import java.sql.Date;
-
 public class RequestAuthority {
-    private int requestAuthorityId;
+    private int requestId;
     private String image;
-    private Date createDate;
     private String descriptions;
-    private String respDescriptions;
-    private Date responseDate;
+    private String status;
+    private String responseDescriptions;
     private int accountId;
-    private String requestAuthorityStatus;
 
     // Getters and Setters
-    public int getRequestAuthorityId() {
-        return requestAuthorityId;
+    public int getRequestId() {
+        return requestId;
     }
 
-    public void setRequestAuthorityId(int requestAuthorityId) {
-        this.requestAuthorityId = requestAuthorityId;
+    public void setRequestId(int requestId) {
+        this.requestId = requestId;
     }
 
     public String getImage() {
@@ -29,14 +26,6 @@ public class RequestAuthority {
         this.image = image;
     }
 
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
     public String getDescriptions() {
         return descriptions;
     }
@@ -45,20 +34,20 @@ public class RequestAuthority {
         this.descriptions = descriptions;
     }
 
-    public String getRespDescriptions() {
-        return respDescriptions;
+    public String getStatus() {
+        return status;
     }
 
-    public void setRespDescriptions(String respDescriptions) {
-        this.respDescriptions = respDescriptions;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public Date getResponseDate() {
-        return responseDate;
+    public String getResponseDescriptions() {
+        return responseDescriptions;
     }
 
-    public void setResponseDate(Date responseDate) {
-        this.responseDate = responseDate;
+    public void setResponseDescriptions(String responseDescriptions) {
+        this.responseDescriptions = responseDescriptions;
     }
 
     public int getAccountId() {
@@ -67,27 +56,5 @@ public class RequestAuthority {
 
     public void setAccountId(int accountId) {
         this.accountId = accountId;
-    }
-
-    public String getRequestAuthorityStatus() {
-        return requestAuthorityStatus;
-    }
-
-    public void setRequestAuthorityStatus(String requestAuthorityStatus) {
-        this.requestAuthorityStatus = requestAuthorityStatus;
-    }
-
-    @Override
-    public String toString() {
-        return "RequestAuthority{" +
-                "requestAuthorityId=" + requestAuthorityId +
-                ", image='" + image + '\'' +
-                ", createDate=" + createDate +
-                ", descriptions='" + descriptions + '\'' +
-                ", respDescriptions='" + respDescriptions + '\'' +
-                ", responseDate=" + responseDate +
-                ", accountId=" + accountId +
-                ", requestAuthorityStatus='" + requestAuthorityStatus + '\'' +
-                '}';
     }
 }

@@ -13,19 +13,21 @@
             <th>Action</th>
         </tr>
         <c:forEach var="account" items="${accounts}">
-            <tr>
-                <td>${account.fullname}</td>
-                <td>${account.email}</td>
-                <td>${account.phone}</td>
-                <td>${account.citizenId}</td>
-                <td>
-                    <input type="date" id="startDate_${account.accountId}" required>
-                    <span id="dateError_${account.accountId}" style="color: red; display: none;">Please select a date.</span>
-                </td>
-                <td>
-                    <button onclick="addTenant(${account.accountId}, ${motelRoomId})">Add as Tenant</button>
-                </td>
-            </tr>
+            <c:if test="${account.role != 'admin'}">
+                <tr>
+                    <td>${account.fullname}</td>
+                    <td>${account.email}</td>
+                    <td>${account.phone}</td>
+                    <td>${account.citizenId}</td>
+                    <td>
+                        <input type="date" id="startDate_${account.accountId}" required>
+                        <span id="dateError_${account.accountId}" style="color: red; display: none;">Please select a date.</span>
+                    </td>
+                    <td>
+                        <button onclick="addTenant(${account.accountId}, ${motelRoomId})">Add as Tenant</button>
+                    </td>
+                </tr>
+            </c:if>
         </c:forEach>
     </table>
 </c:if>
