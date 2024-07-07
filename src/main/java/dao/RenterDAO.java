@@ -8,6 +8,8 @@ import model.Feedback;
 import model.Renter;
 import java.util.logging.Logger;
 
+import static dao.MotelRoomDAO.checkAndUpdateRoomStatus;
+
 public class RenterDAO {
 
     public List<Renter> getRentersByMotel(int motelId) {
@@ -119,18 +121,6 @@ public class RenterDAO {
             ps.setInt(4, renter.getMotelRoomId());
             ps.setInt(5, renter.getRenterId());
 
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void deleteRenter(int renterId) {
-        String sql = "DELETE FROM renter WHERE renter_id = ?";
-
-        try (Connection conn = DBcontext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, renterId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -305,6 +295,102 @@ public class RenterDAO {
             e.printStackTrace();
         }
 
+        return false;
+    }
+
+    public static int getNumberOfRentersByMotelRoomId(int motelRoomId) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) AS renter_count FROM renter WHERE motel_room_id = ? AND check_out_date IS NULL";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, motelRoomId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt("renter_count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public static int getMaxRentersForRoom(int motelRoomId) throws SQLException {
+        String sql = "SELECT cr.quantity FROM category_room cr " +
+                "JOIN motel_room mr ON cr.category_room_id = mr.category_room_id " +
+                "WHERE mr.motel_room_id = ?";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, motelRoomId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("quantity");
+            }
+        }
+        return 0; // Return 0 if no result found
+    }
+
+    public void checkoutRenter(int renterId) throws SQLException {
+        String sql = "UPDATE renter SET check_out_date = GETDATE() WHERE renter_id = ?";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, renterId);
+            ps.executeUpdate();
+
+            // Get the motel_room_id for this renter
+            int motelRoomId = getMotelRoomIdByRenterId(renterId);
+
+            // Check and update room status
+            checkAndUpdateRoomStatus(motelRoomId);
+        }
+    }
+
+
+    public boolean deleteRenter(int renterId) throws SQLException {
+        String sql = "DELETE FROM renter WHERE renter_id = ?";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, renterId);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                // Get the motel_room_id for this renter before deletion
+                int motelRoomId = getMotelRoomIdByRenterId(renterId);
+
+                // Check and update room status after deletion
+                checkAndUpdateRoomStatus(motelRoomId);
+
+                return true;
+            }
+            return false;
+        }
+    }
+
+    private int getMotelRoomIdByRenterId(int renterId) throws SQLException {
+        String sql = "SELECT motel_room_id FROM renter WHERE renter_id = ?";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, renterId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("motel_room_id");
+            }
+        }
+        throw new SQLException("No motel room found for renter id: " + renterId);
+    }
+
+    public boolean hasUnpaidInvoices(int renterId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM invoice WHERE renter_id = ? AND invoice_status = 'UNPAID'";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, renterId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
         return false;
     }
 }

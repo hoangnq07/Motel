@@ -1,6 +1,7 @@
 package controller;
 
 import dao.RenterDAO;
+import dao.MotelRoomDAO;
 import model.Renter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -41,6 +42,16 @@ public class AddTenantServlet extends HttpServlet {
                 return;
             }
 
+            // Check if the room is full
+            int currentRenterCount = renterDAO.getNumberOfRentersByMotelRoomId(motelRoomId);
+            int maxRenters = renterDAO.getMaxRentersForRoom(motelRoomId);
+
+            if (currentRenterCount >= maxRenters) {
+                logger.warning("Room is full. Cannot add more tenants.");
+                out.write("Room is full. Cannot add more tenants.");
+                return;
+            }
+
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date startDate = dateFormat.parse(startDateStr);
 
@@ -53,6 +64,9 @@ public class AddTenantServlet extends HttpServlet {
             boolean success = renterDAO.addRenter(renter);
 
             if (success) {
+                // Update room status after adding the tenant
+                MotelRoomDAO.checkAndUpdateRoomStatus(motelRoomId);
+
                 logger.info("Tenant added successfully");
                 out.write("success");
             } else {

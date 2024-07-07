@@ -170,6 +170,9 @@
                             <td>${renter.account.email}</td>
                             <td>${renter.account.phone}</td>
                             <td><fmt:formatDate value="${renter.renterDate}" pattern="yyyy-MM-dd"/></td>
+                            <td>
+                                <button onclick="kickOutTenant(${renter.renterId})">Kick Out</button>
+                            </td>
                         </tr>
                     </c:forEach>
                 </table>
@@ -238,6 +241,59 @@
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error adding tenant: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    function kickOutTenant(renterId) {
+        if (confirm('Are you sure you want to kick out this tenant?')) {
+            $.ajax({
+                url: 'kickOutTenant',
+                method: 'POST',
+                data: { renterId: renterId, forceDelete: false },
+                success: function(response) {
+                    var parts = response.split('|');
+                    var status = parts[0];
+                    var message = parts[1];
+
+                    if (status === 'unpaid_invoices') {
+                        if (confirm(message)) {
+                            // User chose to continue despite unpaid invoices
+                            kickOutTenantForce(renterId);
+                        }
+                    } else if (status === 'success') {
+                        alert(message);
+                        location.reload();  // Reload the page to show updated tenant list
+                    } else {
+                        alert('Error: ' + message);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error kicking out tenant: ' + textStatus + ' - ' + errorThrown);
+                }
+            });
+        }
+    }
+
+    function kickOutTenantForce(renterId) {
+        $.ajax({
+            url: 'kickOutTenant',
+            method: 'POST',
+            data: { renterId: renterId, forceDelete: true },
+            success: function(response) {
+                var parts = response.split('|');
+                var status = parts[0];
+                var message = parts[1];
+
+                if (status === 'success') {
+                    alert(message);
+                    location.reload();  // Reload the page to show updated tenant list
+                } else {
+                    alert('Error: ' + message);
+                }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error kicking out tenant: ' + textStatus + ' - ' + errorThrown);
             }
         });
     }

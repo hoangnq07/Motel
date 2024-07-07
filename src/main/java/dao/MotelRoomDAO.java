@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import Account.Account;
+import dao.RenterDAO;
 
 public class MotelRoomDAO {
     private Connection connection;
@@ -574,5 +575,23 @@ public class MotelRoomDAO {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public static void updateRoomStatus(int motelRoomId, boolean status) throws SQLException {
+        String sql = "UPDATE motel_room SET room_status = ? WHERE motel_room_id = ?";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setBoolean(1, status);
+            ps.setInt(2, motelRoomId);
+            ps.executeUpdate();
+        }
+    }
+
+    public static void checkAndUpdateRoomStatus(int motelRoomId) throws SQLException {
+        int currentRenterCount = RenterDAO.getNumberOfRentersByMotelRoomId(motelRoomId);
+        int maxRenters = RenterDAO.getMaxRentersForRoom(motelRoomId);
+
+        boolean isFull = currentRenterCount >= maxRenters;
+        updateRoomStatus(motelRoomId, !isFull);
     }
 }
