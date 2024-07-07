@@ -48,9 +48,7 @@ public class LoginServlet extends HttpServlet {
 
                 if (user.getRole().equals("admin")) {
                     request.getRequestDispatcher("dashboard_admin.jsp").forward(request, response);
-                } else if (user.getRole().equals("owner")) {
-                    request.getRequestDispatcher("owner.jsp").forward(request, response);
-                } else if (user.getRole().equals("user")) {
+                } else {
                     request.getRequestDispatcher("home").forward(request, response);
                 }
             } else {
