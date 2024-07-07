@@ -1,5 +1,6 @@
 package controller;
 import Account.Account;
+import dao.FeedbackDAO;
 import dao.MotelDAO;
 import dao.MotelRoomDAO;
 import jakarta.servlet.*;
@@ -47,8 +48,15 @@ public class OwnerServlet extends HttpServlet {
                         }
                         request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(motelId));
                     break;
-                case "createInvoice":
+                case "createBill":
 
+                    break;
+                case "feedback":
+                    try {
+                        request.setAttribute("feedbacks", FeedbackDAO.getFeedbackForOwner(account.getAccountId()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                     break;
             }
             request.getRequestDispatcher("motel-manage.jsp").forward(request, response);

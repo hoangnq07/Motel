@@ -287,7 +287,6 @@ public class RenterDAO {
         return tenants;
     }
 
-
     public boolean isUserAlreadyRenting(int accountId) {
         String sql = "SELECT COUNT(*) FROM renter WHERE renter_id = ? AND (check_out_date IS NULL OR check_out_date > GETDATE())";
 

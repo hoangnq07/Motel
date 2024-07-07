@@ -57,17 +57,22 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'customer-management' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=customer-management">
-                        <i class="fas fa-users mr-2"></i>Quản lý Thành viên
+                        <i class="fas fa-users mr-2"></i>Quản lý Người thuê
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="createBill.jsp">
+                    <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=bill">
                         <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa đơn
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'notifications' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=notify">
                         <i class="fas fa-bell mr-2"></i>Thông báo
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ${param.page == 'feedback' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=feedback">
+                        <i class="fas fa-comments mr-2"></i>Feedback
                     </a>
                 </li>
                 <li class="nav-item">
@@ -91,8 +96,11 @@
                 <c:when test="${param.page == 'notify'}">
                     <jsp:include page="notify.jsp"/>
                 </c:when>
-                <c:when test="${param.page == 'createInvoice'}">
+                <c:when test="${param.page == 'bill'}">
                     <jsp:include page="manageInvoices.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'feedback'}">
+                    <jsp:include page="viewfeedback.jsp"/>
                 </c:when>
             </c:choose>
         </div>
