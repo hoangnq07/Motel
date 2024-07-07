@@ -7,7 +7,9 @@
     <title>Authority Requests</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<body>
+
+<body style="margin-top: 50px;">
+<jsp:include page="header.jsp" />
 <div class="container">
     <h2 class="my-4">Authority Requests</h2>
 
@@ -101,9 +103,18 @@
     %>
 
 
-</div>
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Filter Form -->
+<form action="<%= ((HttpServletRequest) pageContext.getRequest()).getContextPath() %>/authorityRequests.jsp" method="get">
+    <label for="statusFilter">Filter by Status:</label>
+    <select id="statusFilter" name="statusFilter">
+        <option value="Pending" <%= "Pending".equals(statusFilter) ? "selected" : "" %>>Pending</option>
+        <option value="Approved" <%= "Approved".equals(statusFilter) ? "selected" : "" %>>Approved</option>
+        <option value="Rejected" <%= "Rejected".equals(statusFilter) ? "selected" : "" %>>Rejected</option>
+    </select>
+    <input type="submit" value="Filter">
+</form>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

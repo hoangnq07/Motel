@@ -8,7 +8,9 @@
     <meta charset="UTF-8">
     <title>Your Bills</title>
 </head>
-<body>
+<body style="            margin-top: 50px;">
+<jsp:include page="header.jsp" />
+
 <h1>Your Bills</h1>
 
 <%
@@ -69,5 +71,6 @@
         }
     %>
 </table>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

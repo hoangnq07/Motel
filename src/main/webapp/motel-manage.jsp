@@ -61,7 +61,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=createInvoice">
+                    <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="createBill.jsp">
                         <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa đơn
                     </a>
                 </li>
