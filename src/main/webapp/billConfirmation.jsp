@@ -3,7 +3,7 @@
     <h2>Confirm Bill Details</h2>
     <p>Electricity Usage: ${param.electricityUsage}</p>
     <p>Water Usage: ${param.waterUsage}</p>
-    <p>Total Price: ${param.totalPrice}</p>
+    <p>Total Price: ${param.totalPrice}VNĐ</p>
     <button onclick="confirmBill()">Confirm</button>
     <button onclick="cancelBill()">Cancel</button>
 </div>

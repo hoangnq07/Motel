@@ -174,4 +174,33 @@ public class InvoiceDAO {
             }
         }
     }
+
+    public Invoice getLatestInvoiceForRoom(int motelRoomId) throws SQLException, ClassNotFoundException {
+        String sql = "SELECT TOP 1 i.*, e.electricity_index, w.water_index " +
+                "FROM dbo.invoice i " +
+                "LEFT JOIN dbo.electricity e ON i.invoice_id = e.invoice_id " +
+                "LEFT JOIN dbo.water w ON i.invoice_id = w.invoice_id " +
+                "WHERE i.motel_room_id = ? " +
+                "ORDER BY i.create_date DESC";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, motelRoomId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Invoice(
+                            rs.getInt("invoice_id"),
+                            rs.getDate("create_date"),
+                            rs.getDate("end_date"),
+                            rs.getFloat("total_price"),
+                            rs.getString("invoice_status"),
+                            rs.getInt("renter_id"),
+                            rs.getInt("motel_room_id"),
+                            rs.getFloat("electricity_index"),
+                            rs.getFloat("water_index")
+                    );
+                }
+            }
+        }
+        return null;
+    }
 }
