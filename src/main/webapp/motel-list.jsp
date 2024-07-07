@@ -47,6 +47,40 @@
             max-height: calc(100vh - 200px);
             overflow-y: auto;
         }
+        #pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        #pagination button {
+            padding: 8px 16px;
+            margin: 0 5px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            color: #007bff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #pagination button:hover:not(:disabled) {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        #pagination button:disabled {
+            color: #ddd;
+            cursor: not-allowed;
+        }
+
+        #pagination #pageInfo {
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border: 1px solid #007bff;
+        }
     </style>
 </head>
 <body>
@@ -96,9 +130,7 @@
         </c:forEach>
         </tbody>
     </table>
-    <div id="pagination" class="mt-3">
-        <!-- Các nút phân trang sẽ được thêm vào đây -->
-    </div>
+    <div id="pagination"></div>
 </div>
 
 <!-- Add Motel Modal -->
@@ -209,6 +241,80 @@
         document.getElementById('districtText').value = selectedDistrictText;
         document.getElementById('townText').value = selectedTownText;
     }
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var motelsPerPage = 5;
+        var currentPage = 1;
+        var motels = Array.from(document.querySelectorAll("#motelList tr"));
+        var totalPages = Math.ceil(motels.length / motelsPerPage);
+
+        function showPage(page) {
+            motels.forEach(function(row, index) {
+                if (index === 0) return; // Bỏ qua hàng tiêu đề
+                row.style.display = 'none';
+            });
+
+            var startIndex = (page - 1) * motelsPerPage + 1; // +1 để bỏ qua hàng tiêu đề
+            var endIndex = Math.min(startIndex + motelsPerPage, motels.length);
+
+            for (var i = startIndex; i < endIndex; i++) {
+                motels[i].style.display = '';
+            }
+        }
+
+        function createPagination() {
+            var pagination = document.getElementById("pagination");
+            pagination.innerHTML = '';
+            pagination.classList.add("pagination");
+
+            // Nút Previous
+            var prev = document.createElement("li");
+            prev.classList.add("page-item");
+            if (currentPage === 1) {
+                prev.classList.add("disabled");
+            }
+            prev.innerHTML = '<a class="page-link" href="#">Previous</a>';
+            prev.onclick = function(e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(currentPage);
+                    createPagination();
+                }
+            };
+            pagination.appendChild(prev);
+
+            // Số trang hiện tại
+            var current = document.createElement("li");
+            current.classList.add("page-item", "active");
+            current.innerHTML = '<span class="page-link">' + currentPage + '</span>';
+            pagination.appendChild(current);
+
+            // Nút Next
+            var next = document.createElement("li");
+            next.classList.add("page-item");
+            if (currentPage === totalPages) {
+                next.classList.add("disabled");
+            }
+            next.innerHTML = '<a class="page-link" href="#">Next</a>';
+            next.onclick = function(e) {
+                e.preventDefault();
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(currentPage);
+                    createPagination();
+                }
+            };
+            pagination.appendChild(next);
+        }
+
+        // Hiển thị trang đầu tiên và tạo các nút phân trang
+        if (motels.length > 1) { // > 1 vì có hàng tiêu đề
+            showPage(currentPage);
+            createPagination();
+        }
+    });
 </script>
 </body>
 </html>

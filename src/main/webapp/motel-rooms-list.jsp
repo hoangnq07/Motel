@@ -51,6 +51,13 @@
             border-radius: 50%;
             cursor: pointer;
         }
+        #pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+        }
     </style>
     <script>
         var contextPath = '${pageContext.request.contextPath}';
@@ -216,7 +223,7 @@
 <div class="container">
     <h2>Motel Room List</h2>
 
-    <a href="javascript:void(0);" onclick="showForm('create');" class="btn btn-primary">Add New Room</a>
+    <a href="javascript:void(0);" onclick="showForm('create');" class="btn btn-primary mb-2">Add New Room</a>
     <table class="table">
         <thead>
         <tr>
