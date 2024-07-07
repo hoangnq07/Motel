@@ -5,14 +5,82 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create New Bill</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
   <style>
-    /* ... (keep the previous CSS styles) ... */
+    body {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      background-color: #343a40;
+      min-height: 100vh;
+      padding-top: 20px;
+    }
+    .sidebar a {
+      color: #f8f9fa;
+      padding: 10px 15px;
+      display: block;
+      transition: all 0.3s;
+    }
+    .sidebar a:hover, .sidebar a.active {
+      background-color: #495057;
+      text-decoration: none;
+    }
+    .content-area {
+      padding: 20px;
+    }
+    .nav-link {
+      border-radius: 0;
+    }
   </style>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid">
+<div class="row">
+  <div class="col-md-2 sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link " href="${pageContext.request.contextPath}/home">
+          <i class="fas fa-home mr-2"></i>Home
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link ${param.page == 'motel-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=motel-list">
+          <i class="fas fa-building mr-2"></i>Quản lý Nhà trọ
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link ${param.page == 'room-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=room-list">
+          <i class="fas fa-door-open mr-2"></i>Quản lý Phòng trọ
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link ${param.page == 'customer-management' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=customer-management">
+          <i class="fas fa-users mr-2"></i>Quản lý Thành viên
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="createBill.jsp">
+          <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa đơn
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link ${param.page == 'notifications' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=notify">
+          <i class="fas fa-bell mr-2"></i>Thông báo
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="${pageContext.request.contextPath}/logout">
+          <i class="fas fa-sign-out-alt mr-2"></i>Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="col-md-10 content-area">
   <h1>Create New Bill</h1>
   <form action="createBill" method="post" id="billForm">
     <label for="motelRoomId">Motel Room:</label>
@@ -64,6 +132,8 @@
 
     <input type="submit" value="Create Bill">
   </form>
+  </div>
+</div>
 </div>
 
 <script>

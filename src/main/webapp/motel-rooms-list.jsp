@@ -263,6 +263,7 @@
                 <td class="actions">
                     <a href="javascript:void(0);" onclick="showForm('edit', ${room.motelRoomId},${room.motelId});">Edit</a>
                     <a href="${pageContext.request.contextPath}/motel-rooms?action=delete&id=${room.motelRoomId}" onclick="return confirm('Are you sure?');">Delete</a>
+                    <a href="${pageContext.request.contextPath}/add_tenants.jsp?motel_room_id=${room.motelRoomId}">Manage</a>
                 </td>
             </tr>
         </c:forEach>
