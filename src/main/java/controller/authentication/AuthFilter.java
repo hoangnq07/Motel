@@ -12,7 +12,7 @@ import Account.Account;
 @WebFilter("/*")
 public class AuthFilter implements Filter {
 
-    private static final List<String> PUBLIC_PAGES = Arrays.asList("/home", "/login", "/register","/registration.jsp","/login.jsp","/motel-rooms", "/404.jsp","/room-details","/categories","/about.jsp");
+    private static final List<String> PUBLIC_PAGES = Arrays.asList("/home", "/login", "/register","/registration.jsp","/verify","/login.jsp","/motel-rooms", "/404.jsp","/room-details","/categories","/about.jsp");
     private static final List<String> ADMIN_PAGES = Arrays.asList("/admin", "/dashboard_admin");
     private static final List<String> OWNER_PAGES = Arrays.asList("/owner","/motel");
     private static final List<String> USER_PAGES = Arrays.asList("/user");

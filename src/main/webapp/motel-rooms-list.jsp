@@ -421,52 +421,6 @@
 
 </script>
 <script>
-    // Update the form submission handler
-    document.getElementById('roomForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        var formData = new FormData(this);
-
-        // Log formData contents for debugging
-        for (var pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
-
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', '${pageContext.request.contextPath}/motel-rooms', true);
-        xhr.onreadystatechange = function() {
-            console.log('ReadyState:', xhr.readyState);
-            if (xhr.readyState === 4) {
-                console.log('Status:', xhr.status);
-                console.log('Response:', xhr.responseText);
-
-                if (xhr.status === 200) {
-                    try {
-                        var response = JSON.parse(xhr.responseText);
-                        if (response.success) {
-                            alert('Room ' + (formData.get('action') === 'edit' ? 'updated' : 'added') + ' successfully');
-                            location.reload();
-                        } else {
-                            alert('Error: ' + (response.message || 'Unknown error occurred'));
-                        }
-                    } catch (e) {
-                        console.error('Error parsing response:', e);
-                        console.error('Raw response:', xhr.responseText);
-                        alert('An error occurred while processing the response. Check the console for details.');
-                    }
-                } else {
-                    console.error('Server error:', xhr.status, xhr.statusText);
-                    console.error('Response:', xhr.responseText);
-                    alert('An error occurred: ' + xhr.status + ' ' + xhr.statusText + '\nCheck the console for details.');
-                }
-            }
-        };
-        xhr.onerror = function() {
-            console.error('Network error:', xhr.status, xhr.statusText);
-            alert('A network error occurred');
-        };
-        xhr.send(formData);
-    });
 
     // Add this function to your JavaScript
     function showForm(action, roomId, motelId) {

@@ -206,7 +206,7 @@ public class MotelRoomServlet extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             try {
                 motelRoomDAO.deleteMotelRoom(id);
-                response.sendRedirect("/Project/motel/manage");
+                response.sendRedirect("/Project/owner?page=room-list");
             } catch (SQLException ex) {
                 throw new ServletException(ex);
             }
