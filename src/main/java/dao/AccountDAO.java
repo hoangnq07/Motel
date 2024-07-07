@@ -199,30 +199,30 @@ public class AccountDAO {
     }
 
     public List<Account> getAllAccount() {
-    List<Account> accounts = new ArrayList<>();
-    String sql = "SELECT * FROM accounts WHERE role != 'admin'";
-    try (Connection conn = DBcontext.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Account account = new Account();
-            account.setAccountId(rs.getInt("account_id"));
-            account.setRole(rs.getString("role"));
-            account.setPhone(rs.getString("phone"));
-            account.setGender(rs.getBoolean("gender"));
-            account.setFullname(rs.getString("fullname"));
-            account.setEmail(rs.getString("email"));
-            account.setDob(rs.getDate("dob"));
-            account.setCreateDate(rs.getDate("create_date"));
-            account.setCitizenId(rs.getString("citizen_id"));
-            account.setAvatar(rs.getString("avatar"));
-            account.setActive(rs.getBoolean("active"));
-            accounts.add(account);
+        List<Account> accounts = new ArrayList<>();
+        String sql = "SELECT * FROM accounts WHERE role != 'admin'";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Account account = new Account();
+                account.setAccountId(rs.getInt("account_id"));
+                account.setRole(rs.getString("role"));
+                account.setPhone(rs.getString("phone"));
+                account.setGender(rs.getBoolean("gender"));
+                account.setFullname(rs.getString("fullname"));
+                account.setEmail(rs.getString("email"));
+                account.setDob(rs.getDate("dob"));
+                account.setCreateDate(rs.getDate("create_date"));
+                account.setCitizenId(rs.getString("citizen_id"));
+                account.setAvatar(rs.getString("avatar"));
+                account.setActive(rs.getBoolean("active"));
+                accounts.add(account);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return accounts;
+        return accounts;
     }
     public boolean updateAccountStatus(int accountId, boolean isActive) {
         String sql = "UPDATE accounts SET active = ? WHERE account_id = ?";
@@ -275,7 +275,7 @@ public class AccountDAO {
             if(account.getDob() == null) {
                 ps.setDate(6, null);
             } else
-            ps.setDate(6, new java.sql.Date(account.getDob().getTime()));
+                ps.setDate(6, new java.sql.Date(account.getDob().getTime()));
             ps.setBoolean(7, account.isActive());
             ps.setString(8, account.getEmail());
             ps.setString(9, account.getFullname());
@@ -288,46 +288,46 @@ public class AccountDAO {
     }
 
     public boolean updateAccount(Account account) {
-    // Check if the password needs to be updated
-    boolean updatePassword = account.getPassword() != null && !account.getPassword().isEmpty();
+        // Check if the password needs to be updated
+        boolean updatePassword = account.getPassword() != null && !account.getPassword().isEmpty();
 
-    // Construct the SQL query dynamically based on whether the password needs to be updated
-    String sql = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen_id = ?, active = ?, email = ?, role= ?, dob = ?";
-    if (updatePassword) {
-        sql += ", password = ?";
-    }
-    sql += " WHERE account_id = ?";
-
-    try (Connection conn = DBcontext.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, account.getFullname());
-        ps.setBoolean(2, account.isGender());
-        ps.setString(3, account.getPhone());
-        ps.setString(4, account.getCitizenId());
-        ps.setBoolean(5, account.isActive());
-        ps.setString(6, account.getEmail());
-        ps.setString(7, account.getRole());
-        if(account.getDob() == null) {
-            ps.setNull(8, java.sql.Types.DATE);
-        } else {
-            ps.setDate(8, new java.sql.Date(account.getDob().getTime()));
-        }
-
-        int index = 9;
-
+        // Construct the SQL query dynamically based on whether the password needs to be updated
+        String sql = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen_id = ?, active = ?, email = ?, role= ?, dob = ?";
         if (updatePassword) {
-            // Hash the password if it's being updated
-            String hashedPassword = BCrypt.hashpw(account.getPassword(), BCrypt.gensalt());
-            ps.setString(index++, hashedPassword);
+            sql += ", password = ?";
         }
+        sql += " WHERE account_id = ?";
 
-        ps.setInt(index, account.getAccountId());
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, account.getFullname());
+            ps.setBoolean(2, account.isGender());
+            ps.setString(3, account.getPhone());
+            ps.setString(4, account.getCitizenId());
+            ps.setBoolean(5, account.isActive());
+            ps.setString(6, account.getEmail());
+            ps.setString(7, account.getRole());
+            if(account.getDob() == null) {
+                ps.setNull(8, java.sql.Types.DATE);
+            } else {
+                ps.setDate(8, new java.sql.Date(account.getDob().getTime()));
+            }
 
-        int rowsAffected = ps.executeUpdate();
-        return rowsAffected > 0;
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+            int index = 9;
+
+            if (updatePassword) {
+                // Hash the password if it's being updated
+                String hashedPassword = BCrypt.hashpw(account.getPassword(), BCrypt.gensalt());
+                ps.setString(index++, hashedPassword);
+            }
+
+            ps.setInt(index, account.getAccountId());
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
     public List<Account> searchAccounts(String searchTerm) throws SQLException {
@@ -350,7 +350,7 @@ public class AccountDAO {
                     account.setPhone(rs.getString("phone"));
                     account.setCitizenId(rs.getString("citizen_id"));
                     account.setFullname(rs.getString("fullname"));
-                    // Set other fields as needed
+                    account.setRole(rs.getString("role"));
 
                     accounts.add(account);
                 }
