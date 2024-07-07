@@ -67,10 +67,23 @@
         <tr>
             <th>Ngày Gửi</th>
             <th>Nội Dung</th>
-            <th>Người Nhận</th>
+<%--            <th>Người Nhận</th>--%>
         </tr>
         </thead>
-        <tbody></tbody>
+        <tbody>
+        <c:forEach var="feedback" items="${feedbackList}">
+            <tr>
+                <td>${feedback.createDate}</td>
+                <td>${feedback.feedbackText}</td>
+<%--                <td>${feedback.senderName}</td>--%>
+            </tr>
+        </c:forEach>
+        <c:if test="${empty feedbackList}">
+            <tr>
+                <td colspan="3">Không có lịch sử feedback.</td>
+            </tr>
+        </c:if>
+        </tbody>
     </table>
 </div>
 <!-- Feedback Form End -->

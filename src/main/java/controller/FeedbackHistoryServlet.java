@@ -30,7 +30,7 @@ public class FeedbackHistoryServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            List<Feedback> feedbacks = new RenterDAO().getFeedbackHistory(userId); // Đảm bảo RenterDAO có phương thức getFeedbackHistory
+            List<Feedback> feedbacks = new RenterDAO().getFeedbackHistory(userId); // Ensure RenterDAO has getFeedbackHistory method
             String jsonResponse = new Gson().toJson(feedbacks);
             out.print(jsonResponse);
             out.flush();
@@ -41,9 +41,8 @@ public class FeedbackHistoryServlet extends HttpServlet {
         }
     }
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        // Handle POST request if needed
     }
 }

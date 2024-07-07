@@ -214,11 +214,14 @@ public class RenterDAO {
         }
         return adminIds;
     }
-    public List<Feedback> getFeedbackHistory(int userId) throws SQLException {
-        List<Feedback> feedbacks = new ArrayList<>();
-        String sql = "SELECT feedback_id, feedback_text, create_date, account_id, to_user_id, tag "
-                + "FROM feedback "
-                + "WHERE account_id = ?";  // Lấy feedback dựa trên accountId của người dùng hiện tại
+    public List<Feedback> getFeedbackHistory(int userId) throws Exception {
+        List<Feedback> feedbackList = new ArrayList<>();
+        String sql = "SELECT f.feedback_id, f.feedback_text, f.create_date, f.account_id, f.motel_id, f.motel_room_id, a.fullname AS sender_name " +
+                "FROM feedback f " +
+                "JOIN accounts a ON f.account_id = a.account_id " +
+                "JOIN motels m ON f.motel_id = m.motel_id " +
+                "WHERE m.account_id = ?";
+
         try (Connection conn = DBcontext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -228,18 +231,15 @@ public class RenterDAO {
                 Feedback feedback = new Feedback();
                 feedback.setFeedbackId(rs.getInt("feedback_id"));
                 feedback.setFeedbackText(rs.getString("feedback_text"));
-                feedback.setCreateDate(rs.getTimestamp("create_date")); // Sử dụng getTimestamp để lấy cả thời gian
+                feedback.setCreateDate(rs.getDate("create_date"));
                 feedback.setAccountId(rs.getInt("account_id"));
-                feedback.setToUserId(rs.getInt("to_user_id"));
-                feedback.setTag(rs.getString("tag")); // Sử dụng cột 'tag' để biết feedback gửi tới vai trò nào
-
-                feedbacks.add(feedback);
+                feedback.setMotelId(rs.getInt("motel_id"));
+                feedback.setMotelRoomId(rs.getInt("motel_room_id"));
+                feedback.setSenderName(rs.getString("sender_name"));
+                feedbackList.add(feedback);
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e; // Thông báo lỗi nếu không thể truy xuất dữ liệu
         }
-        return feedbacks;
+        return feedbackList;
     }
 
     public List<Renter> getCurrentTenants(int motelRoomId) {
