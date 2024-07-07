@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
   <style>
     body {
+      margin-top: 50px;
       background-color: #f8f9fa;
     }
     .sidebar {

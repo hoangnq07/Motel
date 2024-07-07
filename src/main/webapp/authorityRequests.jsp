@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <title>Authority Requests</title>
 </head>
-<body>
+<body style="margin-top: 50px;">
 <jsp:include page="header.jsp" />
 
 <h2>Authority Requests</h2>

@@ -30,6 +30,7 @@
         }
 
         body {
+            margin-top: 50px;
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
             margin: 0;
