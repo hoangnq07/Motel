@@ -1,6 +1,8 @@
 package dao;
 
 import context.DBcontext;
+import model.Notification;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

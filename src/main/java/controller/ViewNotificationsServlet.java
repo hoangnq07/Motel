@@ -2,7 +2,7 @@ package controller;
 
 import Account.Account;
 import dao.NotificationDAO;
-import dao.Notification;
+import model.Notification;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

@@ -24,8 +24,9 @@ public class NotificationServlet extends HttpServlet {
             e.printStackTrace();
             status = "Failed to send notification: " + e.getMessage();
         }
-        request.setAttribute("status", status);
-        request.getRequestDispatcher("/notify.jsp").forward(request, response); // Correct path to your JSP file
+
+        response.setContentType("text/plain");
+        response.getWriter().write(status);
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

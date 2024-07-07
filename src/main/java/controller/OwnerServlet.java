@@ -27,6 +27,7 @@ public class OwnerServlet extends HttpServlet {
             }
             request.getRequestDispatcher("owner.jsp").forward(request, response);
         }else{
+            int motelId = -1;
             switch (page) {
                 case "motel-list":
                     try {
@@ -37,21 +38,14 @@ public class OwnerServlet extends HttpServlet {
                     }
                     break;
                 case "room-list":
+                case "notify":
                     try {
-                        int motelId = -1;
-                        try {
                             motelId = Integer.parseInt(request.getParameter("id"));
                             request.getSession().setAttribute("motelId", motelId);
                         } catch (Exception e) {
                             motelId = (int) request.getSession().getAttribute("motelId");
                         }
                         request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(motelId));
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                    break;
-                case "notify":
-
                     break;
                 case "createInvoice":
 

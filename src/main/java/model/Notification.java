@@ -1,28 +1,24 @@
 package model;
 
-import java.sql.Timestamp;
-
 public class Notification {
-    private int id;
-    private int user_Id;
+    private int notificationId;
     private String message;
-    private Timestamp createDate;
+    private String createDate;
 
-    // Getters and setters
-    public int getId() {
-        return id;
+    public Notification() {}
+
+    public Notification(int notificationId, String message, String createDate) {
+        this.notificationId = notificationId;
+        this.message = message;
+        this.createDate = createDate;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getNotificationId() {
+        return notificationId;
     }
 
-    public int getUserId() {
-        return user_Id;
-    }
-
-    public void setUserId(int userId) {
-        this.user_Id = userId;
+    public void setNotificationId(int notificationId) {
+        this.notificationId = notificationId;
     }
 
     public String getMessage() {
@@ -33,11 +29,11 @@ public class Notification {
         this.message = message;
     }
 
-    public Timestamp getCreateDate() {
+    public String getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
+    public void setCreateDate(String createDate) {
         this.createDate = createDate;
     }
 }
