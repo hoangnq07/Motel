@@ -57,7 +57,8 @@
     <input type="date" id="endDate" name="endDate" required>
 
     <label for="totalPrice">Total Price:</label>
-    <input type="number" id="totalPrice" name="totalPrice" readonly>
+    <input type="text" id="totalPrice" readonly>
+    <input type="hidden" id="totalPriceHidden" name="totalPrice">
 
     <input type="hidden" id="invoiceStatus" name="invoiceStatus" value="UNPAID">
 
@@ -67,14 +68,43 @@
 
 <script>
   $(document).ready(function() {
+    var latestElectricityIndex = 0;
+    var latestWaterIndex = 0;
+
+    $('#motelRoomId').change(function() {
+      var motelRoomId = $(this).val();
+      if (motelRoomId) {
+        $.ajax({
+          url: 'getLatestInvoice',
+          type: 'GET',
+          data: { motelRoomId: motelRoomId },
+          success: function(response) {
+            latestElectricityIndex = response.electricityIndex || 0;
+            latestWaterIndex = response.waterIndex || 0;
+            $('#electricityUsage').attr('min', latestElectricityIndex);
+            $('#waterUsage').attr('min', latestWaterIndex);
+            calculateTotal();
+          },
+          error: function() {
+            alert('Error fetching latest invoice data.');
+          }
+        });
+      }
+    });
+
+    function formatNumber(number) {
+      return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
     function calculateTotal() {
       var electricityPrice = parseFloat($('#motelRoomId option:selected').data('electricity-price') || 0);
       var waterPrice = parseFloat($('#motelRoomId option:selected').data('water-price') || 0);
-      var electricityUsage = parseFloat($('#electricityUsage').val() || 0);
-      var waterUsage = parseFloat($('#waterUsage').val() || 0);
-
+      var electricityUsage = parseFloat($('#electricityUsage').val() || 0) - latestElectricityIndex;
+      var waterUsage = parseFloat($('#waterUsage').val() || 0) - latestWaterIndex;
       var totalPrice = (electricityUsage * electricityPrice) + (waterUsage * waterPrice);
-      $('#totalPrice').val(totalPrice.toFixed(2));
+
+      $('#totalPrice').val(formatNumber(totalPrice.toFixed(0)));
+      $('#totalPriceHidden').val(totalPrice); // Keep the original value for form submission
     }
 
     $('#motelRoomId, #electricityUsage, #waterUsage').on('change input', calculateTotal);
@@ -85,6 +115,34 @@
         alert('Please select a room');
         return;
       }
+      if (parseFloat($('#electricityUsage').val()) <= latestElectricityIndex) {
+        alert('Electricity usage must be greater than ' + latestElectricityIndex);
+        return;
+      }
+      if (parseFloat($('#waterUsage').val()) <= latestWaterIndex) {
+        alert('Water usage must be greater than ' + latestWaterIndex);
+        return;
+      }
+
+      $('#billForm').submit(function(e) {
+        e.preventDefault();
+        var totalPrice = $('#totalPriceHidden').val();
+        var formData = $(this).serialize();
+        $.ajax({
+          url: 'createBill',
+          type: 'POST',
+          data: formData + '&action=preview',
+          success: function(response) {
+            $('body').append(response);
+            var formattedTotalPrice = formatNumber(parseFloat(totalPrice).toFixed(0));
+            $('#formattedTotalPrice').text(formattedTotalPrice);
+            $('#confirmationDialog').show();
+          },
+          error: function() {
+            alert('An error occurred. Please try again.');
+          }
+        });
+      });
 
       $.ajax({
         url: 'createBill',
@@ -100,6 +158,7 @@
       });
     });
   });
+
 </script>
 </body>
 </html>

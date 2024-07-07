@@ -1,13 +1,13 @@
 package controller;
 
+import dao.InvoiceDAO;
 import model.Invoice;
 import context.DBcontext;
 import java.sql.*;
 import java.util.Date;
 
 public class InvoiceService {
-    public Invoice createInvoice(int motelRoomId, float totalPrice, String invoiceStatus,
-                                 Date endDate, float electricityIndex, float waterIndex) throws SQLException {
+    public Invoice createInvoice(int motelRoomId, String invoiceStatus, Date endDate, float electricityIndex, float waterIndex) throws SQLException {
         Connection connection = null;
         try {
             connection = DBcontext.getConnection();
@@ -15,10 +15,36 @@ public class InvoiceService {
 
             Date currentDate = new Date();
 
-            Date lastEndDate = getMostRecentInvoiceEndDate(connection, motelRoomId);
-            if (lastEndDate != null && currentDate.before(lastEndDate)) {
-                throw new IllegalArgumentException("Cannot create new invoice. Current date must be after " + lastEndDate);
+            // Get the latest invoice for the room
+            InvoiceDAO invoiceDAO = new InvoiceDAO();
+            Invoice latestInvoice = invoiceDAO.getLatestInvoiceForRoom(motelRoomId);
+
+            if (latestInvoice != null) {
+                if (electricityIndex <= latestInvoice.getElectricityIndex() || waterIndex <= latestInvoice.getWaterIndex()) {
+                    throw new IllegalArgumentException("New electricity and water indexes must be greater than the previous ones.");
+                }
             }
+
+            // Get room prices
+            String getRoomPricesSQL = "SELECT electricity_price, water_price FROM dbo.motel_room WHERE motel_room_id = ?";
+            float electricityPrice = 0, waterPrice = 0;
+            try (PreparedStatement ps = connection.prepareStatement(getRoomPricesSQL)) {
+                ps.setInt(1, motelRoomId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        electricityPrice = rs.getFloat("electricity_price");
+                        waterPrice = rs.getFloat("water_price");
+                    } else {
+                        throw new SQLException("Room not found.");
+                    }
+                }
+            }
+
+            // Calculate total price
+            float electricityUsage = latestInvoice != null ? electricityIndex - latestInvoice.getElectricityIndex() : electricityIndex;
+            float waterUsage = latestInvoice != null ? waterIndex - latestInvoice.getWaterIndex() : waterIndex;
+            float totalPrice = (electricityUsage * electricityPrice) + (waterUsage * waterPrice);
+
 
             // Find the renter_id from the motel_room_id
             String selectRenterIdSQL = "SELECT renter_id FROM dbo.renter WHERE motel_room_id = ?";
@@ -59,6 +85,10 @@ public class InvoiceService {
                 }
             }
 
+
+
+
+
             // Insert into Electricity table
             String insertElectricitySQL = "INSERT INTO dbo.electricity (create_date, electricity_index, invoice_id) VALUES (GETDATE(), ?, ?)";
             try (PreparedStatement psElectricity = connection.prepareStatement(insertElectricitySQL)) {
@@ -76,6 +106,8 @@ public class InvoiceService {
             }
 
             connection.commit();
+
+
             return new Invoice(invoiceId, currentDate, endDate, totalPrice, invoiceStatus, renterId, motelRoomId, electricityIndex, waterIndex);
         } catch (SQLException e) {
             if (connection != null) {
@@ -87,6 +119,8 @@ public class InvoiceService {
                 }
             }
             throw e;
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         } finally {
             if (connection != null) {
                 connection.setAutoCommit(true);
@@ -94,18 +128,4 @@ public class InvoiceService {
             }
         }
     }
-
-    private Date getMostRecentInvoiceEndDate(Connection connection, int motelRoomId) throws SQLException {
-        String sql = "SELECT MAX(end_date) as last_end_date FROM dbo.invoice WHERE motel_room_id = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setInt(1, motelRoomId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getDate("last_end_date");
-                }
-            }
-        }
-        return null;
-    }
-
 }

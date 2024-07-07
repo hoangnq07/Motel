@@ -51,7 +51,7 @@ public class CreateBillServlet extends HttpServlet {
                 float waterUsage = Float.parseFloat(waterUsageStr);
 
                 // Create the invoice
-                Invoice invoice = invoiceService.createInvoice(motelRoomId, totalPrice, invoiceStatus, endDate, electricityUsage, waterUsage);
+                Invoice invoice = invoiceService.createInvoice(motelRoomId, invoiceStatus, endDate, electricityUsage, waterUsage);
 
                 if (invoice != null && invoice.getInvoiceId() > 0) {
                     out.print("{\"status\":\"success\", \"invoiceId\":" + invoice.getInvoiceId() + "}");
