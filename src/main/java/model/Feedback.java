@@ -10,7 +10,8 @@ public class Feedback {
     private int toUserId;  // ID của người nhận feedback
     private String tag;  // Nhãn dùng để phân loại feedback
     private String senderName; // Tên của người gửi feedback
-
+    private int motelId;
+    private int motelRoomId;
     public Feedback() {}
 
     public Feedback(int feedbackId, String feedbackText, Date createDate, int accountId, int toUserId, String tag, String senderName) {
@@ -21,6 +22,18 @@ public class Feedback {
         this.toUserId = toUserId;
         this.tag = tag;
         this.senderName = senderName;
+    }
+
+    public Feedback(String feedbackText, int feedbackId, Date createDate, int accountId, int toUserId, String tag, int motelRoomId, String senderName, int motelId) {
+        this.feedbackText = feedbackText;
+        this.feedbackId = feedbackId;
+        this.createDate = createDate;
+        this.accountId = accountId;
+        this.toUserId = toUserId;
+        this.tag = tag;
+        this.motelRoomId = motelRoomId;
+        this.senderName = senderName;
+        this.motelId = motelId;
     }
 
     // Getters
@@ -50,6 +63,22 @@ public class Feedback {
 
     public String getSenderName() {
         return senderName;
+    }
+
+    public int getMotelId() {
+        return motelId;
+    }
+
+    public void setMotelId(int motelId) {
+        this.motelId = motelId;
+    }
+
+    public int getMotelRoomId() {
+        return motelRoomId;
+    }
+
+    public void setMotelRoomId(int motelRoomId) {
+        this.motelRoomId = motelRoomId;
     }
 
     // Setters

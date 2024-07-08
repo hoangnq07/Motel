@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <title>Request Authority</title>
 </head>
-<body>
+<body style="            margin-top: 50px;">
+<jsp:include page="header.jsp" />
 <h2>Request Authority</h2>
 <form action="${pageContext.request.contextPath}/requestAuthority" method="post">
     <label for="image">Image URL:</label>
@@ -20,5 +21,6 @@
 <% if (request.getParameter("status") != null) { %>
 <p>Request submitted successfully!</p>
 <% } %>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

@@ -1,5 +1,5 @@
 <%@ page import="dao.NotificationDAO" %>
-<%@ page import="dao.Notification" %>
+<%@ page import="model.Notification" %>
 <%@ page import="java.util.List" %>
 <<<<<<< HEAD
 <%@ page import="Account.User" %>

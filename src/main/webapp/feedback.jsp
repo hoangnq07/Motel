@@ -53,7 +53,9 @@
         <div class="mb-3">
             <label for="tag" class="form-label">Gửi đến:</label>
             <select id="tag" name="tag" class="form-select">
-                <option value="owner">Owner</option>
+                <c:if test="${user.role!='owner'}">
+                    <option value="owner">Owner</option>
+                </c:if>
                 <option value="admin">Admin</option>
             </select>
         </div>

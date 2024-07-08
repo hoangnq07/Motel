@@ -1,38 +1,58 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Thông báo</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+    <title>Send Notification</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container mt-4">
-    <h2>Gửi Thông Báo</h2>
-    <form method="post" action="NotificationServlet">
+    <h1 class="mb-4">Send Notification</h1>
+    <form id="notificationForm">
         <div class="form-group">
-            <%--@declare id="email"--%><label for="email">Nhập email người nhận thông báo:</label>
-            <input type="email" name="email" class="form-control" required>
+            <label for="motelRoomId">Motel Room ID:</label>
+            <select class="form-control" id="motelRoomId" name="motelRoomId" required>
+                <c:forEach var="room" items="${requestScope.rooms}">
+                    <option value="${room.motelRoomId}">${room.name}</option>
+                </c:forEach>
+            </select>
         </div>
         <div class="form-group">
-            <%--@declare id="message"--%><label for="message">Nội dung thông báo:</label>
-            <textarea name="message" class="form-control" rows="5" required></textarea>
+            <label for="message">Message:</label>
+            <input type="text" class="form-control" id="message" name="message" required>
         </div>
-        <button type="submit" class="btn btn-primary">Gửi Thông Báo</button>
+        <button type="submit" class="btn btn-primary">Send</button>
     </form>
+    <br>
+    <div id="statusMessage"></div>
 </div>
-</body>
-<script type="text/javascript">
-    window.onload = function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const status = urlParams.get('status');
-        if (status === 'success') {
-            alert('Gửi thông báo thành công.');
-            window.location.href = 'owner-body.jsp';
-        } else if (status === 'error') {
-            alert('Email không tồn tại trong hệ thống.');
-        }
-    };
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    if (typeof jQuery !== 'undefined') {
+        console.log('jQuery is loaded!');
+    } else {
+        console.log('jQuery is not loaded.');
+    }
 </script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#notificationForm").on("submit", function(event){
+            event.preventDefault(); // Prevent the form from submitting the traditional way
+            $.ajax({
+                url: "sendNotification",
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(response){
+                    $("#statusMessage").html('<div class="alert alert-info">' + response + '</div>');
+                },
+                error: function(xhr, status, error){
+                    $("#statusMessage").html('<div class="alert alert-danger">Failed to send notification: ' + xhr.responseText + '</div>');
+                }
+            });
+        });
+    });
+</script>
+</body>
 </html>

@@ -10,21 +10,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import model.Motel;
-
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Paths;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @MultipartConfig
-@WebServlet(name = "MotelServlet", urlPatterns = {"/motel", "/motel/create", "/motel/update", "/motel/delete","/motel/manage"})
+@WebServlet(name = "MotelServlet", urlPatterns = {"/motel", "/motel/create", "/motel/update", "/motel/delete"})
 public class MotelServlet extends HttpServlet {
-    private static final String UPLOAD_DIRECTORY = "uploads";
+    private static final String UPLOAD_DIRECTORY = "images";
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getServletPath();
@@ -39,14 +36,6 @@ public class MotelServlet extends HttpServlet {
                     break;
                 case "/motel/delete":
                     deleteMotel(request, response);
-                    break;
-                case "/motel/manage":
-                    List<Motel> motels = new ArrayList<>();
-                    Account account = (Account) request.getSession().getAttribute("user");
-                    motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
-                    request.setAttribute("motels", motels);
-                    request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(Integer.parseInt(request.getParameter("id"))));
-                    request.getRequestDispatcher("/motel-manage.jsp").forward(request, response);
                     break;
                 default:
                     listMotels(request, response);
@@ -102,6 +91,7 @@ public class MotelServlet extends HttpServlet {
         String provinceText = request.getParameter("provinceText");
         String district = request.getParameter("district");
         String districtText = request.getParameter("districtText");
+        String ward = request.getParameter("town");
         String wardText = request.getParameter("townText");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
         int accountId = Integer.parseInt(request.getParameter("accountId"));
@@ -133,6 +123,7 @@ public class MotelServlet extends HttpServlet {
             motel.setWard(wardText);
             motel.setProvinceId(province);
             motel.setDistrictId(district);
+            motel.setWardId(ward);
             motel.setAccountId(accountId);
             MotelDAO.addMotel(motel);
             response.sendRedirect("/Project/owner");
@@ -150,6 +141,7 @@ public class MotelServlet extends HttpServlet {
         String provinceText = request.getParameter("provinceText");
         String district = request.getParameter("district");
         String districtText = request.getParameter("districtText");
+        String ward = request.getParameter("town");
         String wardText = request.getParameter("townText");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
         String newFileName = null;
@@ -181,6 +173,7 @@ public class MotelServlet extends HttpServlet {
                 motel.setWard(wardText);
                 motel.setProvinceId(province);
                 motel.setDistrictId(district);
+                motel.setWardId(ward);
             }
             motel.setStatus(status);
             motel.setAccountId(accountId);

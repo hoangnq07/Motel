@@ -1,57 +1,35 @@
 package controller;
 
-import context.DBcontext;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import dao.NotificationDAO;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-@WebServlet("/NotificationServlet")
+@WebServlet(name = "NotificationServlet", urlPatterns = {"/sendNotification"})
 public class NotificationServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String email = request.getParameter("email");
         String message = request.getParameter("message");
+        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
 
-        try (Connection conn = DBcontext.getConnection()) {
-            String userId = getUserIdByEmail(email, conn);
-            if (userId != null) {
-                sendNotification(userId, message, conn);
-                response.sendRedirect("owner.jsp?status=success");
-            } else {
-                response.sendRedirect("owner.jsp?status=error");
-            }
-        } catch (SQLException e) {
-            throw new ServletException(e);
+        NotificationDAO dao = new NotificationDAO();
+        String status;
+        try {
+            dao.addNotification(message, motelRoomId);
+            status = "Notification sent successfully.";
+        } catch (Exception e) {
+            e.printStackTrace();
+            status = "Failed to send notification: " + e.getMessage();
         }
+
+        response.setContentType("text/plain");
+        response.getWriter().write(status);
     }
 
-    private String getUserIdByEmail(String email, Connection conn) throws SQLException {
-        String sql = "SELECT account_id FROM accounts WHERE email = ?";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, email);
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                return rs.getString("account_id");
-            }
-        }
-        return null;
-    }
-
-    private void sendNotification(String userId, String message, Connection conn) throws SQLException {
-        String sql = "INSERT INTO notifications (user_id, message) VALUES (?, ?)";
-        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, userId);
-            pstmt.setString(2, message);
-            pstmt.executeUpdate();
-        }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doPost(request, response);
     }
 }

@@ -1,13 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, context.DBcontext" %>
 <%@ page import="jakarta.servlet.http.*, jakarta.servlet.*" %>
+<%@ page import="Account.Account" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Your Bills</title>
 </head>
-<body>
+<body style="            margin-top: 50px;">
+<jsp:include page="header.jsp" />
+
 <h1>Your Bills</h1>
 
 <%
@@ -30,7 +33,7 @@
         <th>Action</th>
     </tr>
     <%
-        int accountId = (int) session.getAttribute("accountId");
+        Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
 
         try (Connection connection = DBcontext.getConnection()) {
             // Get the renter's invoices
@@ -68,5 +71,6 @@
         }
     %>
 </table>
+<jsp:include page="footer.jsp" />
 </body>
 </html>

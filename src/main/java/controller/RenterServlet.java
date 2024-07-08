@@ -58,7 +58,7 @@ public class RenterServlet extends HttpServlet {
                 newRenter.setMotelRoomId(motelRoomId);
 
                 // Thêm renter vào cơ sở dữ liệu
-                renterDAO.addRenter(newRenter);
+//                renterDAO.addRenter(newRenter);
 
                 // Gửi thông báo thành công
                 request.setAttribute("successMessage", "Renter đã được thêm thành công!");

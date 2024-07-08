@@ -1,15 +1,12 @@
 package controller;
-
 import Account.Account;
+import dao.FeedbackDAO;
 import dao.MotelDAO;
 import dao.MotelRoomDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.Motel;
-import model.MotelRoom;
-import org.apache.http.client.fluent.Response;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,20 +16,52 @@ import java.util.List;
 public class OwnerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Motel> motels = new ArrayList<>();
+        String page = request.getParameter("page");
         Account account = (Account) request.getSession().getAttribute("user");
-        try {
-            motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
-            request.setAttribute("motels", motels);
-            request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(10));
-        } catch (SQLException e) {
-            response.sendRedirect("404.jsp");
+        List<Motel> motels = new ArrayList<>();
+        if (page == null) {
+            try {
+                motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
+                request.setAttribute("motels", motels);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            request.getRequestDispatcher("owner.jsp").forward(request, response);
+        }else{
+            int motelId = -1;
+            switch (page) {
+                case "motel-list":
+                    try {
+                        motels = MotelDAO.getMotelsByAccountId(account.getAccountId());
+                        request.setAttribute("motels", motels);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case "room-list":
+                case "notify":
+                    try {
+                            motelId = Integer.parseInt(request.getParameter("id"));
+                            request.getSession().setAttribute("motelId", motelId);
+                        } catch (Exception e) {
+                            motelId = (int) request.getSession().getAttribute("motelId");
+                        }
+                        request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(motelId));
+                    break;
+                case "createBill":
+
+                    break;
+                case "feedback":
+                    try {
+                        request.setAttribute("feedbacks", FeedbackDAO.getFeedbackForOwner(account.getAccountId()));
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+            }
+            request.getRequestDispatcher("motel-manage.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("owner.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
+
 }

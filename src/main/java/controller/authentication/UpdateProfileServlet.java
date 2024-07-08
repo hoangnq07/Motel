@@ -49,6 +49,7 @@ public class UpdateProfileServlet extends HttpServlet {
                 user.setGender(gender);
                 user.setPhone(phone);
                 user.setCitizenId(citizen);
+                user.setDob(java.sql.Date.valueOf(request.getParameter("dob")));
                 if (fileName != null) {
                     user.setAvatar(fileName);
                 }

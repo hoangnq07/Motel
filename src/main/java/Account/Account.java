@@ -3,7 +3,7 @@ package Account;
 import dao.AccountDAO;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 public class Account implements Serializable {
 

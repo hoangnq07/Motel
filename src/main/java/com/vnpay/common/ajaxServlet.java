@@ -38,7 +38,7 @@ public class ajaxServlet extends HttpServlet {
         String vnp_Command = "pay";
         String vnp_OrderInfo = "Thanh toan don hang";
         String orderType = "other";
-        long amount = Integer.parseInt(req.getParameter("amount"))*100;
+        long amount = ((long) Float.parseFloat(req.getParameter("amount")))*100;
 //        String bankCode = req.getParameter("bankCode");
         String bankCode = "";
         

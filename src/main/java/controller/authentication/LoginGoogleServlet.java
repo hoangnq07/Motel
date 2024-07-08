@@ -1,5 +1,6 @@
 package controller.authentication;
 
+import Account.Account;
 import Account.GooglePojo;
 import Account.GoogleUtils;
 import dao.AccountDAO;
@@ -41,7 +42,13 @@ public class LoginGoogleServlet extends HttpServlet {
             if (!AccountDAO.isEmailExist(email)) {
                 AccountDAO.registerGoogle(email,googlePojo.getName());
             }
-            request.getSession().setAttribute("user", AccountDAO.searchUser(email));
+            Account account = AccountDAO.searchUser(email);
+            if(!account.isActive()){
+                request.setAttribute("status", "Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với quản trị viên để biết thêm chi tiết.");
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
+            request.getSession().setAttribute("user", account);
             response.sendRedirect("home");
         }
     }

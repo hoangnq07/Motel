@@ -12,9 +12,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/lib/animate/animate.min.css" rel="stylesheet">
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/assets/css/style.css" rel="stylesheet">
 </head>
 <body>
 <!-- Spinner Start -->
@@ -38,14 +38,12 @@
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
 
-            <form class="d-flex ms-auto me-4">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
-            </form>
+
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="home" class="nav-item nav-link active">Home</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
-                <a href="about.jsp" class="nav-item nav-link">Contact Us</a>
+                <a href="feedback.jsp" class="nav-item nav-link">Feedback</a>
+                <a href="viewNotifications" class="nav-item nav-link">Notification</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
 
@@ -68,9 +66,15 @@
                                     <c:if test="${sessionScope.user.role == 'owner'}">
                                         <a href="owner" class="dropdown-item">Manage Motel</a>
                                     </c:if>
-                                    <a href="feedback.jsp" class="dropdown-item">Feedback</a>
-                                    <a href="change_password.jsp" class="dropdown-item">Change Password</a>
+                                    <c:if test="${sessionScope.user.role == 'admin'}">
+                                        <a href="authorityRequests.jsp" class="dropdown-item">Authority Requests</a>
+                                    </c:if>
+                                    <c:if test="${sessionScope.user.role == 'user'}">
+                                        <a href="requestAuthority.jsp" class="dropdown-item">My requests</a>
+                                        <a href="bills.jsp" class="dropdown-item">View Bills</a>
+                                    </c:if>
                                     <a href="favorite-rooms" class="dropdown-item">My Favorite Room</a>
+                                    <a href="change_password.jsp" class="dropdown-item">Change Password</a>
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
                                 </div>
                             </div>
@@ -92,10 +96,10 @@
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="assets/lib/wow/wow.min.js"></script>
-<script src="assets/lib/easing/easing.min.js"></script>
-<script src="assets/lib/waypoints/waypoints.min.js"></script>
-<script src="assets/js/main.js"></script>
+<script src="${pageContext.request.contextPath}/assets/lib/wow/wow.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/lib/easing/easing.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/lib/waypoints/waypoints.min.js"></script>
+<script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
 
 
 </body>

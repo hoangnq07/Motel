@@ -1,73 +1,114 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<html>
+<!DOCTYPE html>
+<html lang="vi">
 <head>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
-          integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Owner Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            background-color: #343a40;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        .sidebar a {
+            color: #f8f9fa;
+            padding: 10px 15px;
+            display: block;
+            transition: all 0.3s;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #495057;
+            text-decoration: none;
+        }
+        .content-area {
+            padding: 20px;
+        }
+        .nav-link {
+            border-radius: 0;
+        }
+    </style>
 </head>
 <body>
-<!-- mymotel -->
-<div class="container-fluid mt-3">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-2 mt-3">
+        <div class="col-md-2 sidebar">
             <ul class="nav flex-column">
-                <a  href="${pageContext.request.contextPath}/home">Home</a>
                 <li class="nav-item">
-                    <a class="nav-link" href="motel-list.jsp" data-target="motel-management">Quản lý Nhà trọ</a>
+                    <a class="nav-link " href="${pageContext.request.contextPath}/home">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="createInvoice.jsp" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
+                    <a class="nav-link ${param.page == 'motel-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=motel-list">
+                        <i class="fas fa-building mr-2"></i>Quản lý Nhà trọ
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="renters.jsp" data-target="customer-management">Quản lý Thành viên</a>
+                    <a class="nav-link ${param.page == 'room-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=room-list">
+                        <i class="fas fa-door-open mr-2"></i>Quản lý Phòng trọ
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="createInvoice.jsp" data-target="createinvoice">Hóa đơn</a>
+                    <a class="nav-link ${param.page == 'customer-management' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=customer-management">
+                        <i class="fas fa-users mr-2"></i>Quản lý Người thuê
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="notify.jsp" data-target="notifications">Thông báo</a>
+                    <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=bill">
+                        <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa đơn
+                    </a>
                 </li>
-                <a href="${pageContext.request.contextPath}/logout" >Logout</a>
+                <li class="nav-item">
+                    <a class="nav-link ${param.page == 'notifications' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=notify">
+                        <i class="fas fa-bell mr-2"></i>Thông báo
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ${param.page == 'feedback' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=feedback">
+                        <i class="fas fa-comments mr-2"></i>Feedback
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/logout">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                    </a>
+                </li>
             </ul>
         </div>
-        <div class="col-10">
-            <div id="motel-management" class="content d-none">
-                <jsp:include page="motel-list.jsp"></jsp:include>
-            </div>
-            <div id="motel-rooms-management" class="content">
-                <jsp:include page="motel-rooms-list.jsp"></jsp:include>
-            </div>
-            <div id="customer-management" class="content d-none">
-                <jsp:include page="renters.jsp"></jsp:include>
-            </div>
-            <div id="notifications" class="content d-none">
-                <jsp:include page="notify.jsp"></jsp:include>
-            </div>
-            <div id="createinvoice" class="content d-none">
-                <jsp:include page="createInvoice.jsp"></jsp:include>
-            </div>
+        <div class="col-md-10 content-area">
+            <c:choose>
+                <c:when test="${param.page == 'motel-list'}">
+                    <jsp:include page="motel-list.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'room-list'}">
+                    <jsp:include page="motel-rooms-list.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'customer-management'}">
+                    <jsp:include page="renters.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'notify'}">
+                    <jsp:include page="notify.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'bill'}">
+                    <jsp:include page="manageInvoices.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'feedback'}">
+                    <jsp:include page="viewfeedback.jsp"/>
+                </c:when>
+            </c:choose>
         </div>
     </div>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function(){
-        $('.nav-link').click(function(e){
-            e.preventDefault();
-            $('.nav-link').removeClass('active');
-            $(this).addClass('active');
 
-            var target = $(this).data('target');
-            $('.content').addClass('d-none');
-            $('#' + target).removeClass('d-none');
-        });
-    });
-</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </body>
 </html>

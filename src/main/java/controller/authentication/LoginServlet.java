@@ -22,6 +22,11 @@ public class LoginServlet extends HttpServlet {
     private static final Logger LOGGER = Logger.getLogger(LoginServlet.class.getName());
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("login.jsp").forward(req, resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -29,17 +34,21 @@ public class LoginServlet extends HttpServlet {
         Account user = AccountDAO.authenticateUser(email, password);
 
         if (user != null) {
+            Account account = AccountDAO.searchUser(email);
+            if(!account.isActive()){
+                setErrorStatus("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ với quản trị viên để biết thêm chi tiết.", request);
+                request.getRequestDispatcher("login.jsp").forward(request, response);
+                return;
+            }
             int accountId = AccountDAO.getAccountIdByEmail(email); // Fetch accountId separately
             if (accountId != -1) {
                 LOGGER.info("User authenticated successfully: " + accountId);
                 session.setAttribute("accountId", accountId);
-                session.setAttribute("user", AccountDAO.searchUser(email));
+                session.setAttribute("user", account);
 
                 if (user.getRole().equals("admin")) {
                     request.getRequestDispatcher("dashboard_admin.jsp").forward(request, response);
-                } else if (user.getRole().equals("owner")) {
-                    request.getRequestDispatcher("owner.jsp").forward(request, response);
-                } else if (user.getRole().equals("user")) {
+                } else {
                     request.getRequestDispatcher("home").forward(request, response);
                 }
             } else {

@@ -1,4 +1,4 @@
-﻿﻿-- Tạo cơ sở dữ liệu
+﻿-- Tạo cơ sở dữ liệu
 CREATE DATABASE motel7;
 USE motel7;
 
@@ -32,6 +32,7 @@ CREATE TABLE dbo.motels(
     province_id VARCHAR(255),
     status BIT NOT NULL DEFAULT 1,
     ward NVARCHAR(255),
+	ward_id NVARCHAR(255),
     account_id INT,
     FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id)
 );

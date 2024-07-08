@@ -1,5 +1,5 @@
 <%@ page import="java.util.List" %>
-<%@ page import="dao.Notification" %>
+<%@ page import="model.Notification" %>
 <%@ page session="true" %>
 <%
     List<Notification> notifications = (List<Notification>) request.getAttribute("notifications");
