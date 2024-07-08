@@ -15,9 +15,9 @@
     <div class="row">
         <div class="col-2 mt-3">
             <ul class="nav flex-column">
-                    <a  href="home">Home</a>
+                <a href="home">Home</a>
                 <li class="nav-item">
-                    <a class="nav-link active" href="motel-list.jsp" data-target="motel-management">Quản lý Nhà trọ</a>
+                    <a class="nav-link" href="motel-list.jsp" data-target="motel-management">Quản lý Nhà trọ</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="createInvoice.jsp" data-target="motel-rooms-management">Quản lý Phòng trọ</a>
@@ -31,8 +31,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="notify.jsp" data-target="notifications">Thông báo</a>
                 </li>
-                    <a href="logout" >Logout</a>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-target="revenue-management">Doanh Thu</a>
+                </li>
+                <a href="logout">Logout</a>
             </ul>
+
         </div>
         <div class="col-10">
             <div id="motel-management" class="content">
@@ -49,6 +53,10 @@
             </div>
             <div id="createinvoice" class="content d-none">
                 <jsp:include page="createInvoice.jsp"></jsp:include>
+            </div>
+            <div id="revenue-management" class="content d-none">
+                <!-- Nội dung biểu đồ doanh thu sẽ được đặt ở đây -->
+                <jsp:include page="revenue.jsp"></jsp:include> <!-- Thay đổi này giả định bạn có một trang JSP tách biệt để quản lý hiển thị doanh thu -->
             </div>
         </div>
     </div>
