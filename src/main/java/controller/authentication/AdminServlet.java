@@ -36,7 +36,7 @@ public class AdminServlet extends HttpServlet {
 
         switch (action) {
             case "/admin":
-                request.getRequestDispatcher("/admin.jsp").forward(request, response);
+                request.getRequestDispatcher("dashboard_admin.jsp").forward(request, response);
                 break;
             case "/fetchAllAccounts":
                 fetchAllAccounts(request, response);

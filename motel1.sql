@@ -23,7 +23,7 @@ CREATE TABLE dbo.motels(
     motel_id INT PRIMARY KEY IDENTITY(1,1),
     create_date DATE DEFAULT GETDATE(),
     descriptions NVARCHAR(MAX),
-	[name] NVARCHAR(255),
+    [name] NVARCHAR(255),
     detail_address NVARCHAR(255),
     district NVARCHAR(255),
     district_id VARCHAR(255),
@@ -32,9 +32,9 @@ CREATE TABLE dbo.motels(
     province_id VARCHAR(255),
     status BIT NOT NULL DEFAULT 1,
     ward NVARCHAR(255),
-	ward_id NVARCHAR(255),
+    ward_id NVARCHAR(255),
     account_id INT,
-    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id)
+    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id) ON DELETE CASCADE
 );
 
 -- Tạo bảng danh mục phòng
@@ -49,30 +49,29 @@ CREATE TABLE dbo.category_room(
 CREATE TABLE dbo.motel_room(
     motel_room_id INT PRIMARY KEY IDENTITY(1,1),
     create_date DATE DEFAULT GETDATE(),
-	[name] NVARCHAR(255),
+    [name] NVARCHAR(255),
     descriptions NVARCHAR(255),
     length FLOAT CHECK (length >= 1),
     width FLOAT CHECK (width >= 1),
-	room_price FLOAT,
+    room_price FLOAT,
     electricity_price FLOAT,
     water_price FLOAT,
     wifi_price FLOAT,
     room_status BIT NOT NULL DEFAULT 0,
     category_room_id INT,
     motel_id INT,
-	account_id INT,
-    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id),
-    FOREIGN KEY (category_room_id) REFERENCES dbo.category_room(category_room_id),
-    FOREIGN KEY (motel_id) REFERENCES dbo.motels(motel_id)
+    account_id INT,
+    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id) ON DELETE CASCADE,
+    FOREIGN KEY (category_room_id) REFERENCES dbo.category_room(category_room_id) ON DELETE SET NULL,
+    FOREIGN KEY (motel_id) REFERENCES dbo.motels(motel_id) ON DELETE CASCADE
 );
 
 CREATE TABLE dbo.image(
     image_id [int] PRIMARY KEY IDENTITY(1,1),
     name [varchar](255) NULL,
     motel_room_id [int] NULL,
-    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room (motel_room_id)
-    );
-
+    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room (motel_room_id) ON DELETE CASCADE
+);
 
 -- Tạo bảng người thuê
 CREATE TABLE dbo.renter(
@@ -81,8 +80,8 @@ CREATE TABLE dbo.renter(
     check_out_date DATE,
     renter_date DATE,
     motel_room_id INT,
-    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id),
-    FOREIGN KEY (renter_id) REFERENCES dbo.accounts(account_id)
+    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id) ON DELETE SET NULL,
+    FOREIGN KEY (renter_id) REFERENCES dbo.accounts(account_id) ON DELETE CASCADE
 );
 
 -- Tạo bảng hóa đơn
@@ -94,8 +93,8 @@ CREATE TABLE dbo.invoice(
     invoice_status NVARCHAR(255),
     renter_id INT,
     motel_room_id INT,
-    FOREIGN KEY (renter_id) REFERENCES dbo.renter(renter_id),
-    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id)
+    FOREIGN KEY (renter_id) REFERENCES dbo.renter(renter_id) ON DELETE CASCADE,
+    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id) ON DELETE CASCADE
 );
 
 -- Tạo bảng chỉ số điện
@@ -104,7 +103,7 @@ CREATE TABLE dbo.electricity(
     create_date DATE DEFAULT GETDATE(),
     electricity_index FLOAT,
     invoice_id INT,
-    FOREIGN KEY (invoice_id) REFERENCES dbo.invoice(invoice_id)
+    FOREIGN KEY (invoice_id) REFERENCES dbo.invoice(invoice_id) ON DELETE CASCADE
 );
 
 -- Tạo bảng chỉ số nước
@@ -113,9 +112,8 @@ CREATE TABLE dbo.water(
     create_date DATE DEFAULT GETDATE(),
     water_index FLOAT,
     invoice_id INT,
-    FOREIGN KEY (invoice_id) REFERENCES dbo.invoice(invoice_id)
+    FOREIGN KEY (invoice_id) REFERENCES dbo.invoice(invoice_id) ON DELETE CASCADE
 );
-
 
 CREATE TABLE dbo.request_authority(
     request_authority_id [int] PRIMARY KEY IDENTITY(1,1) NOT NULL,
@@ -126,21 +124,24 @@ CREATE TABLE dbo.request_authority(
     responsedate [date] NULL,
     account_id [int] NULL,
     request_authority_status [nvarchar](255) NULL,
-    FOREIGN KEY (account_id) REFERENCES dbo.accounts (account_id));
+    FOREIGN KEY (account_id) REFERENCES dbo.accounts (account_id) ON DELETE CASCADE
+);
 
 CREATE TABLE notifications (
  notification_id INT PRIMARY KEY IDENTITY(1,1),
  message NVARCHAR(MAX) NULL,
  create_date DATETIME DEFAULT GETDATE(),
 );
+
 CREATE TABLE account_notifications (
     account_notification_id INT PRIMARY KEY IDENTITY(1,1),
     account_id INT,
     notification_id INT,
     create_date DATE DEFAULT GETDATE(),
-    FOREIGN KEY (account_id) REFERENCES accounts(account_id),
-    FOREIGN KEY (notification_id) REFERENCES notifications(notification_id)
+    FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE CASCADE,
+    FOREIGN KEY (notification_id) REFERENCES notifications(notification_id) ON DELETE CASCADE
 );
+
 -- Tạo bảng đánh giá
 CREATE TABLE dbo.rating (
     rating_id INT PRIMARY KEY IDENTITY(1,1),
@@ -149,13 +150,12 @@ CREATE TABLE dbo.rating (
     account_id INT NULL,
     motel_id INT NULL,
     motel_room_id INT NULL,
-	[to_user_id] [int] NULL,
-	[tag] [varchar](50) NULL,
-    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id),
-    FOREIGN KEY (motel_id) REFERENCES dbo.motels(motel_id),
-    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id)
+    [to_user_id] [int] NULL,
+    [tag] [varchar](50) NULL,
+    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id) ON DELETE CASCADE,
+    FOREIGN KEY (motel_id) REFERENCES dbo.motels(motel_id) ON DELETE CASCADE,
+    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id) ON DELETE CASCADE
 );
-
 
 -- Tạo bảng phản hồi
 CREATE TABLE dbo.feedback (
@@ -165,9 +165,19 @@ CREATE TABLE dbo.feedback (
     account_id INT,
     motel_id INT,
     motel_room_id INT,
-    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id),
-    FOREIGN KEY (motel_id) REFERENCES dbo.motels(motel_id),
-    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id)
+    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id) ON DELETE CASCADE,
+    FOREIGN KEY (motel_id) REFERENCES dbo.motels(motel_id) ON DELETE CASCADE,
+    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id) ON DELETE CASCADE
+);
+
+-- Tạo bảng favourite_room
+CREATE TABLE dbo.favourite_room(
+    favourite_room_id INT PRIMARY KEY IDENTITY(1,1),
+    account_id INT,
+    motel_room_id INT,
+    create_date DATE DEFAULT GETDATE(),
+    FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id) ON DELETE CASCADE,
+    FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id) ON DELETE CASCADE
 );
 
 -- Tạo người dùng quản trị mặc định pass 123456789

@@ -35,26 +35,25 @@ public class CreateBillServlet extends HttpServlet {
                 String motelRoomIdStr = request.getParameter("motelRoomId");
                 String totalPriceStr = request.getParameter("totalPrice");
                 String invoiceStatus = request.getParameter("invoiceStatus");
-                String endDateStr = request.getParameter("endDate");
                 String electricityUsageStr = request.getParameter("electricityUsage");
                 String waterUsageStr = request.getParameter("waterUsage");
 
                 if (motelRoomIdStr == null || totalPriceStr == null || invoiceStatus == null ||
-                        endDateStr == null || electricityUsageStr == null || waterUsageStr == null) {
+                        electricityUsageStr == null || waterUsageStr == null) {
                     throw new IllegalArgumentException("All fields are required");
                 }
 
                 int motelRoomId = Integer.parseInt(motelRoomIdStr);
-                float totalPrice = Float.parseFloat(totalPriceStr);
-                Date endDate = java.sql.Date.valueOf(endDateStr);
+//                float totalPrice = Float.parseFloat(totalPriceStr);
                 float electricityUsage = Float.parseFloat(electricityUsageStr);
                 float waterUsage = Float.parseFloat(waterUsageStr);
 
                 // Create the invoice
-                Invoice invoice = invoiceService.createInvoice(motelRoomId, invoiceStatus, endDate, electricityUsage, waterUsage);
+                Invoice invoice = invoiceService.createInvoice(motelRoomId, invoiceStatus, electricityUsage, waterUsage);
 
                 if (invoice != null && invoice.getInvoiceId() > 0) {
-                    out.print("{\"status\":\"success\", \"invoiceId\":" + invoice.getInvoiceId() + "}");
+                    response.sendRedirect("owner?page=bill");
+//                    out.print("{\"status\":\"success\", \"invoiceId\":" + invoice.getInvoiceId() + "}");
                 } else {
                     throw new Exception("Invoice creation failed");
                 }

@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.Date;
 
 public class InvoiceService {
-    public Invoice createInvoice(int motelRoomId, String invoiceStatus, Date endDate, float electricityIndex, float waterIndex) throws SQLException {
+    public Invoice createInvoice(int motelRoomId, String invoiceStatus, float electricityIndex, float waterIndex) throws SQLException {
         Connection connection = null;
         try {
             connection = DBcontext.getConnection();
@@ -60,13 +60,13 @@ public class InvoiceService {
             if (renterId == -1) {
                 throw new SQLException("No renter found for the specified room.");
             }
-
+            Date endDate = new Date();
             // Insert into Invoice table
             String insertInvoiceSQL = "INSERT INTO dbo.invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (?, ?, ?, ?, ?, ?)";
             int invoiceId;
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertInvoiceSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setDate(1, new java.sql.Date(currentDate.getTime()));
-                preparedStatement.setDate(2, new java.sql.Date(endDate.getTime()));
+                preparedStatement.setDate(2, new java.sql.Date(new Date().getTime()));
                 preparedStatement.setFloat(3, totalPrice);
                 preparedStatement.setString(4, invoiceStatus);
                 preparedStatement.setInt(5, renterId);

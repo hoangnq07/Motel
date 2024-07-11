@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin Dashboard</title>
-    <link rel="shortcut icon" type="image/png" href="./assets1/images/logos/favicon.png" />
-    <link rel="stylesheet" href="./assets1/css/styles.min.css" />
+    <link rel="shortcut icon" type="image/png" href="./assets1/images/logos/favicon.png"/>
+    <link rel="stylesheet" href="./assets1/css/styles.min.css"/>
 </head>
 
 <body>
@@ -50,8 +50,22 @@
                             <span class="hide-menu">Feedback</span>
                         </a>
                     </li>
-                    <li class="sidebar-item"><a class="sidebar-link" href="./authorityRequests.jsp"><span>Request</span></a></li>
-                    <li class="sidebar-item"><a class="sidebar-link" href="./statistics.html"><span>Statistics</span></a></li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="./authorityRequests.jsp">
+                            <span class="icon">
+                                <i class="ti ti-user"></i>
+                            </span>
+                            <span>Request</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="./statistics.html">
+                            <span class="icon">
+                                <i class="ti ti-chart-bar"></i>
+                            </span>
+                            <span>Statistics</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
@@ -74,8 +88,10 @@
                 <div class="navbar-collapse justify-content-end" id="navbarNav">
                     <ul class="navbar-nav flex-row ms-auto align-items-center">
                         <li class="nav-item dropdown">
-                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="./assets1/images/profile/user-1.jpg" alt="" width="35" height="35" class="rounded-circle">
+                            <a class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="./assets1/images/profile/user-1.jpg" alt="" width="35" height="35"
+                                     class="rounded-circle">
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
                                 <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
@@ -176,19 +192,19 @@
 <script src="./assets1/js/sidebarmenu.js"></script>
 <script src="./assets1/js/app.min.js"></script>
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         // Handle Accounts click
-        $('#accounts').click(function(e) {
+        $('#accounts').click(function (e) {
             e.preventDefault();
             $.ajax({
                 url: 'fetchAllAccounts',
                 type: 'GET',
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
                     var accountsHtml = '<h3>All Accounts</h3><button id="add-account-btn" class="btn btn-success mb-3">Add Account</button><table class="table table-hover">' +
                         '<thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
 
-                    data.forEach(function(account) {
+                    data.forEach(function (account) {
                         accountsHtml += '<tr>' +
                             '<td>' + account.accountId + '</td>' +
                             '<td>' + account.fullname + '</td>' +
@@ -200,11 +216,10 @@
                             'id="status-' + account.accountId + '" ' + (account.active ? 'checked' : '') + ' ' +
                             'data-id="' + account.accountId + '">' +
                             '<label class="form-check-label" for="status-' + account.accountId + '">' +
-                            (account.active ? 'Active' : 'Inactive') + '</label>' +
                             '</div></td>' +
                             '<td>' +
                             '<button class="btn btn-primary btn-sm edit-account" data-id="' + account.accountId + '">Edit</button> ' +
-                            '<button class="btn btn-danger btn-sm delete-account" data-id="' + account.accountId + '">Delete</button>' +
+                            // '<button class="btn btn-danger btn-sm delete-account" data-id="' + account.accountId + '">Delete</button>' +
                             '</td>' +
                             '</tr>';
                     });
@@ -212,17 +227,17 @@
                     accountsHtml += '</tbody></table>';
                     $('#content-container').html(accountsHtml);
                     // Add Account functionality
-                    $('#add-account-btn').click(function() {
+                    $('#add-account-btn').click(function () {
                         $('#add-account-modal').modal('show');
                     });
                     // Edit account functionality
-                    $('.edit-account').click(function() {
+                    $('.edit-account').click(function () {
                         var accountId = $(this).data('id');
                         $.ajax({
                             url: 'fetchAccount',
                             type: 'GET',
-                            data: { accountId: accountId },
-                            success: function(account) {
+                            data: {accountId: accountId},
+                            success: function (account) {
                                 // Populate the add account form with the account details
                                 $('#fullname').val(account.fullname);
                                 $('#email').val(account.email);
@@ -246,13 +261,13 @@
                                 // Show the modal
                                 $('#add-account-modal').modal('show');
                             },
-                            error: function() {
+                            error: function () {
                                 alert('Failed to fetch account details');
                             }
                         });
                     });
                     // Modify the save account function to handle both add and edit
-                    $('#save-account').click(function() {
+                    $('#save-account').click(function () {
                         var accountData = {
                             fullname: $('#fullname').val() || null,
                             email: $('#email').val() || null,
@@ -271,7 +286,7 @@
                         if (accountId) {
                             url = 'updateAccount';
                             accountData.accountId = accountId;
-                            if(!$('#password').val()){
+                            if (!$('#password').val()) {
                                 delete accountData.password;
                             } else {
                                 accountData.password = $('#password').val() || null;
@@ -292,7 +307,7 @@
                             type: 'POST',
                             contentType: 'application/json',
                             data: JSON.stringify(accountData),
-                            success: function(response) {
+                            success: function (response) {
                                 if (response.success) {
                                     alert(accountId ? 'Account updated successfully' : 'Account added successfully');
                                     $('#add-account-modal').modal('hide');
@@ -301,7 +316,7 @@
                                     alert(accountId ? 'Failed to update account' : 'Failed to add account');
                                 }
                             },
-                            error: function() {
+                            error: function () {
                                 alert('An error occurred');
                             }
                         });
@@ -315,14 +330,14 @@
                     });
 
                     // Delete account functionality
-                    $('.delete-account').click(function() {
+                    $('.delete-account').click(function () {
                         var accountId = $(this).data('id');
                         if (confirm('Are you sure you want to delete this account?')) {
                             $.ajax({
                                 url: 'deleteAccount',
                                 type: 'POST',
-                                data: { accountId: accountId },
-                                success: function(response) {
+                                data: {accountId: accountId},
+                                success: function (response) {
                                     if (response.success) {
                                         alert('Account deleted successfully');
                                         $('#accounts').click(); // Refresh the account list
@@ -330,7 +345,7 @@
                                         alert('Failed to delete account');
                                     }
                                 },
-                                error: function() {
+                                error: function () {
                                     alert('An error occurred while deleting the account');
                                 }
                             });
@@ -338,19 +353,17 @@
                     });
 
                     // Add event listener for status toggle
-                    $('.status-toggle').change(function() {
+                    $('.status-toggle').change(function () {
                         var accountId = $(this).data('id');
                         var isActive = $(this).prop('checked');
                         updateAccountStatus(accountId, isActive);
                     });
                 },
-                error: function() {
+                error: function () {
                     alert('Unable to fetch accounts. Please try again later.');
                 }
             });
         });
-
-
 
 
         function updateAccountStatus(accountId, isActive) {
@@ -361,10 +374,9 @@
                     accountId: accountId,
                     active: isActive
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         // Update the label
-                        $('label[for="status-' + accountId + '"]').text(isActive ? 'Active' : 'Inactive');
                         alert('Account status updated successfully');
                     } else {
                         alert('Failed to update account status');
@@ -372,7 +384,7 @@
                         $('#status-' + accountId).prop('checked', !isActive);
                     }
                 },
-                error: function() {
+                error: function () {
                     alert('An error occurred while updating account status');
                     // Revert the toggle if update failed
                     $('#status-' + accountId).prop('checked', !isActive);
@@ -381,17 +393,17 @@
         }
 
         // Existing feedback handling code
-        $('#feedback').click(function(e) {
+        $('#feedback').click(function (e) {
             e.preventDefault();
             $.ajax({
                 url: 'fetchAdminFeedback',
                 type: 'GET',
                 dataType: 'json',
-                success: function(data) {
+                success: function (data) {
                     var feedbackHtml = '<h3>Feedback</h3><table class="table table-hover">' +
                         '<thead><tr><th>Date</th><th>Feedback</th><th>From</th><th>Actions</th></tr></thead><tbody>';
 
-                    data.forEach(function(fb) {
+                    data.forEach(function (fb) {
                         feedbackHtml += '<tr>' +
                             '<td>' + new Date(fb.createDate).toLocaleString() + '</td>' +
                             '<td>' + fb.feedbackText + '</td>' +
@@ -406,12 +418,12 @@
                     feedbackHtml += '</tbody></table>';
                     $('#content-container').html(feedbackHtml);
 
-                    $('.reply-btn').click(function() {
+                    $('.reply-btn').click(function () {
                         var id = $(this).data('id');
                         $('#reply-row-' + id).toggle();
                     });
                 },
-                error: function() {
+                error: function () {
                     alert('Unable to fetch feedback. Please try again later.');
                 }
             });

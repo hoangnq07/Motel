@@ -55,11 +55,11 @@
                         <i class="fas fa-door-open mr-2"></i>Quản lý Phòng trọ
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link ${param.page == 'customer-management' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=customer-management">
-                        <i class="fas fa-users mr-2"></i>Quản lý Người thuê
-                    </a>
-                </li>
+<%--                <li class="nav-item">--%>
+<%--                    <a class="nav-link ${param.page == 'customer-management' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=customer-management">--%>
+<%--                        <i class="fas fa-users mr-2"></i>Quản lý Người thuê--%>
+<%--                    </a>--%>
+<%--                </li>--%>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=bill">
                         <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa đơn

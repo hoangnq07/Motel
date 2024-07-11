@@ -26,7 +26,7 @@ public class DeleteInvoiceServlet extends HttpServlet {
 
         try {
             invoiceDAO.deleteInvoice(invoiceId);
-            response.sendRedirect("manageInvoices.jsp");
+            response.sendRedirect("owner?page=bill");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
             log("Error details: " + e.getMessage());

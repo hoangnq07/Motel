@@ -1,8 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div id="confirmationDialog" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background-color:white; padding:20px; border:1px solid black;">
     <h2>Confirm Bill Details</h2>
-    <p>Electricity Usage: ${param.electricityUsage}</p>
-    <p>Water Usage: ${param.waterUsage}</p>
+    <p>Electricity Index: ${param.electricityUsage}</p>
+    <p>Water Index: ${param.waterUsage}</p>
     <p>Total Price: ${param.totalPrice}VNĐ</p>
     <button onclick="confirmBill()">Confirm</button>
     <button onclick="cancelBill()">Cancel</button>

@@ -44,24 +44,25 @@
       </select>
     </div>
     <div class="form-group">
-      <label for="electricityUsage">Electricity Usage:</label>
+      <label for="electricityUsage">Electricity Index:</label>
       <input type="number" id="electricityUsage" name="electricityUsage" class="form-control" step="0.01" required>
     </div>
     <div class="form-group">
-      <label for="waterUsage">Water Usage:</label>
+      <label for="waterUsage">Water Index:</label>
       <input type="number" id="waterUsage" name="waterUsage" class="form-control" step="0.01" required>
     </div>
-    <div class="form-group">
-      <label for="endDate">End Date:</label>
-      <input type="date" id="endDate" name="endDate" class="form-control" required>
-    </div>
-    <div class="form-group">
-      <label for="totalPrice">Total Price:</label>
-      <input type="text" id="totalPrice" class="form-control" readonly>
+<%--    <div class="form-group">--%>
+<%--      <label for="endDate">End Date:</label>--%>
+<%--      <input type="date" id="endDate" name="endDate" class="form-control" required>--%>
+<%--    </div>--%>
+<%--    <div class="form-group">--%>
+<%--      <label for="totalPrice">Total Price:</label>--%>
+<%--      <input type="text" id="totalPrice" class="form-control" readonly>--%>
       <input type="hidden" id="totalPriceHidden" name="totalPrice">
     </div>
     <input type="hidden" id="invoiceStatus" name="invoiceStatus" value="UNPAID">
-    <button type="submit" class="btn btn-primary">Create Bill</button>
+    <input type="hidden" id="action" name="action" value="confirm">
+    <button type="submit" class="btn btn-primary" onclick="confirmBill()">Create Bill</button>
     <button type="button" class="btn btn-secondary ml-2" data-dismiss="modal">Cancel</button>
   </form>
 </div>
@@ -88,4 +89,31 @@
   });
 </script>
 </body>
+<script>
+  // function confirmBill() {
+  //   $.ajax({
+  //     url: 'createBill',
+  //     type: 'POST',
+  //     data: $('#billForm').serialize(),
+  //     dataType: 'json',
+  //     success: function(response) {
+  //       if (response.status === 'success') {
+  //         alert('Bill created successfully!');
+  //         $('#confirmationDialog').remove();
+  //         // Optionally, reset the form or redirect to a new page
+  //       } else {
+  //         alert('Error: ' + response.message);
+  //       }
+  //     },
+  //     error: function(xhr, status, error) {
+  //       if (xhr.status === 409) {
+  //         alert('Cannot create invoice: ' + xhr.responseJSON.message);
+  //       } else {
+  //         alert('An error occurred. Please try again. Details: ' + xhr.responseText);
+  //       }
+  //     }
+  //   });
+  // }
+
+</script>
 </html>
