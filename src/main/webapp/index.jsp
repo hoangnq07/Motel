@@ -155,5 +155,15 @@
             </div>
         </div>
         <jsp:include page="footer.jsp" />
+        <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+        <c:if test="${not empty sessionScope.user and sessionScope.user.role == 'user'}">
+            <df-messenger
+                    intent="WELCOME"
+                    chat-title="MotelBot"
+                    agent-id="d66eae9e-41a1-4459-821b-e8953259fad8"
+                    language-code="en">
+            </df-messenger>
+        </c:if>
     </body>
+
 </html>

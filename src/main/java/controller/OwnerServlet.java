@@ -58,6 +58,8 @@ public class OwnerServlet extends HttpServlet {
                         throw new RuntimeException(e);
                     }
                     break;
+                case "statics":
+                    break;
             }
             request.getRequestDispatcher("motel-manage.jsp").forward(request, response);
         }

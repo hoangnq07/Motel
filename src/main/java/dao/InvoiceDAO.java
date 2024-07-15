@@ -208,49 +208,96 @@ public class InvoiceDAO {
         return null;
     }
 
-    public List<RevenueData> getMonthlyRevenueByOwnerId(int ownerId) throws SQLException, ClassNotFoundException {
+    public List<RevenueData> getMonthlyRevenueByOwnerIdAndYear(int ownerId, int year) throws SQLException, ClassNotFoundException {
         List<RevenueData> revenues = new ArrayList<>();
         String sql = "WITH RevenueData AS (" +
-                "    SELECT a.account_id AS OwnerId, MONTH(i.create_date) AS Month, SUM(i.total_price) AS TotalRevenue " +
+                "    SELECT a.account_id AS OwnerId, MONTH(i.create_date) AS Month, YEAR(i.create_date) AS Year, SUM(i.total_price) AS TotalRevenue " +
                 "    FROM invoice i " +
                 "    JOIN motel_room mr ON i.motel_room_id = mr.motel_room_id " +
                 "    JOIN accounts a ON mr.account_id = a.account_id " +
-                "    WHERE a.role = 'owner' AND a.account_id = ? " +
-                "    GROUP BY a.account_id, MONTH(i.create_date) " +
+                "    WHERE a.role = 'owner' AND a.account_id = ? AND YEAR(i.create_date) = ? " +
+                "    GROUP BY a.account_id, MONTH(i.create_date), YEAR(i.create_date) " +
                 ") " +
-                "SELECT m.Month, ISNULL(rd.TotalRevenue, 0) AS TotalRevenue " +
-                "FROM (VALUES (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12)) AS m(Month) " +
-                "LEFT JOIN RevenueData rd ON m.Month = rd.Month " +
+                "SELECT m.Month, m.Year, ISNULL(rd.TotalRevenue, 0) AS TotalRevenue " +
+                "FROM (SELECT * FROM (VALUES (1), (2), (3), (4), (5), (6), (7), (8), (9), (10), (11), (12)) AS months(Month) " +
+                "      CROSS JOIN (VALUES (?)) AS years(Year)) AS m " +
+                "LEFT JOIN RevenueData rd ON m.Month = rd.Month AND m.Year = rd.Year " +
                 "ORDER BY m.Month;";
 
         DBcontext dbContext = new DBcontext();
         try (Connection conn = dbContext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, ownerId);
+            ps.setInt(2, year);
+            ps.setInt(3, year); // Thiết lập năm cho CROSS JOIN
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    revenues.add(new RevenueData(rs.getInt("Month"), rs.getDouble("TotalRevenue")));
+                    revenues.add(new RevenueData(rs.getInt("Month"), rs.getDouble("TotalRevenue"), rs.getInt("Year")));
                 }
             }
         }
         return revenues;
     }
+    public int getNumberOfRenters(int ownerId) throws SQLException, ClassNotFoundException {
+        int count = 0;
+        String sql = "SELECT COUNT(DISTINCT renter_id) AS Count FROM renter " +
+                "JOIN motel_room ON renter.motel_room_id = motel_room.motel_room_id " +
+                "WHERE motel_room.account_id = ?";
+        DBcontext dbContext = new DBcontext();
+        try (Connection conn = dbContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt("Count");
+                }
+            }
+        }
+        return count;
+    }
+
+    public int getNumberOfMotels(int ownerId) throws SQLException, ClassNotFoundException {
+        int count = 0;
+        String sql = "SELECT COUNT(DISTINCT motel_id) AS Count FROM motels " +
+                "WHERE account_id = ?";
+        DBcontext dbContext = new DBcontext();
+        try (Connection conn = dbContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt("Count");
+                }
+            }
+        }
+        return count;
+    }
+
+    public int getNumberOfRooms(int ownerId) throws SQLException, ClassNotFoundException {
+        int count = 0;
+        String sql = "SELECT COUNT(*) AS Count FROM motel_room " +
+                "WHERE account_id = ?";
+        DBcontext dbContext = new DBcontext();
+        try (Connection conn = dbContext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, ownerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    count = rs.getInt("Count");
+                }
+            }
+        }
+        return count;
+    }
+
 //    public static void main(String[] args) {
 //        try {
-//            // Khởi tạo InvoiceDAO
-//            InvoiceDAO invoiceDAO = new InvoiceDAO();
-//
-//            // Thiết lập ownerId cần kiểm tra
-//            int ownerId = 2; // Bạn có thể thay đổi ID này để kiểm tra các owner khác
-//
-//            // Gọi phương thức getMonthlyRevenueByOwnerId
-//            List<RevenueData> revenues = invoiceDAO.getMonthlyRevenueByOwnerId(ownerId);
-//
-//            // In kết quả
-//            for (RevenueData revenue : revenues) {
-//                System.out.println("Tháng: " + revenue.getMonth() + ", Doanh thu: " + revenue.getTotalRevenue());
+//            InvoiceDAO dao = new InvoiceDAO();
+//            List<RevenueData> revenues = dao.getMonthlyRevenueByOwnerIdAndYear(1, 2024);
+//            for (RevenueData rd : revenues) {
+//                System.out.println("Month: " + rd.getMonth() + " - Total Revenue: " + rd.getTotalRevenue());
 //            }
-//        } catch (SQLException | ClassNotFoundException e) {
+//        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
 //    }

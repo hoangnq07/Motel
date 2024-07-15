@@ -76,6 +76,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link ${param.page == 'statics' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=statics">
+                        <i class="fas fa-comments mr-2"></i>Revenue
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/logout">
                         <i class="fas fa-sign-out-alt mr-2"></i>Logout
                     </a>
@@ -101,6 +106,9 @@
                 </c:when>
                 <c:when test="${param.page == 'feedback'}">
                     <jsp:include page="viewfeedback.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'statics'}">
+                    <jsp:include page="revenue.jsp"/>
                 </c:when>
             </c:choose>
         </div>
