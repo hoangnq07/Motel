@@ -66,6 +66,14 @@
                             <span>Statistics</span>
                         </a>
                     </li>
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="pending-room-requests?action=listPending" id="posting-requests" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-file"></i>
+                            </span>
+                            <span class="hide-menu">Posting Requests</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
@@ -364,6 +372,7 @@
                 }
             });
         });
+
 
 
         function updateAccountStatus(accountId, isActive) {

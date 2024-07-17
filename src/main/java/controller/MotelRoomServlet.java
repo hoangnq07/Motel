@@ -38,20 +38,13 @@ public class MotelRoomServlet extends HttpServlet {
         if (action == null || action.equals("list")) {
             listRooms(request, response);
         } else if ("getRoomDetails".equals(action)) {
-            int id = Integer.parseInt(request.getParameter("id"));
-            MotelRoom room = MotelRoomDAO.getMotelRoomById(id);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            if (room != null) {
-                String jsonResponse = gson.toJson(room);
-                response.getWriter().write(jsonResponse);
-            } else {
-                sendErrorResponse(response, HttpServletResponse.SC_NOT_FOUND, "Room not found");
-            }
+            getRoomDetails(request, response);
         } else if (action.equals("delete")) {
             deleteMotelRoom(request, response);
         } else if ("search".equals(action) || "filter".equals(action)) {
             searchRooms(request, response);
+        } else if ("requestPost".equals(action)) {
+            requestPost(request, response);
         }
     }
 
@@ -70,6 +63,20 @@ public class MotelRoomServlet extends HttpServlet {
         }
     }
 
+
+    private void requestPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int roomId = Integer.parseInt(request.getParameter("roomId"));
+        boolean result = motelRoomDAO.requestPost(roomId);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"success\": " + result + "}");
+    }
+    private void sendErrorResponse(HttpServletResponse response, int status, String message) throws IOException {
+        response.setStatus(status);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"error\": \"" + message + "\"}");
+    }
 
     private void getRoomDetails(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
@@ -257,10 +264,7 @@ public class MotelRoomServlet extends HttpServlet {
         }
 
 
-        private void sendErrorResponse (HttpServletResponse response,int status, String message) throws IOException {
-            response.setStatus(status);
-            response.getWriter().write(gson.toJson(new ErrorResponse(message)));
-        }
+
 
         // Inner class for error responses
         private static class ErrorResponse {

@@ -5,6 +5,8 @@ import java.util.List;
 import context.DBcontext;
 import model.Motel;
 public class MotelDAO {
+
+    private Connection connection;
     public static List<Motel> getAllMotels() throws SQLException {
         List<Motel> motels = new ArrayList<>();
         String sql = "SELECT * FROM dbo.motels";
@@ -29,6 +31,11 @@ public class MotelDAO {
         }
         return motels;
     }
+
+
+
+
+
     //Get motel by id
     public static Motel getMotelById(int motelId) throws SQLException {
         Motel motel = new Motel();

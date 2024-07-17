@@ -2,6 +2,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="model.MotelRoom" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -136,8 +138,10 @@
                                     <div class="room-details">
                                         <h5>${room.description}</h5>
                                         <p>${room.length * room.width} m²</p>
-                                        <p class="price">${room.roomPrice} triệu/tháng</p>
-                                        <p>${room.detailAddress}, ${room.ward}, ${room.district}, ${room.city}, ${room.province}</p>
+                                        <p class="price">
+                                            <fmt:formatNumber value="${room.roomPrice}" type="number" groupingUsed="true"/> VND/tháng
+                                        </p>
+                                        <p>${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
                                         <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">View Details</a>
                                     </div>
                                 </div>
