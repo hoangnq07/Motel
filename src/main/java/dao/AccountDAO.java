@@ -198,6 +198,32 @@ public class AccountDAO {
         return feedbacks;
     }
 
+        public List<Feedback> getFeedbacksReceivedByOwner(int ownerId) throws SQLException, ClassNotFoundException {
+            List<Feedback> feedbacks = new ArrayList<>();
+            String sql = "SELECT f.feedback_id, f.feedback_text, f.create_date, a.fullname as senderName " +
+                    "FROM feedback f " +
+                    "JOIN accounts a ON f.account_id = a.account_id " + // Người gửi
+                    "WHERE f.to_user_id = ? AND a.role != 'owner';"; // Chỉ lấy feedback mà owner đã nhận
+
+            try (Connection conn = DBcontext.getConnection();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, ownerId);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        Feedback feedback = new Feedback();
+                        feedback.setFeedbackId(rs.getInt("feedback_id"));
+                        feedback.setFeedbackText(rs.getString("feedback_text"));
+                        feedback.setCreateDate(rs.getTimestamp("create_date"));
+                        feedback.setSenderName(rs.getString("senderName")); // Tên người gửi
+                        feedbacks.add(feedback);
+                    }
+                }
+            }
+            return feedbacks;
+        }
+
+
+
     public List<Account> getAllAccount() {
         List<Account> accounts = new ArrayList<>();
         String sql = "SELECT * FROM accounts WHERE role != 'admin'";
@@ -360,9 +386,26 @@ public class AccountDAO {
         return accounts;
     }
     public static void main(String[] args) {
-//        listUsers().forEach(p -> System.out.println(p));
-//        System.out.println(searchUser("hoangnq417@gmail.com"));
-//        System.out.println(authenticateUser("hoangnqde170007@fpt.edu.vn", "Hoangasd@123"));
-//        System.out.println(registerUser(new User("nguyenhoang5@gmail.com", "123456", "012345678")));
+        AccountDAO dao = new AccountDAO();
+        int testUserId = 13; // Thay đổi giá trị này theo ID của một người dùng trong cơ sở dữ liệu của bạn
+
+        try {
+            List<Feedback> feedbacks = dao.getFeedbacksReceivedByOwner(testUserId);
+            if (feedbacks.isEmpty()) {
+                System.out.println("Không có feedback nào được gửi đến các owner từ user này.");
+            } else {
+                System.out.println("Feedback đã gửi đến các owner:");
+                for (Feedback feedback : feedbacks) {
+                    System.out.println("Feedback ID: " + feedback.getFeedbackId());
+                    System.out.println("Feedback Text: " + feedback.getFeedbackText());
+                    System.out.println("Create Date: " + feedback.getCreateDate());
+                    System.out.println("Sender Name: " + feedback.getSenderName());
+                    System.out.println("----------------------------------------");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Đã xảy ra lỗi khi truy xuất feedback: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
