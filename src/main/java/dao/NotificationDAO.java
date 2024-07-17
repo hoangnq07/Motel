@@ -75,4 +75,39 @@ public class NotificationDAO {
             if (conn != null) conn.close();
         }
     }
+    //send notification to all room
+    public void addNotificationToAllRooms(String message) throws Exception {
+        String queryNotification = "INSERT INTO notifications (message) VALUES (?)";
+        String queryAccountNotifications = "INSERT INTO account_notifications (account_id, notification_id) " +
+                "SELECT r.renter_id, n.notification_id " +
+                "FROM renter r, notifications n " +
+                "WHERE n.message = ?";
+        Connection conn = null;
+        PreparedStatement psNotification = null;
+        PreparedStatement psAccountNotifications = null;
+        try {
+            conn = new DBcontext().getConnection();
+            conn.setAutoCommit(false);
+
+            // Insert into notifications table
+            psNotification = conn.prepareStatement(queryNotification);
+            psNotification.setString(1, message);
+            psNotification.executeUpdate();
+
+            // Insert into account_notifications table for all renters
+            psAccountNotifications = conn.prepareStatement(queryAccountNotifications);
+            psAccountNotifications.setString(1, message);
+            psAccountNotifications.executeUpdate();
+
+            conn.commit();
+        } catch (Exception e) {
+            if (conn != null) conn.rollback();
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (psNotification != null) psNotification.close();
+            if (psAccountNotifications != null) psAccountNotifications.close();
+            if (conn != null) conn.close();
+        }
+    }
 }

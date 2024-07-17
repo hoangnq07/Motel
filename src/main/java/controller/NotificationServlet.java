@@ -13,13 +13,19 @@ import java.io.IOException;
 public class NotificationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
-        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
+        String motelRoomIdParam = request.getParameter("motelRoomId");
 
         NotificationDAO dao = new NotificationDAO();
         String status;
         try {
-            dao.addNotification(message, motelRoomId);
-            status = "Notification sent successfully.";
+            if ("all".equals(motelRoomIdParam)) {
+                dao.addNotificationToAllRooms(message);
+                status = "Notification sent to all rooms successfully.";
+            } else {
+                int motelRoomId = Integer.parseInt(motelRoomIdParam);
+                dao.addNotification(message, motelRoomId);
+                status = "Notification sent successfully.";
+            }
         } catch (Exception e) {
             e.printStackTrace();
             status = "Failed to send notification: " + e.getMessage();
