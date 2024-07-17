@@ -11,8 +11,9 @@
     <h1 class="mb-4">Send Notification</h1>
     <form id="notificationForm">
         <div class="form-group">
-            <label for="motelRoomId">Motel Room ID:</label>
+            <label for="motelRoomId">Motel Room:</label>
             <select class="form-control" id="motelRoomId" name="motelRoomId" required>
+                <option value="all">All room</option>
                 <c:forEach var="room" items="${requestScope.rooms}">
                     <option value="${room.motelRoomId}">${room.name}</option>
                 </c:forEach>
