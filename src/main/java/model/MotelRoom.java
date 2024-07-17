@@ -29,6 +29,8 @@ public class MotelRoom {
     private String province;
     private String category;
     private boolean isFavorite;
+
+    private String postRequestStatus;
     public MotelRoom() {
     }
 
@@ -130,6 +132,43 @@ public class MotelRoom {
         this.isFavorite = isFavorite; // Khởi tạo trạng thái yêu thích
     }
 
+
+    public MotelRoom(int motelRoomId, String name, Date createDate, String description, double length, double width, double roomPrice, double electricityPrice, double waterPrice, double wifiPrice, int categoryRoomId, int motelId, boolean roomStatus, int accountId, List<String> image, String address, String accountFullname, String accountPhone, String detailAddress, String ward, String district, String city, String province, String category, boolean isFavorite, String postRequestStatus) {
+        this.motelRoomId = motelRoomId;
+        this.name = name;
+        this.createDate = createDate;
+        this.description = description;
+        this.length = length;
+        this.width = width;
+        this.roomPrice = roomPrice;
+        this.electricityPrice = electricityPrice;
+        this.waterPrice = waterPrice;
+        this.wifiPrice = wifiPrice;
+        this.categoryRoomId = categoryRoomId;
+        this.motelId = motelId;
+        this.roomStatus = roomStatus;
+        this.accountId = accountId;
+        this.image = image;
+        this.address = address;
+        this.accountFullname = accountFullname;
+        this.accountPhone = accountPhone;
+        this.detailAddress = detailAddress;
+        this.ward = ward;
+        this.district = district;
+        this.city = city;
+        this.province = province;
+        this.category = category;
+        this.isFavorite = isFavorite;
+        this.postRequestStatus = postRequestStatus;
+    }
+
+    public String getPostRequestStatus() {
+        return postRequestStatus;
+    }
+
+    public void setPostRequestStatus(String postRequestStatus) {
+        this.postRequestStatus = postRequestStatus;
+    }
 
     public boolean isFavorite() {
         return isFavorite;

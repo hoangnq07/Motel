@@ -217,6 +217,26 @@
             // Ví dụ: gửi request đến server để xóa file
         }
 
+        function requestPost(roomId) {
+            var url = contextPath + "/motel-rooms?action=requestPost&roomId=" + roomId;
+            fetch(url)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log('Response Data:', data); // Log response data for debugging
+                    if (data.success) {
+                        document.querySelector('tr[data-room-id="' + roomId + '"] .postRequestStatus').textContent = 'pending';
+                        alert('Request for posting was successful.');
+                    } else {
+                        alert('Failed to request for posting.');
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    alert('An error occurred while requesting for posting.');
+                });
+        }
     </script>
 </head>
 <body>
@@ -239,6 +259,7 @@
             <th>Image</th>
             <th>Room Status</th>
             <th>Actions</th>
+            <th>Post Status</th>
         </tr>
         </thead>
         <tbody>
@@ -269,9 +290,11 @@
                 </td>
                 <td class="actions">
                     <a href="javascript:void(0);" onclick="showForm('edit', ${room.motelRoomId},${room.motelId});">Edit</a>
-<%--                    <a href="${pageContext.request.contextPath}/motel-rooms?action=delete&id=${room.motelRoomId}" onclick="return confirm('Are you sure?');">Delete</a>--%>
+                    <!-- <a href="${pageContext.request.contextPath}/motel-rooms?action=delete&id=${room.motelRoomId}" onclick="return confirm('Are you sure?');">Delete</a> -->
                     <a href="${pageContext.request.contextPath}/add_tenants.jsp?motel_room_id=${room.motelRoomId}">Manage</a>
+                    <a href="javascript:void(0);" onclick="requestPost(${room.motelRoomId});">Request for Posting</a>
                 </td>
+                <td class="postRequestStatus">${room.postRequestStatus}</td>
             </tr>
         </c:forEach>
         </tbody>

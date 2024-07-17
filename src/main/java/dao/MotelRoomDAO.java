@@ -115,10 +115,11 @@ public class MotelRoomDAO {
 
     public List<MotelRoom> getAllMotelRooms(int page, int pageSize, Account acc) {
         List<MotelRoom> rooms = new ArrayList<>();
-        String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category " +
+        String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category, mr.post_request_status " +
                 "FROM motel_room mr " +
                 "JOIN motels m ON mr.motel_id = m.motel_id " +
                 "JOIN category_room cr ON mr.category_room_id = cr.category_room_id " +
+                "WHERE m.status = 1 AND mr.room_status = 1 AND mr.post_request_status = 'approved' " +
                 "ORDER BY mr.create_date DESC " +
                 "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
         try {
@@ -142,8 +143,9 @@ public class MotelRoomDAO {
                 room.setDistrict(rs.getString("district"));
                 room.setProvince(rs.getString("province"));
                 if (acc != null)
-                    room.setFavorite(isFavoriteRoom(acc.getAccountId(), rs.getInt("motel_room_id")));  // Correct use
+                    room.setFavorite(isFavoriteRoom(acc.getAccountId(), rs.getInt("motel_room_id")));
                 room.setCategory(rs.getString("category"));
+                room.setPostRequestStatus(rs.getString("post_request_status")); // Retrieve post request status
                 rooms.add(room);
             }
         } catch (SQLException e) {
@@ -151,6 +153,7 @@ public class MotelRoomDAO {
         }
         return rooms;
     }
+
 
     public static List<MotelRoom> getMotelRoomsByMotelId(int motelId) {
         List<MotelRoom> rooms = new ArrayList<>();
@@ -186,7 +189,10 @@ public class MotelRoomDAO {
     }
 
     public int getTotalMotelRooms() {
-        String query = "SELECT COUNT(*) FROM motel_room";
+        String query = "SELECT COUNT(*) " +
+                "FROM motel_room mr " +
+                "JOIN motels m ON mr.motel_id = m.motel_id " +
+                "WHERE m.status = 1 AND mr.room_status = 1 AND mr.post_request_status = 'approved'";
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ResultSet rs = ps.executeQuery();
@@ -198,6 +204,7 @@ public class MotelRoomDAO {
         }
         return 0;
     }
+
 
     public static MotelRoom getMotelRoomById(int id) {
         MotelRoom room = null;
@@ -406,7 +413,7 @@ public class MotelRoomDAO {
 
     public List<MotelRoom> searchRooms(String search, String province, String district, String town, String category, String minPrice, String maxPrice, String minArea, String maxArea, String sortPrice, String sortArea, String sortDate, int page, int pageSize, Account acc) {
         List<MotelRoom> rooms = new ArrayList<>();
-        StringBuilder query = new StringBuilder("SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category FROM motel_room mr JOIN motels m ON mr.motel_id = m.motel_id JOIN category_room cr ON mr.category_room_id = cr.category_room_id WHERE 1=1");
+        StringBuilder query = new StringBuilder("SELECT mr.*, m.detail_address, m.ward, m.district, m.province, cr.descriptions as category FROM motel_room mr JOIN motels m ON mr.motel_id = m.motel_id JOIN category_room cr ON mr.category_room_id = cr.category_room_id WHERE m.status = 1 AND mr.room_status = 1 AND mr.post_request_status = 'approved'");
 
         List<Object> params = new ArrayList<>();
 
@@ -509,7 +516,7 @@ public class MotelRoomDAO {
     }
 
     public int getTotalSearchResults(String search, String province, String district, String town, String category, String minPrice, String maxPrice, String minArea, String maxArea) {
-        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM motel_room mr JOIN motels m ON mr.motel_id = m.motel_id WHERE 1=1");
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM motel_room mr JOIN motels m ON mr.motel_id = m.motel_id WHERE m.status = 1 AND mr.room_status = 1 AND mr.post_request_status = 'approved'");
         List<Object> params = new ArrayList<>();
 
         if (search != null && !search.isEmpty()) {
@@ -534,7 +541,7 @@ public class MotelRoomDAO {
 
         if (town != null && !town.equals("-1")) {
             query.append(" AND m.ward_id = ?");
-            params.add(town.toLowerCase());
+            params.add(Integer.parseInt(town));
         }
 
         if (category != null && !category.equals("-1")) {
@@ -575,4 +582,112 @@ public class MotelRoomDAO {
         }
         return 0;
     }
+
+    public boolean requestPost(int roomId) {
+        String query = "UPDATE motel_room SET post_request_status = 'pending' WHERE motel_room_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, roomId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public List<MotelRoom> getRoomsByStatus(String status, int page, int pageSize) {
+        List<MotelRoom> rooms = new ArrayList<>();
+        String query = "SELECT mr.*, m.detail_address, m.ward, m.district, m.province " +
+                "FROM motel_room mr " +
+                "JOIN motels m ON mr.motel_id = m.motel_id " +
+                "WHERE mr.post_request_status = ? " +
+                "ORDER BY mr.create_date DESC " +
+                "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, status);
+            ps.setInt(2, (page - 1) * pageSize);
+            ps.setInt(3, pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                MotelRoom room = new MotelRoom();
+                room.setMotelRoomId(rs.getInt("motel_room_id"));
+                room.setDescription(rs.getString("descriptions"));
+                room.setLength(rs.getDouble("length"));
+                room.setWidth(rs.getDouble("width"));
+                room.setRoomPrice(rs.getDouble("room_price"));
+                room.setElectricityPrice(rs.getDouble("electricity_price"));
+                room.setWaterPrice(rs.getDouble("water_price"));
+                room.setWifiPrice(rs.getDouble("wifi_price"));
+                room.setImage(getImagesForRoom(rs.getInt("motel_room_id")));
+                room.setDetailAddress(rs.getString("detail_address"));
+                room.setWard(rs.getString("ward"));
+                room.setDistrict(rs.getString("district"));
+                room.setProvince(rs.getString("province"));
+                rooms.add(room);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return rooms;
+    }
+
+    public int getCountByStatus(String status) {
+        String query = "SELECT COUNT(*) FROM motel_room WHERE post_request_status = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, status);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public boolean updatePostRequestStatus(int roomId, String status) {
+        String query = "UPDATE motel_room SET post_request_status = ? WHERE motel_room_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, status);
+            ps.setInt(2, roomId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            MotelRoomDAO motelRoomDAO = new MotelRoomDAO();
+
+            // Test getRoomsByStatus
+            System.out.println("Testing getRoomsByStatus with 'pending' status...");
+            List<MotelRoom> rooms = motelRoomDAO.getRoomsByStatus("Pending", 1, 10);
+            for (MotelRoom room : rooms) {
+                System.out.println("Room ID: " + room.getMotelRoomId() + ", Description: " + room.getDescription());
+            }
+
+            // Test getCountByStatus
+            System.out.println("Testing getCountByStatus with 'pending' status...");
+            int count = motelRoomDAO.getCountByStatus("pending");
+            System.out.println("Count of pending rooms: " + count);
+
+            // Test updatePostRequestStatus
+            System.out.println("Testing updatePostRequestStatus to 'approved' for room ID 1...");
+            boolean updateResult = motelRoomDAO.updatePostRequestStatus(1, "approved");
+            System.out.println("Update result: " + updateResult);
+
+            // Rerun getRoomsByStatus to see changes
+            System.out.println("Rerunning getRoomsByStatus after update...");
+            rooms = motelRoomDAO.getRoomsByStatus("approved", 1, 10);
+            for (MotelRoom room : rooms) {
+                System.out.println("Room ID: " + room.getMotelRoomId() + ", Status: approved");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+

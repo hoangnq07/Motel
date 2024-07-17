@@ -3,6 +3,8 @@
 <%@ page import="model.MotelRoom" %>
 <%@ page import="model.CategoryRoom" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -98,11 +100,9 @@
                 <label for="category">Category:</label>
                 <select id="category" name="category" class="form-control">
                     <option value="-1">Chọn loại phòng</option>
-                    <c:forEach var="categoryRoom" items="${categoryRooms}">
-                        <option value="${categoryRoom.categoryRoomId}" ${categoryRoom.categoryRoomId == param.category ? 'selected' : ''}>${categoryRoom.descriptions}</option>
-                    </c:forEach>
                 </select>
             </div>
+
         </div>
 
         <div class="row">
@@ -158,7 +158,9 @@
                     <div class="room-details">
                         <h5>${room.description}</h5>
                         <p>${room.length * room.width} m²</p>
-                        <p class="price">${room.roomPrice} triệu/tháng</p>
+                        <p class="price">
+                            <fmt:formatNumber value="${room.roomPrice}" type="number" groupingUsed="true"/> VND/tháng
+                        </p>
                         <p>${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
                         <i class="favorite ${room.favorite ? 'fas text-danger' : 'far'} fa-heart" onclick="toggleFavorite(this, ${room.motelRoomId})"></i>
                         <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">View Details</a>
@@ -167,6 +169,7 @@
             </div>
         </c:forEach>
     </div>
+
 
     <!-- Pagination -->
     <nav aria-label="Page navigation example">
@@ -303,6 +306,33 @@
         document.getElementById('districtText').value = selectedDistrictText;
         document.getElementById('townText').value = selectedTownText;
     }
+    $(document).ready(function() {
+        // Fetch categories on page load
+        fetchCategories();
+
+        // Fetch and populate categories
+        function fetchCategories() {
+            $.ajax({
+                url: '${pageContext.request.contextPath}/categories',
+                method: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    var categoryDropdown = $('#category');
+                    categoryDropdown.empty(); // Clear existing options
+                    categoryDropdown.append('<option value="-1">Chọn loại phòng</option>');
+                    $.each(data, function(index, category) {
+                        var selected = category.categoryRoomId == '${param.category}' ? 'selected="selected"' : '';
+                        categoryDropdown.append('<option value="' + category.categoryRoomId + '" ' + selected + '>' + category.descriptions + '</option>');
+                    });
+                },
+                error: function(error) {
+                    console.error('Error fetching categories:', error);
+                }
+            });
+        }
+
+        // Other existing scripts
+    });
 </script>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
