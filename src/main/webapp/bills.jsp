@@ -6,12 +6,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Your Bills</title>
+    <title>Xem Hóa Đơn</title>
 </head>
 <body style="            margin-top: 50px;">
 <jsp:include page="header.jsp" />
 
-<h1>Your Bills</h1>
+<h1>Hóa Đơn của bạn</h1>
 
 <%
     String paymentMessage = (String) session.getAttribute("paymentMessage");
