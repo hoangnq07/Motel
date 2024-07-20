@@ -7,10 +7,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Notifications</title>
+    <title>Notification</title>
 </head>
 <body>
-<h1>Your Notifications</h1>
+<h1>Notifications</h1>
 <ul>
     <%
         if (notifications != null && !notifications.isEmpty()) {

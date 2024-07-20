@@ -115,7 +115,7 @@
                         ele.parentNode.removeChild(ele);
                     }
                 } else {
-                    alert('Có lỗi xảy ra khi xử lý yêu cầu của bạn');
+                    alert('Got errors while dealing with your requests');
                 }
             })
             .catch(error => {

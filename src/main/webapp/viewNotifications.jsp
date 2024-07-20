@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Your Notifications</title>
+    <title>Notification</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
         .page{
@@ -71,7 +71,7 @@
 <body>
 <jsp:include page="header.jsp" ></jsp:include>
 <div class="container page">
-    <h1 class="mb-4">Your Notifications</h1>
+    <h1 class="mb-4">Notification</h1>
     <ul id="notificationList" class="list-group">
         <!-- Notifications will be displayed here -->
     </ul>

@@ -13,14 +13,14 @@
 
 <!-- Feedback List Start -->
 <div class="container feedback-table">
-    <h3>Danh Sách Feedback Nhận Được</h3>
+    <h3>Received Feedbacks</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>Ngày Giờ</th>
-            <th>Nội Dung</th>
-            <th>Tên Người Gửi</th>
-            <th>Phòng</th>
+            <th>Date</th>
+            <th>Content</th>
+            <th>Sender</th>
+            <th>Room</th>
         </tr>
         </thead>
         <tbody id="feedbackList">

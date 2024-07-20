@@ -42,17 +42,17 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link " href="${pageContext.request.contextPath}/home">
-                        <i class="fas fa-home mr-2"></i>Home
+                        <i class="fas fa-home mr-2"></i>HOME
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'motel-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=motel-list">
-                        <i class="fas fa-building mr-2"></i>Quản lý Nhà trọ
+                        <i class="fas fa-building mr-2"></i>Manage Accommodation
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'room-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=room-list">
-                        <i class="fas fa-door-open mr-2"></i>Quản lý Phòng trọ
+                        <i class="fas fa-door-open mr-2"></i>Manage Room
                     </a>
                 </li>
 <%--                <li class="nav-item">--%>
@@ -62,12 +62,12 @@
 <%--                </li>--%>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=bill">
-                        <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa đơn
+                        <i class="fas fa-file-invoice-dollar mr-2"></i>Invoices
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'notifications' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=notify">
-                        <i class="fas fa-bell mr-2"></i>Thông báo
+                        <i class="fas fa-bell mr-2"></i>Notification
                     </a>
                 </li>
                 <li class="nav-item">
