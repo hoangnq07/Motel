@@ -34,10 +34,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-                <a href="home" class="nav-item nav-link active">Home</a>
-                <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
-                <a href="feedback.jsp" class="nav-item nav-link">Feedback</a>
-                <a href="viewNotifications" class="nav-item nav-link">Notification</a>
+                <a href="motel-rooms?action=list" class="nav-item nav-link">Danh Sách Phòng</a>
+                <a href="feedback.jsp" class="nav-item nav-link">Đánh Giá</a>
+                <a href="viewNotifications" class="nav-item nav-link">Thông Báo</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
                 <c:choose>
@@ -55,27 +54,27 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end show" aria-labelledby="userDropdown" data-bs-popper="none">
                                 <div class="message-body">
-                                    <a href="account_info.jsp" class="dropdown-item">User Profile</a>
+                                    <a href="account_info.jsp" class="dropdown-item">Trang Cá Nhân</a>
                                     <c:if test="${sessionScope.user.role == 'owner'}">
-                                        <a href="owner" class="dropdown-item">Manage Motel</a>
+                                        <a href="owner" class="dropdown-item">Quản Lý</a>
                                     </c:if>
                                     <c:if test="${sessionScope.user.role == 'admin'}">
-                                        <a href="admincheckrequest.jsp" class="dropdown-item">Authority Requests</a>
+                                        <a href="admincheckrequest.jsp" class="dropdown-item">Yêu Cầu</a>
                                     </c:if>
                                     <c:if test="${sessionScope.user.role == 'user'}">
-                                        <a href="${pageContext.request.contextPath}/checkRequest" class="dropdown-item">My requests</a>
-                                        <a href="bills.jsp" class="dropdown-item">View Bills</a>
+                                        <a href="${pageContext.request.contextPath}/checkRequest" class="dropdown-item">Yêu Cầu</a>
+                                        <a href="bills.jsp" class="dropdown-item">Hóa Đơn</a>
                                     </c:if>
-                                    <a href="favorite-rooms" class="dropdown-item">My Favorite Room</a>
-                                    <a href="change_password.jsp" class="dropdown-item">Change Password</a>
-                                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Log Out</a>
+                                    <a href="favorite-rooms" class="dropdown-item">Phòng Yêu Thích</a>
+                                    <a href="change_password.jsp" class="dropdown-item">Đổi Mật Khẩu</a>
+                                    <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Đăng Xuất</a>
                                 </div>
                             </div>
                         </li>
                     </c:when>
                     <c:otherwise>
-                        <a class="btn btn-outline-primary ms-3" href="login.jsp">Đăng nhập</a>
-                        <a class="btn btn-primary ms-3" href="registration.jsp">Đăng ký</a>
+                        <a class="btn btn-outline-primary ms-3" href="login.jsp">Đăng Nhập</a>
+                        <a class="btn btn-primary ms-3" href="registration.jsp">Đăng Ký</a>
                     </c:otherwise>
                 </c:choose>
             </div>

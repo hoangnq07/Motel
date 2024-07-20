@@ -3,9 +3,9 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Succeed!</title>
+  <title>Thành Công!</title>
 </head>
 <body>
-<h3>Invoice has been successfully created!</h3>
+<h3>Đã Tạo Hóa Đơn Thành Công!</h3>
 </body>
 </html>

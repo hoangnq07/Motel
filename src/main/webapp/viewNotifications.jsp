@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Notification</title>
+    <title>Thông Báo</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <style>
         .page{
@@ -71,7 +71,7 @@
 <body>
 <jsp:include page="header.jsp" ></jsp:include>
 <div class="container page">
-    <h1 class="mb-4">Notification</h1>
+    <h1 class="mb-4">Thông Báo</h1>
     <ul id="notificationList" class="list-group">
         <!-- Notifications will be displayed here -->
     </ul>
@@ -82,7 +82,7 @@
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="page-item"><span class="page-link" id="pageNumber">Page 1</span></li>
+            <li class="page-item"><span class="page-link" id="pageNumber">Trang 1</span></li>
             <li class="page-item">
                 <a class="page-link" href="#" aria-label="Next" onclick="nextPage()">
                     <span aria-hidden="true">&raquo;</span>

@@ -45,7 +45,7 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="mb-4 text-center">Account Role Statistics</h1>
+    <h1 class="mb-4 text-center">Thông số về Role tài khoản</h1>
     <div class="chart-container">
         <canvas id="accountRoleChart"></canvas>
     </div>
@@ -53,21 +53,21 @@
         <div class="stat-item">
             <img src="images/motel.png" alt="Motel Icon">
             <div class="stat-text">
-                <h3>Total Motels</h3>
+                <h3>Tổng số trọ/ chung cư</h3>
                 <p id="totalMotels">Loading...</p>
             </div>
         </div>
         <div class="stat-item">
             <img src="images/room.png" alt="Room Icon">
             <div class="stat-text">
-                <h3>Total Rooms</h3>
+                <h3>Tổng số phòng</h3>
                 <p id="totalRooms">Loading...</p>
             </div>
         </div>
         <div class="stat-item">
             <img src="images/renter.png" alt="Renter Icon">
             <div class="stat-text">
-                <h3>Total Renters</h3>
+                <h3>Tổng số người thuê</h3>
                 <p id="totalRenters">Loading...</p>
             </div>
         </div>

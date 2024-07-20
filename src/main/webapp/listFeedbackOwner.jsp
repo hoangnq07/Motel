@@ -6,7 +6,7 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8">
-    <title>Danh Sách Feedback</title>
+    <title>Danh Sách Đánh Giá</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <style>
         .feedback-table {
@@ -43,14 +43,14 @@
 <jsp:include page="header.jsp"></jsp:include>
 <!-- Feedback List Start -->
 <div class="container feedback-table">
-    <h3>Received Feedbacks</h3>
+    <h3>Đánh Giá Đã Nhận</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>Date</th>
-            <th>Content</th>
-            <th>Sender</th>
-            <th>Room</th>
+            <th>Ngày Nhận</th>
+            <th>Nội Dung</th>
+            <th>Người Gửi</th>
+            <th>Phòng</th>
         </tr>
         </thead>
         <tbody id="feedbackList">

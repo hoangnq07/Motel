@@ -1,11 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <div id="confirmationDialog" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background-color:white; padding:20px; border:1px solid black;">
-    <h2>Confirm Bill Details</h2>
-    <p>Electricity Index: ${param.electricityUsage}</p>
-    <p>Water Index: ${param.waterUsage}</p>
-    <p>Total Price: ${param.totalPrice}VNĐ</p>
-    <button onclick="confirmBill()">Confirm</button>
-    <button onclick="cancelBill()">Cancel</button>
+    <h2>Xác nhận thông tin về hóa đơn</h2>
+    <p>Chỉ số điện: ${param.electricityUsage}</p>
+    <p>Chỉ số nước: ${param.waterUsage}</p>
+    <p>Tổng giá: ${param.totalPrice}VNĐ</p>
+    <button onclick="confirmBill()">Xác nhận</button>
+    <button onclick="cancelBill()">Hủy</button>
 </div>
 
 <script>
@@ -17,7 +17,7 @@
             dataType: 'json',
             success: function(response) {
                 if (response.status === 'success') {
-                    alert('Bill created successfully!');
+                    alert('Bill đã tạo thành công!');
                     $('#confirmationDialog').remove();
                     // Optionally, reset the form or redirect to a new page
                 } else {
@@ -26,9 +26,9 @@
             },
             error: function(xhr, status, error) {
                 if (xhr.status === 409) {
-                    alert('Cannot create invoice: ' + xhr.responseJSON.message);
+                    alert('Không thể tạo được hóa đơn ' + xhr.responseJSON.message);
                 } else {
-                    alert('An error occurred. Please try again. Details: ' + xhr.responseText);
+                    alert('Xảy ra lỗi. Làm ơn hãy thử lại. Chi tiết: ' + xhr.responseText);
                 }
             }
         });

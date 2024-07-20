@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motel Management</title>
+    <title>Quản Lý Trọ/Chung Cư</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
@@ -85,19 +85,19 @@
 </head>
 <body>
 <div class="container">
-    <h1>Motel List</h1>
+    <h1>Danh Sách Trọ/Chung Cư</h1>
     <button type="button" class="btn btn-primary create-btn" data-toggle="modal" data-target="#addMotelModal">
-        Add New Motel
+        Thêm Mới
     </button>
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Address</th>
-            <th>Image</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>Tên</th>
+            <th>Mô tả</th>
+            <th>Địa chỉ</th>
+            <th>Ảnh</th>
+            <th>Trạng thái</th>
+            <th>Hành động</th>
         </tr>
         </thead>
         <tbody id="motelList">
@@ -118,13 +118,13 @@
                 </td>
                 <td>
                     <c:choose>
-                        <c:when test="${motel.status}">Available</c:when>
-                        <c:otherwise>Unavailable</c:otherwise>
+                        <c:when test="${motel.status}">Hoạt động</c:when>
+                        <c:otherwise>Không hoạt động</c:otherwise>
                     </c:choose>
                 </td>
                 <td class="actions">
-                    <a href="${pageContext.request.contextPath}/motel/update?id=${motel.motelId}" class="btn btn-sm btn-warning">Edit</a>
-                    <a href="${pageContext.request.contextPath}/owner?id=${motel.motelId}&page=room-list" class="btn btn-sm btn-info">Manage</a>
+                    <a href="${pageContext.request.contextPath}/motel/update?id=${motel.motelId}" class="btn btn-sm btn-warning">Chỉnh sửa</a>
+                    <a href="${pageContext.request.contextPath}/owner?id=${motel.motelId}&page=room-list" class="btn btn-sm btn-info">Quản lý</a>
                 </td>
             </tr>
         </c:forEach>
@@ -138,7 +138,7 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="addMotelModalLabel">Add New Motel</h5>
+                <h5 class="modal-title" id="addMotelModalLabel">Thêm Trọ/Chung Cư Mới</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -146,52 +146,52 @@
             <div class="modal-body">
                 <form id="addMotelForm" action="${pageContext.request.contextPath}/motel/create" method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="name">Name:</label>
+                        <label for="name">Tên:</label>
                         <input type="text" class="form-control" id="name" name="name" required>
                     </div>
                     <div class="form-group">
-                        <label for="descriptions">Descriptions:</label>
+                        <label for="descriptions">Mô Tả:</label>
                         <textarea class="form-control" id="descriptions" name="descriptions" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="province">Province:</label>
+                        <label for="province">Tỉnh:</label>
                         <select class="form-control"  id="province" name="province" onchange="updateHiddenInputs()">
                             <option value="-1">Chọn tỉnh thành</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="district">District:</label>
+                        <label for="district">Quận/Huyện:</label>
                         <select class="form-control"  id="district" name="district" onchange="updateHiddenInputs()">
                             <option value="-1">Chọn quận/huyện</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="town">Town:</label>
+                        <label for="town">Phường/Xã:</label>
                         <select class="form-control"  id="town" name="town" onchange="updateHiddenInputs()">
                             <option value="-1">Chọn phường/xã</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="detailAddress">Detail Address:</label>
+                        <label for="detailAddress">Địa chỉ:</label>
                         <input type="text" class="form-control" id="detailAddress" name="detailAddress" required>
                     </div>
                     <div class="form-group">
                         <label>Status:</label>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="status" id="statusTrue" value="true" checked>
-                            <label class="form-check-label" for="statusTrue">Available</label>
+                            <label class="form-check-label" for="statusTrue">Hoạt Động</label>
                         </div>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="status" id="statusFalse" value="false">
-                            <label class="form-check-label" for="statusFalse">Unavailable</label>
+                            <label class="form-check-label" for="statusFalse">Không Hoạt Động</label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="image">Image:</label>
+                        <label for="image">Ảnh:</label>
                         <input type="file" class="form-control-file" id="image" name="image" onchange="previewImage(event)">
                     </div>
                     <div class="form-group">
-                        <label>Image Preview:</label>
+                        <label>Xem Trước Ảnh:</label>
                         <div class="image-preview-container">
                             <img id="preview" class="img-fluid" src="#" alt="" style="display: none; max-height: 200px;">
                         </div>
@@ -201,8 +201,8 @@
                     <input type="hidden" id="townText" name="townText">
                     <input type="hidden" name="accountId" value="${user.accountId}">
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Add Motel</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary">Thêm</button>
                     </div>
                 </form>
             </div>

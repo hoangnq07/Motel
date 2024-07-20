@@ -10,7 +10,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Tenants</title>
+    <title>Thêm người thuê</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -96,18 +96,18 @@
         %>
 
         <div>
-            <h2>Current Tenants</h2>
+            <h2>Người thuê hiện tại</h2>
 
             <c:if test="${empty currentTenants}">
-                <p>This room is currently empty.</p>
+                <p>Phòng này hiện đang trống người thuê</p>
             </c:if>
             <c:if test="${not empty currentTenants}">
                 <table>
                     <tr>
-                        <th>Name</th>
+                        <th>Tên</th>
                         <th>Email</th>
-                        <th>Phone</th>
-                        <th>Rent Start Date</th>
+                        <th>Số điện thoại</th>
+                        <th>Ngày bắt đầu thuê</th>
                     </tr>
                     <c:forEach var="renter" items="${currentTenants}">
                         <tr>
@@ -121,7 +121,7 @@
             </c:if>
         </div>
 
-        <h2>Add New Tenant</h2>
+        <h2>Thêm người thuê</h2>
 
 
         <form id="searchForm">
@@ -132,8 +132,6 @@
 
         <div id="searchResults"></div>
     </div>
-
-
     </div>
 </div>
 
@@ -151,7 +149,7 @@
                 $('#searchResults').html(response);
             },
             error: function() {
-                $('#searchResults').html('<p>An error occurred while searching.</p>');
+                $('#searchResults').html('<p>Có lỗi trong quá trình tìm</p>');
             }
         });
     }

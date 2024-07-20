@@ -91,7 +91,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Reset Password</h1>
+    <h1>Đặt Lại Mật Khẩu</h1>
     <c:set var="email" value="${param.email}" />
     <c:set var="code" value="${param.code}" />
     <c:set var="verificationCodeKey" value="verificationCode_${email}" />
@@ -103,11 +103,11 @@
         <c:otherwise>
             <form action="reset-password" method="post" onsubmit="return validatePasswords();">
                 <input type="hidden" name="email" value="${email}">
-                <label for="newPassword">New Password:</label>
+                <label for="newPassword">Mật khẩu mới:</label>
                 <input type="password" id="newPassword" name="newPassword" required><br>
-                <label for="confirmPassword">Confirm Password:</label>
+                <label for="confirmPassword">Xác nhận mật khẩu:</label>
                 <input type="password" id="confirmPassword" name="confirmPassword" required><br>
-                <button type="submit">Reset Password</button>
+                <button type="submit">Đặt lại mật khẩu.</button>
             </form>
         </c:otherwise>
     </c:choose>
