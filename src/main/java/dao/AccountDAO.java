@@ -8,7 +8,9 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static context.DBcontext.getConnection;
 
@@ -489,19 +491,26 @@ public class AccountDAO {
             return false;
         }
     }
-    public static void main(String[] args) {
-        AccountDAO accountDAO = new AccountDAO();
+    public Map<String, Integer> getAccountCountsByRole() {
+        Map<String, Integer> roleCounts = new HashMap<>();
+        String sql = "SELECT role, COUNT(*) AS role_count FROM accounts GROUP BY role";
 
-        // Test case: Update role for account with ID 1
-        int testAccountId = 2;
-        boolean result = accountDAO.updateRoleAndStatus(testAccountId);
+        try (Connection conn = DBcontext.getConnection();
+                PreparedStatement statement = conn.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
 
-        // Output the result
-        if (result) {
-            System.out.println("Update role and request status successfully.");
-        } else {
-            System.out.println("Failed to update role and request status.");
+            while (resultSet.next()) {
+                String role = resultSet.getString("role");
+                int count = resultSet.getInt("role_count");
+                roleCounts.put(role, count);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle exception (e.g., log the error, rethrow, etc.)
         }
+
+        return roleCounts;
     }
     }
 

@@ -156,19 +156,70 @@ public class MotelDAO {
             stmt.executeUpdate();
         }
     }
-    public static void main(String[] args) {
-        MotelDAO dao = new MotelDAO();
-        try {
-            // Chức năng Read
-            System.out.println("Fetching all motels...");
-            List<Motel> motels = dao.getMotelsByAccountId(2);
-            for (Motel motel : motels) {
-                System.out.println(motel);
+    public int getTotalMotels() {
+        int totalMotels = 0;
+        String sql = "SELECT COUNT(*) AS total FROM motels";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                totalMotels = resultSet.getInt("total");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return totalMotels;
     }
 
+    public int getTotalRooms() {
+        int totalRooms = 0;
+        String sql = "SELECT COUNT(*) AS total FROM motel_room";
 
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                totalRooms = resultSet.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalRooms;
+    }
+
+    public int getTotalRenters() {
+        int totalRenters = 0;
+        String sql = "SELECT COUNT(*) AS total FROM renter";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement statement = conn.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            if (resultSet.next()) {
+                totalRenters = resultSet.getInt("total");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return totalRenters;
+    }
+
+    public static void main(String[] args) {
+        MotelDAO dao = new MotelDAO();
+
+        int totalMotels = dao.getTotalMotels();
+        System.out.println("Total Motels: " + totalMotels);
+
+        int totalRooms = dao.getTotalRooms();
+        System.out.println("Total Rooms: " + totalRooms);
+
+        int totalRenters = dao.getTotalRenters();
+        System.out.println("Total Renters: " + totalRenters);
+    }
 }
