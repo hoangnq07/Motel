@@ -120,13 +120,7 @@
         });
 
         $('#listFeedbackReceivedBtn').click(function() {
-            $('#listFeedbackReceivedContainer').load('listfeedbackowner.jsp', function(response, status, xhr) {
-                if (status == 'error') {
-                    $('#listFeedbackReceivedContainer').html('<div class="alert alert-danger" role="alert">Lỗi khi tải dữ liệu. Vui lòng thử lại.</div>');
-                } else {
-                    $('#listFeedbackReceivedContainer').fadeIn();
-                }
-            });
+            window.location.href = 'listFeedbackOwner.jsp'; // Thay đổi xử lý sự kiện nhấn nút để chuyển hướng
         });
 
         function toggleFeedbackTable(table, endpoint) {
