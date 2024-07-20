@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*, context.DBcontext" %>
 <%@ page import="Account.Account" %>
+<%@ page import="java.util.Enumeration" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,6 +11,21 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
+
+<%
+  Enumeration<String> attributeNames = session.getAttributeNames();
+  while (attributeNames.hasMoreElements()) {
+    String name = attributeNames.nextElement();
+  }
+
+  Integer motelId = null;
+  if (session.getAttribute("motelId") != null) {
+    motelId = (Integer) session.getAttribute("motelId");
+  } else if (session.getAttribute("currentMotelId") != null) {
+    motelId = (Integer) session.getAttribute("currentMotelId");
+  }
+%>
+
 <div class="container">
   <h2>Tạo Hóa Đơn Mới</h2>
   <form action="createBill" method="post" id="billForm">
@@ -18,14 +34,14 @@
       <select id="motelRoomId" name="motelRoomId" class="form-control" required>
         <option value="">Chọn phòng:</option>
         <%
-          Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
-          if (accountId != null) {
+          if (motelId != null) {
             try (Connection conn = DBcontext.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(
-                         "SELECT mr.motel_room_id, mr.name, mr.room_price, mr.electricity_price, mr.water_price " +
-                                 "FROM motel_room mr " +
-                                 "WHERE mr.account_id = ? AND mr.room_status = 1")) {
-              pstmt.setInt(1, accountId);
+                         "SELECT mr.motel_room_id, mr.name, mr.room_price, mr.electricity_price, mr.water_price \n" +
+                                 "FROM motel_room mr\n" +
+                                 "JOIN motels m ON mr.motel_id = m.motel_id\n" +
+                                 "WHERE m.motel_id = ? AND mr.room_status = 1")) {
+              pstmt.setInt(1, motelId);
               ResultSet rs = pstmt.executeQuery();
               while (rs.next()) {
                 out.println("<option value='" + rs.getInt("motel_room_id") + "' " +
@@ -38,7 +54,7 @@
               e.printStackTrace();
             }
           } else {
-            out.println("<option value=''>Please log in to select a room</option>");
+            out.println("<option value=''>Vui lòng đăng nhập!</option>");
           }
         %>
       </select>

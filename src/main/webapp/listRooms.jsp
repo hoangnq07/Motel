@@ -62,6 +62,16 @@
 <body class="body">
 <jsp:include page="header.jsp"></jsp:include>
 
+<%
+    String motelIdStr = request.getParameter("id");
+    if (motelIdStr != null && !motelIdStr.isEmpty()) {
+        session.setAttribute("currentMotelId", Integer.parseInt(motelIdStr));
+        out.println("<p>Debug: Motel ID " + motelIdStr + " stored in session.</p>");
+    } else {
+        out.println("<p>Debug: No motel ID found in URL.</p>");
+    }
+%>
+
 <div class="container mt-5">
     <form id="searchForm" method="GET" action="${pageContext.request.contextPath}/motel-rooms">
         <input type="hidden" name="action" value="search">
@@ -125,7 +135,7 @@
             <div class="form-group col-md-2">
                 <label for="sortDate">Sắp xếp theo thời gian:</label>
                 <select id="sortDate" name="sortDate" class="form-control">
-                    <option value="-1">Select</option>
+                    <option value="-1">Chọn</option>
                     <option value="newest" ${param.sortDate == 'newest' ? 'selected' : ''}>Mới nhất</option>
                     <option value="oldest" ${param.sortDate == 'oldest' ? 'selected' : ''}>Cũ nhất</option>
                 </select>
@@ -141,7 +151,7 @@
         <input type="hidden" id="minArea" name="minArea" value="${param.minArea}">
         <input type="hidden" id="maxArea" name="maxArea" value="${param.maxArea}">
         <div class="form-group col-md-2 align-self-end">
-            <button type="submit" class="btn btn-primary w-100">Filter</button>
+            <button type="submit" class="btn btn-primary w-100">Lọc</button>
         </div>
     </form>
     <!-- Room Listings -->
