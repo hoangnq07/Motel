@@ -10,7 +10,9 @@ import dao.MotelRoomDAO;
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet("/pending-room-requests")
 public class PendingRoomRequestsServlet extends HttpServlet {
@@ -51,7 +53,7 @@ public class PendingRoomRequestsServlet extends HttpServlet {
         response.getWriter().write(gson.toJson(new StatusResponse(success)));
     }
 
-    private void listPendingRooms(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void listPendingRooms(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int page = 1;
         int pageSize = 10;  // Set page size or retrieve from a configuration or request parameter
         if (request.getParameter("page") != null) {
@@ -61,17 +63,16 @@ public class PendingRoomRequestsServlet extends HttpServlet {
         int totalRooms = motelRoomDAO.getCountByStatus("pending");
         int totalPages = (int) Math.ceil((double) totalRooms / pageSize);
 
-        request.setAttribute("rooms", rooms);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        // Debug print
-        System.out.println("Rooms size: " + rooms.size());
-        for (MotelRoom room : rooms) {
-            System.out.println("Room ID: " + room.getMotelRoomId() + ", Description: " + room.getDescription());
-        }
+        // Create a JSON object to hold the rooms and pagination info
+        Map<String, Object> result = new HashMap<>();
+        result.put("rooms", rooms);
+        result.put("currentPage", page);
+        result.put("totalPages", totalPages);
 
-        request.getRequestDispatcher("/pendingRooms.jsp").forward(request, response);
+        response.getWriter().write(gson.toJson(result));
     }
 
     static class StatusResponse {
