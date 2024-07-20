@@ -1,13 +1,15 @@
-// RequestAuthority.java
 package model;
+
+import java.util.Date;
 
 public class RequestAuthority {
     private int requestId;
-    private String image;
+    private Date createDate;
     private String descriptions;
-    private String status;
-    private String responseDescriptions;
     private int accountId;
+    private String requestAuthorityStatus;
+    private String imageIdCard;
+    private String imageDoc;
 
     // Getters and Setters
     public int getRequestId() {
@@ -18,12 +20,12 @@ public class RequestAuthority {
         this.requestId = requestId;
     }
 
-    public String getImage() {
-        return image;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public String getDescriptions() {
@@ -34,27 +36,35 @@ public class RequestAuthority {
         this.descriptions = descriptions;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getResponseDescriptions() {
-        return responseDescriptions;
-    }
-
-    public void setResponseDescriptions(String responseDescriptions) {
-        this.responseDescriptions = responseDescriptions;
-    }
-
     public int getAccountId() {
         return accountId;
     }
 
     public void setAccountId(int accountId) {
         this.accountId = accountId;
+    }
+
+    public String getRequestAuthorityStatus() {
+        return requestAuthorityStatus;
+    }
+
+    public void setRequestAuthorityStatus(String requestAuthorityStatus) {
+        this.requestAuthorityStatus = requestAuthorityStatus;
+    }
+
+    public String getImageIdCard() {
+        return imageIdCard;
+    }
+
+    public void setImageIdCard(String imageIdCard) {
+        this.imageIdCard = imageIdCard;
+    }
+
+    public String getImageDoc() {
+        return imageDoc;
+    }
+
+    public void setImageDoc(String imageDoc) {
+        this.imageDoc = imageDoc;
     }
 }

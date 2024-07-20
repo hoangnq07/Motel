@@ -23,22 +23,16 @@
 </div>
 <!-- Spinner End -->
 
-
 <!-- Navbar Start -->
 <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
-
     <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
         <a href="home" class="navbar-brand ms-4 ms-lg-0">
             <h1 class="fw-bold text-primary mb-4">H<span class="text-secondary">O</span>ME</h1>
         </a>
-
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navbarCollapse">
-
-
             <div class="navbar-nav ms-auto p-4 p-lg-0">
                 <a href="home" class="nav-item nav-link active">Home</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Room List</a>
@@ -46,7 +40,6 @@
                 <a href="viewNotifications" class="nav-item nav-link">Notification</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
-
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
                         <li class="nav-item dropdown" style="list-style-type: none">
@@ -67,10 +60,10 @@
                                         <a href="owner" class="dropdown-item">Manage Motel</a>
                                     </c:if>
                                     <c:if test="${sessionScope.user.role == 'admin'}">
-                                        <a href="authorityRequests.jsp" class="dropdown-item">Authority Requests</a>
+                                        <a href="admincheckrequest.jsp" class="dropdown-item">Authority Requests</a>
                                     </c:if>
                                     <c:if test="${sessionScope.user.role == 'user'}">
-                                        <a href="requestAuthority.jsp" class="dropdown-item">My requests</a>
+                                        <a href="${pageContext.request.contextPath}/checkRequest" class="dropdown-item">My requests</a>
                                         <a href="bills.jsp" class="dropdown-item">View Bills</a>
                                     </c:if>
                                     <a href="favorite-rooms" class="dropdown-item">My Favorite Room</a>
@@ -85,10 +78,8 @@
                         <a class="btn btn-primary ms-3" href="registration.jsp">Đăng ký</a>
                     </c:otherwise>
                 </c:choose>
-
             </div>
         </div>
-
     </nav>
 </div>
 <!-- Navbar End -->
@@ -100,7 +91,5 @@
 <script src="${pageContext.request.contextPath}/assets/lib/easing/easing.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/lib/waypoints/waypoints.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
-
-
 </body>
 </html>

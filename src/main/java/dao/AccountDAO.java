@@ -3,11 +3,14 @@ package dao;
 import Account.Account;
 import context.DBcontext;
 import model.Feedback;
+import model.RequestAuthority;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static context.DBcontext.getConnection;
 
 public class AccountDAO {
 
@@ -17,7 +20,7 @@ public class AccountDAO {
         String QUERY = "SELECT * FROM accounts WHERE email=?";
         Account acc = null;
 
-        try (Connection conn = DBcontext.getConnection()) {
+        try (Connection conn = getConnection()) {
             try (PreparedStatement pst = conn.prepareStatement(QUERY)) {
                 pst.setString(1, email);
                 ResultSet rs = pst.executeQuery();
@@ -49,7 +52,7 @@ public class AccountDAO {
     public static Account authenticateUser(String email, String password) {
         Account user = null;
 
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(LOGIN)) {
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(LOGIN)) {
             pst.setString(1, email);
             ResultSet rs = pst.executeQuery();
 
@@ -71,7 +74,7 @@ public class AccountDAO {
         int accountId = -1; // Default value indicating not found
         String QUERY = "SELECT account_id FROM accounts WHERE email = ?";
 
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
             pst.setString(1, email);
             ResultSet rs = pst.executeQuery();
 
@@ -88,7 +91,7 @@ public class AccountDAO {
     public static boolean registerUser(Account u) {
         String QUERY = "INSERT INTO accounts (active, email, password, gender, phone, role) VALUES (1,?, ?, 1, ?, 'user')";
 
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
 
             // Mã hóa mật khẩu bằng BCrypt
             String hashedPassword = BCrypt.hashpw(u.getPassword(), BCrypt.gensalt());
@@ -106,7 +109,7 @@ public class AccountDAO {
 
     public static boolean registerGoogle(String email, String name) {
         String QUERY = "INSERT INTO accounts (active, email,fullname, gender, role) VALUES (1,?,?,1, 'user')";
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
             pst.setString(1, email);
             pst.setString(2, name);
             return pst.executeUpdate() > 0;
@@ -119,7 +122,7 @@ public class AccountDAO {
     public static boolean isEmailExist(String email) {
         String QUERY = "SELECT COUNT(*) FROM accounts WHERE email = ?";
 
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
             pst.setString(1, email);
             ResultSet rs = pst.executeQuery();
 
@@ -136,7 +139,7 @@ public class AccountDAO {
 
     public static boolean updateUser(Account user) {
         String QUERY = "UPDATE accounts SET fullname = ?, gender = ?, phone = ?, citizen_id = ?, avatar = ? ,dob =? WHERE account_id = ?";
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
             pst.setString(1, user.getFullname());
             pst.setBoolean(2, user.isGender());
             pst.setString(3, user.getPhone());
@@ -156,7 +159,7 @@ public class AccountDAO {
     public static boolean updatePassword(String email, String newPassword) {
         String QUERY = "UPDATE accounts SET password = ? WHERE email = ?";
 
-        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
 
             // Mã hóa mật khẩu mới bằng BCrypt
             String hashedPassword = BCrypt.hashpw(newPassword, BCrypt.gensalt());
@@ -181,7 +184,7 @@ public class AccountDAO {
                 "JOIN accounts a ON f.account_id = a.account_id " + // Người gửi
                 "WHERE f.tag = 'Admin';"; // Chỉ lấy feedback có tag là 'Admin'
 
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -205,7 +208,7 @@ public class AccountDAO {
                     "JOIN accounts a ON f.account_id = a.account_id " + // Người gửi
                     "WHERE f.to_user_id = ? AND a.role != 'owner';"; // Chỉ lấy feedback mà owner đã nhận
 
-            try (Connection conn = DBcontext.getConnection();
+            try (Connection conn = getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, ownerId);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -227,7 +230,7 @@ public class AccountDAO {
     public List<Account> getAllAccount() {
         List<Account> accounts = new ArrayList<>();
         String sql = "SELECT * FROM accounts WHERE role != 'admin'";
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
@@ -252,7 +255,7 @@ public class AccountDAO {
     }
     public boolean updateAccountStatus(int accountId, boolean isActive) {
         String sql = "UPDATE accounts SET active = ? WHERE account_id = ?";
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setBoolean(1, isActive);
             ps.setInt(2, accountId);
@@ -264,7 +267,7 @@ public class AccountDAO {
     }
     public Account getAccountById(int accountId){
         String sql = "SELECT * FROM accounts WHERE account_id = ?";
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, accountId);
             ResultSet rs = ps.executeQuery();
@@ -290,7 +293,7 @@ public class AccountDAO {
 
     public boolean addAccount(Account account) {
         String sql = "INSERT INTO accounts (role, phone, password,gender, citizen_id, dob, active,email,fullname) VALUES (?, ?, ?, ?, ?, ?,?,?,?)";
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, account.getRole());
             ps.setString(2, account.getPhone());
@@ -324,7 +327,7 @@ public class AccountDAO {
         }
         sql += " WHERE account_id = ?";
 
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, account.getFullname());
             ps.setBoolean(2, account.isGender());
@@ -360,7 +363,7 @@ public class AccountDAO {
         List<Account> accounts = new ArrayList<>();
         String sql = "SELECT * FROM accounts WHERE email LIKE ? OR phone LIKE ? OR citizen_id LIKE ?";
 
-        try (Connection conn = DBcontext.getConnection();
+        try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             String searchPattern = "%" + searchTerm + "%";
@@ -385,27 +388,120 @@ public class AccountDAO {
 
         return accounts;
     }
-    public static void main(String[] args) {
-        AccountDAO dao = new AccountDAO();
-        int testUserId = 13; // Thay đổi giá trị này theo ID của một người dùng trong cơ sở dữ liệu của bạn
+    public boolean submitRequestAuthority(int accountId, String descriptions, String imageIdCard, String imageDoc) {
+        String QUERY = "INSERT INTO request_authority (createdate, descriptions, account_id, request_authority_status, imageidcard, imagedoc) " +
+                "VALUES (GETDATE(), ?, ?, N'Chưa xử lý', ?, ?)";
 
-        try {
-            List<Feedback> feedbacks = dao.getFeedbacksReceivedByOwner(testUserId);
-            if (feedbacks.isEmpty()) {
-                System.out.println("Không có feedback nào được gửi đến các owner từ user này.");
-            } else {
-                System.out.println("Feedback đã gửi đến các owner:");
-                for (Feedback feedback : feedbacks) {
-                    System.out.println("Feedback ID: " + feedback.getFeedbackId());
-                    System.out.println("Feedback Text: " + feedback.getFeedbackText());
-                    System.out.println("Create Date: " + feedback.getCreateDate());
-                    System.out.println("Sender Name: " + feedback.getSenderName());
-                    System.out.println("----------------------------------------");
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Đã xảy ra lỗi khi truy xuất feedback: " + e.getMessage());
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            pst.setString(1, descriptions);
+            pst.setInt(2, accountId);
+            pst.setString(3, imageIdCard);
+            pst.setString(4, imageDoc);
+            return pst.executeUpdate() > 0;
+        } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
     }
-}
+    public List<RequestAuthority> getRequestAuthoritiesByAccountId(int accountId) {
+        List<RequestAuthority> requestAuthorities = new ArrayList<>();
+        String QUERY = "SELECT * FROM request_authority WHERE account_id = ?";
+
+        try (Connection conn = getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            pst.setInt(1, accountId);
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                RequestAuthority requestAuthority = new RequestAuthority();
+                requestAuthority.setRequestId(rs.getInt("request_authority_id"));
+                requestAuthority.setAccountId(rs.getInt("account_id"));
+                requestAuthority.setDescriptions(rs.getString("descriptions"));
+                requestAuthority.setRequestAuthorityStatus(rs.getString("request_authority_status"));
+                requestAuthority.setImageIdCard(rs.getString("imageidcard"));
+                requestAuthority.setImageDoc(rs.getString("imagedoc"));
+
+                requestAuthorities.add(requestAuthority);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return requestAuthorities;
+    }
+    public List<RequestAuthority> getPendingRequestAuthorities() {
+        List<RequestAuthority> requestAuthorities = new ArrayList<>();
+        String QUERY = "SELECT [request_authority_id], [createdate], [descriptions], [account_id], " +
+                "[request_authority_status], [imageidcard], [imagedoc] " +
+                "FROM [motel7].[dbo].[request_authority] " +
+                "WHERE [request_authority_status] = N'Chưa xử lý'";
+
+        try (Connection conn = DBcontext.getConnection(); PreparedStatement pst = conn.prepareStatement(QUERY)) {
+            ResultSet rs = pst.executeQuery();
+
+            while (rs.next()) {
+                RequestAuthority requestAuthority = new RequestAuthority();
+                requestAuthority.setRequestId(rs.getInt("request_authority_id"));
+                requestAuthority.setCreateDate(rs.getDate("createdate"));
+                requestAuthority.setDescriptions(rs.getString("descriptions"));
+                requestAuthority.setAccountId(rs.getInt("account_id"));
+                requestAuthority.setRequestAuthorityStatus(rs.getString("request_authority_status"));
+                requestAuthority.setImageIdCard(rs.getString("imageidcard"));
+                requestAuthority.setImageDoc(rs.getString("imagedoc"));
+
+                requestAuthorities.add(requestAuthority);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return requestAuthorities;
+    }
+    public boolean updateRoleAndStatus(int accountId) {
+        String updateRoleQuery = "UPDATE accounts SET role = 'owner' WHERE account_id = ?";
+        String updateStatusQuery = "UPDATE request_authority SET request_authority_status = N'Chấp nhận' WHERE account_id = ? AND TRIM(request_authority_status) = N'Chưa xử lý'";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement updateRolePst = conn.prepareStatement(updateRoleQuery);
+             PreparedStatement updateStatusPst = conn.prepareStatement(updateStatusQuery)) {
+            updateRolePst.setInt(1, accountId);
+            updateStatusPst.setInt(1, accountId);
+
+            int roleRowsUpdated = updateRolePst.executeUpdate();
+            int statusRowsUpdated = updateStatusPst.executeUpdate();
+
+            return roleRowsUpdated > 0 && statusRowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean rejectRequest(int requestId) {
+        String rejectQuery = "UPDATE request_authority SET request_authority_status = N'Bị từ chối' WHERE request_authority_id = ? AND TRIM(request_authority_status) = N'Chưa xử lý'";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement rejectPst = conn.prepareStatement(rejectQuery)) {
+            rejectPst.setInt(1, requestId);
+            int rowsUpdated = rejectPst.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static void main(String[] args) {
+        AccountDAO accountDAO = new AccountDAO();
+
+        // Test case: Update role for account with ID 1
+        int testAccountId = 2;
+        boolean result = accountDAO.updateRoleAndStatus(testAccountId);
+
+        // Output the result
+        if (result) {
+            System.out.println("Update role and request status successfully.");
+        } else {
+            System.out.println("Failed to update role and request status.");
+        }
+    }
+    }
+

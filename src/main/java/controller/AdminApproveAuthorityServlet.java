@@ -43,7 +43,7 @@ public class AdminApproveAuthorityServlet extends HttpServlet {
 
             conn.commit();
 
-            response.sendRedirect(request.getContextPath() + "/authorityRequests.jsp");
+            response.sendRedirect(request.getContextPath() + "/admincheckrequest.jsp");
 
         } catch (SQLException e) {
             if (conn != null) try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
