@@ -13,7 +13,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Profile</title>
+    <title>Cập nhật Profile cá nhân</title>
     <script>
         function validateForm() {
             const fullName = document.getElementById('fullName').value;
@@ -71,7 +71,7 @@
 
     <form action="UpdateProfileServlet" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
         <div class="mb-3">
-            <label for="fullName" class="form-label">Full Name</label>
+            <label for="fullName" class="form-label">Họ tên</label>
             <input type="text" class="form-control" id="fullName" name="fullName" value="${user.fullname}" required>
         </div>
         <div class="mb-3">
@@ -79,33 +79,33 @@
             <input type="email" class="form-control" id="email" name="email" value="${user.email}" readonly>
         </div>
         <div class="mb-3">
-            <%--@declare id="gender"--%><label for="gender">Gender</label>
+            <%--@declare id="gender"--%><label for="gender">Giới tính</label>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="gender" id="genderMale" value="1" ${user.gender ? "checked" : ""}>
-                <label class="form-check-label" for="genderMale">Male</label>
+                <label class="form-check-label" for="genderMale">Nam</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="gender" id="genderFemale" value="0" ${!user.gender ? "checked" : ""}>
-                <label class="form-check-label" for="genderFemale">Female</label>
+                <label class="form-check-label" for="genderFemale">Nữ</label>
             </div>
         </div>
         <div class="mb-3">
-            <label for="phone" class="form-label">Phone</label>
+            <label for="phone" class="form-label">Số điện thoại</label>
             <input type="text" class="form-control" id="phone" name="phone" value="${user.phone}" required>
         </div>
         <div class="mb-3">
-            <label for="dob" class="form-label">Day of Birth</label>
+            <label for="dob" class="form-label">Ngày sinh</label>
             <input type="date" class="form-control" id="dob" name="dob" value="${user.dob}" required>
         </div>
         <div class="mb-3">
-            <label for="citizen" class="form-label">Citizen ID</label>
+            <label for="citizen" class="form-label">Số CCCD</label>
             <input type="text" class="form-control" id="citizen" name="citizen" value="${user.citizenId}" required>
         </div>
         <div class="mb-3">
-            <label for="avatar" class="form-label">Avatar</label>
+            <label for="avatar" class="form-label">Ảnh Cá Nhân</label>
             <input type="file" class="form-control" id="avatar" name="avatar">
         </div>
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
     </form>
 </div>
 <jsp:include page="footer.jsp" ></jsp:include>

@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8">
-    <title>Gửi và Xem Lịch Sử Feedback</title>
+    <title>Gửi và Xem Lịch Sử Đánh Giá</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -48,34 +48,34 @@
 
 <!-- Feedback Form Start -->
 <div class="container feedback-form">
-    <h3>Gửi Feedback</h3>
+    <h3>Gửi Đánh Giá</h3>
     <div id="notificationArea" style="display: none;"></div>
     <form action="sendFeedback" method="POST">
         <div class="mb-3">
-            <label for="feedback" class="form-label">Nội dung Feedback:</label>
+            <label for="feedback" class="form-label">Nội dung:</label>
             <textarea id="feedback" name="feedback" class="form-control" rows="5" required></textarea>
         </div>
         <div class="mb-3">
             <label for="tag" class="form-label">Gửi đến:</label>
             <select id="tag" name="tag" class="form-select">
                 <c:if test="${sessionScope.user.role != 'owner'}">
-                    <option value="owner">Owner</option>
+                    <option value="owner">Người Chủ</option>
                 </c:if>
-                <option value="admin">Admin</option>
+                <option value="admin">Quản Trị Viên</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary btn-submit">Gửi Feedback</button>
+        <button type="submit" class="btn btn-primary btn-submit">Gửi</button>
     </form>
-    <button id="showHistoryBtn" class="btn btn-info btn-view">Xem Lịch Sử Feedback</button>
+    <button id="showHistoryBtn" class="btn btn-info btn-view">Xem Lịch Sử</button>
     <c:if test="${sessionScope.user.role == 'owner'}">
-        <button id="listFeedbackReceivedBtn" class="btn btn-secondary btn-view">List Feedback Received</button>
+        <button id="listFeedbackReceivedBtn" class="btn btn-secondary btn-view">Danh sách đánh giá đã nhận</button>
     </c:if>
     <table id="historyFeedbackTable" class="table table-bordered" style="display:none;">
         <thead>
         <tr>
-            <th>Ngày Gửi</th>
-            <th>Nội Dung</th>
-            <th>Người Nhận</th>
+            <th>Ngày gửi</th>
+            <th>Nội dung</th>
+            <th>Người nhận</th>
         </tr>
         </thead>
         <tbody></tbody>
@@ -104,12 +104,12 @@
                 url: 'sendFeedback',
                 data: formData,
                 success: function(response) {
-                    $('#notificationArea').html('<div class="alert alert-success" role="alert">Feedback đã được gửi thành công!</div>');
+                    $('#notificationArea').html('<div class="alert alert-success" role="alert">Đánh giá đã được gửi thành công!</div>');
                     $('#notificationArea').fadeIn();
                     $('#historyFeedbackTable').hide();
                 },
                 error: function() {
-                    $('#notificationArea').html('<div class="alert alert-danger" role="alert">Lỗi khi gửi feedback. Vui lòng thử lại.</div>');
+                    $('#notificationArea').html('<div class="alert alert-danger" role="alert">Lỗi khi gửi đánh giá. Vui lòng thử lại.</div>');
                     $('#notificationArea').fadeIn();
                 }
             });

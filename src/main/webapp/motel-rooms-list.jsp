@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Motel Room List</title>
+    <title>Danh Sách Phòng</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         table {
@@ -83,7 +83,7 @@
 
         function fetchRoomDetails(roomId) {
             if (!roomId) {
-                alert('Room ID is required');
+                alert('Phải có ID của phòng!');
                 return;
             }
 
@@ -93,7 +93,7 @@
                 .then(function(response) {
                     if (!response.ok) {
                         return response.json().then(function(errorData) {
-                            throw new Error(errorData.error || 'Unknown error occurred');
+                            throw new Error(errorData.error || 'Xảy ra lỗi không xác định!');
                         });
                     }
                     return response.json();
@@ -227,39 +227,39 @@
                     console.log('Response Data:', data); // Log response data for debugging
                     if (data.success) {
                         document.querySelector('tr[data-room-id="' + roomId + '"] .postRequestStatus').textContent = 'pending';
-                        alert('Request for posting was successful.');
+                        alert('Yêu cầu đăng phòng thành công');
                     } else {
-                        alert('Failed to request for posting.');
+                        alert('Yêu cầu đăng phòng thất bại');
                     }
                 })
                 .catch(function(error) {
                     console.error('Error:', error);
-                    alert('An error occurred while requesting for posting.');
+                    alert('Xảy ra lỗi khi yêu cầu đăng phòng');
                 });
         }
     </script>
 </head>
 <body>
 <div class="container">
-    <h2>Motel Room List</h2>
+    <h2>Danh Sách Phòng</h2>
 
-    <a href="javascript:void(0);" onclick="showForm('create');" class="btn btn-primary mb-2">Add New Room</a>
+    <a href="javascript:void(0);" onclick="showForm('create');" class="btn btn-primary mb-2">Thêm Phòng Mới</a>
     <table class="table">
         <thead>
         <tr>
-            <th>Name</th>
-            <th>Descriptions</th>
-            <th>Length</th>
-            <th>Width</th>
-            <th>Room Price</th>
-            <th>Electricity Price</th>
-            <th>Water Price</th>
-            <th>Wifi Price</th>
-            <th>Category</th>
-            <th>Image</th>
-            <th>Room Status</th>
-            <th>Actions</th>
-            <th>Post Status</th>
+            <th>Tên</th>
+            <th>Mô Tả</th>
+            <th>Chiều dài</th>
+            <th>Chiều rộng</th>
+            <th>Giá phòng</th>
+            <th>Giá điện</th>
+            <th>Giá nước</th>
+            <th>Giá Wi-fi</th>
+            <th>Phân Loại</th>
+            <th>Ảnh</th>
+            <th>Trạng Thái</th>
+            <th>Hành Động</th>
+            <th>Trạng Thái Đăng Bài</th>
         </tr>
         </thead>
         <tbody>
@@ -284,15 +284,15 @@
                 </c:choose>
                 <td class="roomStatus">
                     <c:choose>
-                        <c:when test="${room.roomStatus}">Available</c:when>
-                        <c:otherwise>Unavailable</c:otherwise>
+                        <c:when test="${room.roomStatus}">Hoạt Động</c:when>
+                        <c:otherwise>Không Hoạt Động</c:otherwise>
                     </c:choose>
                 </td>
                 <td class="actions">
-                    <a href="javascript:void(0);" onclick="showForm('edit', ${room.motelRoomId},${room.motelId});">Edit</a>
+                    <a href="javascript:void(0);" onclick="showForm('edit', ${room.motelRoomId},${room.motelId});">Chỉnh Sửa</a>
                     <!-- <a href="${pageContext.request.contextPath}/motel-rooms?action=delete&id=${room.motelRoomId}" onclick="return confirm('Are you sure?');">Delete</a> -->
-                    <a href="${pageContext.request.contextPath}/add_tenants.jsp?motel_room_id=${room.motelRoomId}">Manage</a>
-                    <a href="javascript:void(0);" onclick="requestPost(${room.motelRoomId});">Request for Posting</a>
+                    <a href="${pageContext.request.contextPath}/owner?motel_room_id=${room.motelRoomId}&&page=renter">Quản Lý</a>
+                    <a href="javascript:void(0);" onclick="requestPost(${room.motelRoomId});">Yêu Cầu Đăng Bài</a>
                 </td>
                 <td class="postRequestStatus">${room.postRequestStatus}</td>
             </tr>
@@ -310,7 +310,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="roomModalLabel">Room Form</h5>
+                    <h5 class="modal-title" id="roomModalLabel">Biểu Mẫu Phòng</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -321,42 +321,42 @@
                         <input type="hidden" name="id" id="roomId">
                         <div class="row">
                             <div class="col-md-6">
-                                <label for="name">Name:</label>
+                                <label for="name">Tên:</label>
                                 <input type="text" id="name" name="name" class="form-control" required><br>
-                                <label for="description">Description:</label>
+                                <label for="description">Mô Tả:</label>
                                 <input type="text" id="description" name="description" class="form-control"><br>
-                                <label for="length">Length:</label>
+                                <label for="length">Chiều dài:</label>
                                 <input type="number" id="length" name="length" class="form-control" step="0.01" required><br>
-                                <label for="width">Width:</label>
+                                <label for="width">Chiều rộng:</label>
                                 <input type="number" id="width" name="width" class="form-control" step="0.01" required><br>
-                                <label for="roomPrice">Room Price:</label>
+                                <label for="roomPrice">Giá phòng:</label>
                                 <input type="number" id="roomPrice" name="roomPrice" class="form-control" step="0.01" required><br>
-                                <label for="electricityPrice">Electricity Price:</label>
+                                <label for="electricityPrice">Giá điện:</label>
                                 <input type="number" id="electricityPrice" name="electricityPrice" class="form-control" step="0.01" required><br>
-                                <label for="waterPrice">Water Price:</label>
+                                <label for="waterPrice">Giá nước:</label>
                                 <input type="number" id="waterPrice" name="waterPrice" class="form-control" step="0.01" required><br>
-                                <label for="wifiPrice">Wifi Price:</label>
+                                <label for="wifiPrice">Giá Wi-Fi:</label>
                                 <input type="number" id="wifiPrice" name="wifiPrice" class="form-control" step="0.01" required><br>
-                                <label for="category">Category:</label>
+                                <label for="category">Phân Loại:</label>
                                 <select id="category" name="category" class="form-control" required></select><br>
                                 <label>Room Status:</label>
                                 <div class="radio-group">
                                     <input type="radio" id="statusTrue" name="status" value="true">
-                                    <label for="statusTrue">Available</label>
+                                    <label for="statusTrue">Hoạt Động</label>
                                     <input type="radio" id="statusFalse" name="status" value="false">
-                                    <label for="statusFalse">Unavailable</label>
+                                    <label for="statusFalse">Không Hoạt Động</label>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="images">Upload Images:</label>
+                                <label for="images">Ảnh:</label>
                                 <input type="file" id="images" name="images" class="form-control-file" multiple onchange="handleImageUpload(event)"><br>
                                 <span id="file-count-display"></span>
                                 <div id="image-previews" class="d-flex flex-wrap"></div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary">Save</button>
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Lưu</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
                         </div>
                     </form>
                 </div>

@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8">
-    <title>Danh Sách Feedback</title>
+    <title>Danh Sách Đánh Giá</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <style>
         .feedback-table {
@@ -39,14 +39,13 @@
     </style>
 </head>
 <body>
-<jsp:include page="header.jsp"></jsp:include>
 <!-- Feedback List Start -->
 <div class="container feedback-table">
-    <h3>Danh Sách Feedback Nhận Được</h3>
+    <h3>Đánh Giá Đã Nhận</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>Ngày Giờ</th>
+            <th>Ngày Nhận</th>
             <th>Nội Dung</th>
             <th>Tên Người Gửi</th>
             <th>Nhà Trọ</th>
@@ -58,8 +57,7 @@
         </tbody>
     </table>
 </div>
-<!-- Feedback List End -->
-<jsp:include page="footer.jsp"></jsp:include>
+
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

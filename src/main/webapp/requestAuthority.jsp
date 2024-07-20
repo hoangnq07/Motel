@@ -6,7 +6,7 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8">
-    <title>Request Authority</title>
+    <title>Yêu Cầu Trở Thành Người Chủ</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
@@ -34,32 +34,32 @@
 <body>
 <jsp:include page="header.jsp" />
 <div class="container">
-    <h2>Request Authority</h2>
+    <h2>Yêu Cầu Trở Thành Người Chủ</h2>
     <c:choose>
         <c:when test="${not empty requestAuthorities}">
             <c:forEach var="requestAuthority" items="${requestAuthorities}">
                 <table class="table mt-3">
                     <thead>
                     <tr>
-                        <th scope="col">Thông tin</th>
-                        <th scope="col">Chi tiết</th>
+                        <th scope="col">Thông Tin</th>
+                        <th scope="col">Chi Tiết</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Ảnh Căn cước công dân</td>
+                        <td>Ảnh CCCD</td>
                         <td><img src="<c:out value='${pageContext.request.contextPath}/${requestAuthority.imageIdCard}' />" alt="Căn cước công dân" style="max-width: 100px;"/></td>
                     </tr>
                     <tr>
-                        <td>Ảnh Giấy tờ chứng minh sở hữu nhà trọ </td>
+                        <td>Ảnh Quyền Sở Hữu</td>
                         <td><img src="<c:out value='${pageContext.request.contextPath}/${requestAuthority.imageDoc}' />" alt="Giấy tờ chứng minh" style="max-width: 100px;"/></td>
                     </tr>
                     <tr>
-                        <td>Description</td>
+                        <td>Mô Tả</td>
                         <td><c:out value="${requestAuthority.descriptions}" /></td>
                     </tr>
                     <tr>
-                        <td>Trạng thái</td>
+                        <td>Trạng Thái</td>
                         <td><c:out value="${requestAuthority.requestAuthorityStatus}" /></td>
                     </tr>
                     </tbody>
@@ -74,27 +74,27 @@
             </c:if>
             <form action="${pageContext.request.contextPath}/userRequestAuthorityServlet" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="imageidcard">Căn cước công dân:</label>
+                    <label for="imageidcard">CCCD:</label>
                     <input type="file" class="form-control-file" id="imageidcard" name="imageidcard" accept="image/*" required>
                 </div>
                 <div class="form-group">
-                    <label for="imagedoc">Giấy tờ chứng minh sở hữu nhà trọ:</label>
+                    <label for="imagedoc">Ảnh Quyền Sở Hữu:</label>
                     <input type="file" class="form-control-file" id="imagedoc" name="imagedoc" accept="image/*" required>
                 </div>
                 <div class="form-group">
-                    <label for="descriptions">Descriptions:</label>
+                    <label for="descriptions">Mô Tả:</label>
                     <textarea class="form-control" id="descriptions" name="descriptions" rows="3" required></textarea>
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="agreement" name="agreement" required>
-                    <label class="form-check-label" for="agreement">Đồng ý rằng giấy tờ của bạn đều minh bạch</label>
+                    <label class="form-check-label" for="agreement">Mọi văn bản và ảnh cung cấp đều thật và minh bạch?</label>
                 </div>
                 <div class="g-recaptcha" data-sitekey="6LcjshIqAAAAAIn5SQVQnEPk9n3Vq95RtAGP_zcG"></div>
-                <button type="submit" class="btn btn-primary">Submit Request</button>
+                <button type="submit" class="btn btn-primary">Gửi Yêu Cầu</button>
             </form>
             <% if (request.getAttribute("success") != null && (Boolean) request.getAttribute("success")) { %>
             <div class="alert alert-success mt-3" role="alert">
-                Form Submit Successful!
+                Gửi Thành Công!
             </div>
             <% } %>
         </c:otherwise>

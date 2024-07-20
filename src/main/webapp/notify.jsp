@@ -3,27 +3,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Send Notification</title>
+    <title>Gửi Thông Báo</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container mt-4">
-    <h1 class="mb-4">Send Notification</h1>
+    <h1 class="mb-4">Gửi Thông Báo</h1>
     <form id="notificationForm">
         <div class="form-group">
-            <label for="motelRoomId">Motel Room:</label>
+            <label for="motelRoomId">Phòng:</label>
             <select class="form-control" id="motelRoomId" name="motelRoomId" required>
-                <option value="all">All room</option>
+                <option value="all">Tất cả phòng</option>
                 <c:forEach var="room" items="${requestScope.rooms}">
                     <option value="${room.motelRoomId}">${room.name}</option>
                 </c:forEach>
             </select>
         </div>
         <div class="form-group">
-            <label for="message">Message:</label>
+            <label for="message">Tin nhắn:</label>
             <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Send</button>
+        <button type="submit" class="btn btn-primary mt-3">Gửi</button>
     </form>
     <br>
     <div id="statusMessage"></div>
@@ -49,7 +49,7 @@
                     $("#statusMessage").html('<div class="alert alert-info">' + response + '</div>');
                 },
                 error: function(xhr, status, error){
-                    $("#statusMessage").html('<div class="alert alert-danger">Failed to send notification: ' + xhr.responseText + '</div>');
+                    $("#statusMessage").html('<div class="alert alert-danger">Gửi thông báo không thành công: ' + xhr.responseText + '</div>');
                 }
             });
         });

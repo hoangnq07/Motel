@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owner Dashboard</title>
+    <title>Bảng Người Chủ</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <style>
@@ -42,17 +42,17 @@
             <ul class="nav flex-column">
                 <li class="nav-item">
                     <a class="nav-link " href="${pageContext.request.contextPath}/home">
-                        <i class="fas fa-home mr-2"></i>Home
+                        <i class="fas fa-home mr-2"></i>Trang Chủ
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'motel-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=motel-list">
-                        <i class="fas fa-building mr-2"></i>Quản lý Nhà trọ
+                        <i class="fas fa-building mr-2"></i>Quản lý Trọ/Chung Cư
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'room-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=room-list">
-                        <i class="fas fa-door-open mr-2"></i>Quản lý Phòng trọ
+                        <i class="fas fa-door-open mr-2"></i>Quản lý Phòng
                     </a>
                 </li>
 <%--                <li class="nav-item">--%>
@@ -62,27 +62,27 @@
 <%--                </li>--%>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=bill">
-                        <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa đơn
+                        <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa Đơn
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'notifications' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=notify">
-                        <i class="fas fa-bell mr-2"></i>Thông báo
+                        <i class="fas fa-bell mr-2"></i>Thông Báo
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'feedback' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=feedback">
-                        <i class="fas fa-comments mr-2"></i>Feedback
+                        <i class="fas fa-comments mr-2"></i>Đánh Giá
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'statics' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=statics">
-                        <i class="fas fa-chart-bar mr-2"></i>Revenue
+                        <i class="fas fa-chart-bar mr-2"></i>Doanh Thu
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/logout">
-                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                        <i class="fas fa-sign-out-alt mr-2"></i>Đăng Xuất
                     </a>
                 </li>
             </ul>

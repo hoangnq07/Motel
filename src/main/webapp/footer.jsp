@@ -2,9 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Forgot Password</title>
+    <title>Footer</title>
     <meta charset="utf-8">
-    <title>HOME</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <style>
         html, body {
@@ -46,15 +45,15 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h4 class="text-light mb-4">Address</h4>
-                <p><i class="fa fa-map-marker-alt me-3"></i>Da Nang  City, Ngu Hanh Son District</p>
+                <h4 class="text-light mb-4">Địa Chỉ</h4>
+                <p><i class="fa fa-map-marker-alt me-3"></i>Thành phố Đà Nẵng, Quận Ngũ Hành Sơn</p>
                 <p><i class="fa fa-phone-alt me-3"></i>0123456789</p>
                 <p><i class="fa fa-envelope me-3"></i>info@example.com</p>
             </div>
             <div class="col-lg-3 col-md-6">
-                <h4 class="text-light mb-4">Quick Links</h4>
-                <a class="btn btn-link" href="about.jsp">About Us</a>
-                <a class="btn btn-link" href="about.jsp">Contact Us</a>
+                <h4 class="text-light mb-4">Đường Link</h4>
+                <a class="btn btn-link" href="about.jsp">Về Chúng Mình</a>
+                <a class="btn btn-link" href="about.jsp">Liên Hệ với chúng mình</a>
             </div>
         </div>
     </div>

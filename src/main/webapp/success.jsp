@@ -3,9 +3,9 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Thành Công</title>
+  <title>Thành Công!</title>
 </head>
 <body>
-<h3>Hóa đơn đã được tạo và gửi thành công!</h3>
+<h3>Đã Tạo Hóa Đơn Thành Công!</h3>
 </body>
 </html>
