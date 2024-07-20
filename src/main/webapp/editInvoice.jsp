@@ -65,19 +65,19 @@
         Invoice invoice = (Invoice) request.getAttribute("invoice");
         String errorMessage = (String) request.getAttribute("errorMessage");
     %>
-    <h1>Edit Invoice</h1>
+    <h1>Chỉnh sửa Hóa đơn</h1>
     <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
     <p class="error"><%= errorMessage %></p>
     <% } %>
     <form action="editInvoice" method="post">
         <input type="hidden" name="invoiceId" value="<%= invoice.getInvoiceId() %>" />
-        <label>Total Price:</label>
+        <label>Tổng Giá:</label>
         <input type="text" name="totalPrice" value="<%= invoice.getTotalPrice() %>" />
-        <label>Invoice Status:</label>
+        <label>Trạng Thái Hóa Đơn:</label>
         <input type="text" name="invoiceStatus" value="<%= invoice.getInvoiceStatus() %>" />
-        <label>Electricity Index:</label>
+        <label>Chỉ số điện:</label>
         <input type="text" name="electricityIndex" value="<%= invoice.getElectricityIndex() %>" />
-        <label>Water Index:</label>
+        <label>Chỉ số nước:</label>
         <input type="text" name="waterIndex" value="<%= invoice.getWaterIndex() %>" />
         <input type="submit" value="Update" />
     </form>

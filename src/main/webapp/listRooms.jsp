@@ -8,7 +8,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Phòng Trọ</title>
+
+    <title>Danh Sách Phòng</title>
+
     <!-- Include Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -67,16 +69,20 @@
         <input type="hidden" name="action" value="search">
         <div class="row mb-3">
             <div class="col-md-10">
+
                 <input type="text" id="search" name="search" class="form-control" placeholder="Tìm kiếm theo tên..." value="${param.search}">
             </div>
             <div class="col-md-2">
                 <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+
             </div>
         </div>
 
         <div class="row">
             <div class="form-group col-md-2">
+
                 <label for="province">Tỉnh/Thành phố:</label>
+
                 <select id="province" name="province" class="form-control" onchange="updateHiddenInputs()">
                     <option value="-1">Chọn tỉnh/thành phố</option>
                     <!-- Populate with provinces -->
@@ -97,7 +103,9 @@
                 </select>
             </div>
             <div class="form-group col-md-2">
+
                 <label for="category">Loại phòng:</label>
+
                 <select id="category" name="category" class="form-control">
                     <option value="-1">Chọn loại phòng</option>
                 </select>
@@ -107,25 +115,27 @@
 
         <div class="row">
             <div class="form-group col-md-2">
-                <label for="sortPrice">Sắp xếp theo giá:</label>
+
+                <label for="sortPrice">Sắp xếp theo Giá:</label>
                 <select id="sortPrice" name="sortPrice" class="form-control">
                     <option value="-1">Chọn</option>
-                    <option value="asc" ${param.sortPrice == 'asc' ? 'selected' : ''}>Từ thấp đến cao</option>
-                    <option value="desc" ${param.sortPrice == 'desc' ? 'selected' : ''}>Từ cao đến thấp</option>
+                    <option value="asc" ${param.sortPrice == 'asc' ? 'selected' : ''}>Thấp đến Cao</option>
+                    <option value="desc" ${param.sortPrice == 'desc' ? 'selected' : ''}>Cao đến Thấp</option>
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <label for="sortArea">Sắp xếp theo diện tích:</label>
+                <label for="sortArea">Sắp xếp theo khu vực:</label>
                 <select id="sortArea" name="sortArea" class="form-control">
                     <option value="-1">Chọn</option>
-                    <option value="asc" ${param.sortArea == 'asc' ? 'selected' : ''}>Từ nhỏ đến lớn</option>
-                    <option value="desc" ${param.sortArea == 'desc' ? 'selected' : ''}>Từ lớn đến nhỏ</option>
+                    <option value="asc" ${param.sortArea == 'asc' ? 'selected' : ''}>Nhỏ đến Lớn</option>
+                    <option value="desc" ${param.sortArea == 'desc' ? 'selected' : ''}>Lớn đến Nhỏ</option>
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <label for="sortDate">Sắp xếp theo ngày:</label>
+                <label for="sortDate">Sắp xếp theo thời gian:</label>
                 <select id="sortDate" name="sortDate" class="form-control">
-                    <option value="-1">Chọn</option>
+                    <option value="-1">Select</option>
+
                     <option value="newest" ${param.sortDate == 'newest' ? 'selected' : ''}>Mới nhất</option>
                     <option value="oldest" ${param.sortDate == 'oldest' ? 'selected' : ''}>Cũ nhất</option>
                 </select>

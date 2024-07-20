@@ -43,9 +43,11 @@
 
 
             <div class="navbar-nav ms-auto p-4 p-lg-0">
+
                 <a href="home" class="nav-item nav-link active">Trang Chủ</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Danh Sách Phòng</a>
                 <a href="feedback.jsp" class="nav-item nav-link">Phản Hồi</a>
+
                 <a href="viewNotifications" class="nav-item nav-link">Thông Báo</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
@@ -65,18 +67,20 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end show" aria-labelledby="userDropdown" data-bs-popper="none">
                                 <div class="message-body">
-                                    <a href="account_info.jsp" class="dropdown-item">Thông Tin Người Dùng</a>
+
+                                    <a href="account_info.jsp" class="dropdown-item">Trang Cá Nhân</a>
                                     <c:if test="${sessionScope.user.role == 'owner'}">
-                                        <a href="owner" class="dropdown-item">Quản Lý Phòng</a>
+                                        <a href="owner" class="dropdown-item">Quản Lý</a>
                                     </c:if>
                                     <c:if test="${sessionScope.user.role == 'admin'}">
-                                        <a href="authorityRequests.jsp" class="dropdown-item">Yêu Cầu Quyền Hạn</a>
+                                        <a href="admincheckrequest.jsp" class="dropdown-item">Yêu Cầu</a>
                                     </c:if>
                                     <c:if test="${sessionScope.user.role == 'user'}">
-                                        <a href="requestAuthority.jsp" class="dropdown-item">Yêu Cầu Của Tôi</a>
-                                        <a href="bills.jsp" class="dropdown-item">Xem Hóa Đơn</a>
+                                        <a href="${pageContext.request.contextPath}/checkRequest" class="dropdown-item">Yêu Cầu</a>
+                                        <a href="bills.jsp" class="dropdown-item">Hóa Đơn</a>
                                     </c:if>
-                                    <a href="favorite-rooms" class="dropdown-item">Phòng Yêu Thích Của Tôi</a>
+                                    <a href="favorite-rooms" class="dropdown-item">Phòng Yêu Thích</a>
+
                                     <a href="change_password.jsp" class="dropdown-item">Đổi Mật Khẩu</a>
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Đăng Xuất</a>
                                 </div>

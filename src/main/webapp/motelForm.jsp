@@ -2,7 +2,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>${motel == null ? "Create New Motel" : "Edit Motel"}</title>
+    <title>${motel == null ? "Tạo Mới" : "Chỉnh Sửa"}</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -107,47 +107,47 @@
 </head>
 <body>
 <div class="container h-100">
-    <h1>${motel == null ? "Create New Motel" : "Edit Motel"}</h1>
+    <h1>${motel == null ? "Tạo Trọ/Chung Cư Mới" : "Chỉnh Sửa"}</h1>
     <form action="/Project/motel/${motel == null ? 'create' : 'update'}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="id" value="${motel.motelId}" />
-        <label for="name">Name:</label>
+        <label for="name">Tên:</label>
         <input type="text" id="name" name="name" value="${motel.name}" />
 
-        <label for="descriptions">Descriptions:</label>
+        <label for="descriptions">Mô Tả:</label>
         <input class="textarea" type="text" id="descriptions" name="descriptions" value="${motel.descriptions}" />
-        <label for="province">Province:</label>
+        <label for="province">Tỉnh:</label>
         <select id="province" name="province" onchange="updateHiddenInputs()">
             <option value="-1">Chọn tỉnh thành</option>
         </select>
-        <label for="district">District:</label>
+        <label for="district">Quận/Huyện:</label>
         <select id="district" name="district" onchange="updateHiddenInputs()">
             <option value="-1">Chọn quận/huyện</option>
         </select>
-        <label for="town">Town:</label>
+        <label for="town">Phường/Xã:</label>
         <select id="town" name="town" onchange="updateHiddenInputs()">
             <option value="-1">Chọn phường/xã</option>
         </select>
 
-        <label for="detailAddress">Detail Address:</label>
+        <label for="detailAddress">Địa Chỉ:</label>
         <input type="text" id="detailAddress" name="detailAddress" value="${motel.detailAddress}" />
 
-        <label>Status:</label>
+        <label>Trạng Thái:</label>
         <div class="radio-group">
             <input type="radio" id="statusTrue" name="status" value="true" ${motel.status ? "checked" : ""}>
-            <label for="statusTrue">Available</label>
+            <label for="statusTrue">Hoạt Động</label>
 
             <input type="radio" id="statusFalse" name="status" value="false" ${!motel.status ? "checked" : ""}>
-            <label for="statusFalse">Unavailable</label>
+            <label for="statusFalse">Không Hoạt Động</label>
         </div>
 
         <div class="row">
             <div class="col-md-6">
-                <label for="image">Image:</label>
+                <label for="image">Ảnh:</label>
                 <input type="file" class="form-control" id="image" name="image" onchange="previewImage(event)">
             </div>
             <div class="col-md-6">
                 <div >
-                    <label>Image Preview:</label>
+                    <label>Xem trước Ảnh:</label>
                     <div class="image-preview-container">
                         <img id="preview" class="image-preview" src="#" alt="" style="display: none;">
                     </div>
@@ -159,9 +159,9 @@
         <input type="hidden" id="districtText" name="districtText" value="">
         <input type="hidden" id="townText" name="townText" value="">
         <input type="hidden" name="accountId" value="${user.accountId}" />
-        <input type="submit" value="${motel == null ? 'Create' : 'Update'}" />
+        <input type="submit" value="${motel == null ? 'Tạo' : 'Cập Nhật'}" />
     </form>
-    <a href="/Project/owner">Back to List</a>
+    <a href="/Project/owner">Quay lại Danh Sách</a>
 </div>
 <!-- Optional JavaScript -->
 <script>

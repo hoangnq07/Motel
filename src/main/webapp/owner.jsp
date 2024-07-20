@@ -54,12 +54,12 @@
         <div class="col-md-2 sidebar">
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a class="nav-link" href="home"><i class="fas fa-home"></i> Home</a>
+                    <a class="nav-link" href="home"><i class="fas fa-home"></i>Trang Chủ</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" data-target="motel-management"><i class="fas fa-building"></i> Quản lý Nhà trọ</a>
+                    <a class="nav-link active" href="#" data-target="motel-management"><i class="fas fa-building"></i>Quản lý Nhà trọ</a>
                 </li>
-                    <a class="nav-link" href="logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a class="nav-link" href="logout"><i class="fas fa-sign-out-alt"></i>Đăng Xuất</a>
                 </li>
                
             </ul>

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>Bảng Điều Khiển</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -37,14 +37,14 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="mt-5">Dashboard</h1>
+    <h1 class="mt-5">Bảng Điều Khiển</h1>
     <div class="row">
         <div class="col-md-4">
             <div class="dashboard-card bg-info text-white">
                 <div class="card-icon">
                     <i class="fas fa-users"></i>
                 </div>
-                <div class="card-title">Renters</div>
+                <div class="card-title">Người Thuê</div>
                 <div class="card-value" id="rentersCount">0</div>
             </div>
         </div>
@@ -53,7 +53,7 @@
                 <div class="card-icon">
                     <i class="fas fa-home"></i>
                 </div>
-                <div class="card-title">Motels</div>
+                <div class="card-title">Trọ/ chung cư</div>
                 <div class="card-value" id="motelsCount">0</div>
             </div>
         </div>
@@ -62,7 +62,7 @@
                 <div class="card-icon">
                     <i class="fas fa-door-open"></i>
                 </div>
-                <div class="card-title">Rooms</div>
+                <div class="card-title">Phòng</div>
                 <div class="card-value" id="roomsCount">0</div>
             </div>
         </div>

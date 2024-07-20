@@ -26,7 +26,9 @@
 <body class="body">
 <jsp:include page="header.jsp" />
 <div class="container">
+
     <h1>Chi Tiết Phòng</h1>
+
     <div class="row">
         <div class="col-md-6">
             <!-- Carousel -->
@@ -49,21 +51,25 @@
                 </a>
                 <a class="carousel-control-next" href="#roomImagesCarousel" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
+
                     <span class="sr-only">Tiếp</span>
+
                 </a>
             </div>
         </div>
         <div class="col-md-6">
             <h3>${room.description}</h3>
-            <p><strong>Loại Phòng:</strong> ${room.category}</p>
-            <p><strong>Giá Phòng:</strong> ${room.roomPrice} triệu/tháng</p>
+
+            <p><strong>Phân Loại:</strong> ${room.category}</p>
+            <p><strong>Giá Phòng:</strong> ${room.roomPrice} Triệu/tháng</p>
             <p><strong>Chiều Dài:</strong> ${room.length} m</p>
             <p><strong>Chiều Rộng:</strong> ${room.width} m</p>
-            <p><strong>Giá Điện:</strong> ${room.electricityPrice} mỗi đơn vị</p>
-            <p><strong>Giá Nước:</strong> ${room.waterPrice} mỗi đơn vị</p>
-            <p><strong>Giá WiFi:</strong> ${room.wifiPrice}</p>
-            <p><strong>Tên Chủ Phòng:</strong> ${room.accountFullname}</p>
-            <p><strong>Số Điện Thoại Chủ Phòng:</strong> ${room.accountPhone}</p>
+            <p><strong>Giá Điện:</strong> ${room.electricityPrice} per unit</p>
+            <p><strong>Giá Nước:</strong> ${room.waterPrice} per unit</p>
+            <p><strong>Giá Wi-Fi:</strong> ${room.wifiPrice}</p>
+            <p><strong>Người Chủ:</strong> ${room.accountFullname}</p>
+            <p><strong>Số Điện Thoại:</strong> ${room.accountPhone}</p>
+
             <p><strong>Địa Chỉ:</strong> ${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
         </div>
     </div>

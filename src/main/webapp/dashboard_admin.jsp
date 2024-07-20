@@ -5,7 +5,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bảng Điều Khiển Quản Trị</title>
+
+
+    <title>Bảng Admin</title>
+
     <link rel="shortcut icon" type="image/png" href="./assets1/images/logos/favicon.png"/>
     <link rel="stylesheet" href="./assets1/css/styles.min.css"/>
 </head>
@@ -40,7 +43,9 @@
                                 <span>
                                     <i class="ti ti-user"></i>
                                 </span>
+
                             <span class="hide-menu">Tài Khoản</span>
+
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -48,7 +53,9 @@
                                 <span>
                                     <i class="ti ti-message"></i>
                                 </span>
+
                             <span class="hide-menu">Phản Hồi</span>
+
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -56,7 +63,9 @@
                             <span class="icon">
                                 <i class="ti ti-user"></i>
                             </span>
+
                             <span>Yêu Cầu</span>
+
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -64,6 +73,7 @@
                             <span class="icon">
                                 <i class="ti ti-chart-bar"></i>
                             </span>
+
                             <span>Thống Kê</span>
                         </a>
                     </li>
@@ -72,6 +82,7 @@
         <span>
             <i class="ti ti-file"></i>
         </span>
+
                             <span class="hide-menu">Yêu Cầu Đăng Bài</span>
                         </a>
                     </li>
@@ -106,11 +117,13 @@
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
                                 <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-user fs-6"></i>
-                                    <p>Hồ Sơ Của Tôi</p>
+
+                                    <p>Trang cá nhân</p>
                                 </a>
                                 <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-mail fs-6"></i>
-                                    <p>Đổi Mật Khẩu</p>
+                                    <p>Đổi mật khẩu</p>
+
                                 </a>
                                 <a href="logout" class="btn btn-outline-primary mx-3 mt-2">Đăng Xuất</a>
                             </div>
@@ -138,13 +151,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+
                 <h5 class="modal-title">Thêm Tài Khoản Mới</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+
             </div>
             <div class="modal-body">
                 <form id="add-account-form">
                     <div class="mb-3">
+
                         <label for="fullname" class="form-label">Họ Và Tên</label>
+
                         <input type="text" class="form-control" id="fullname" required>
                     </div>
                     <div class="mb-3">
@@ -171,12 +188,15 @@
                             <option value="false">Nữ</option>
                         </select>
                     </div>
-                    <div class="mb-3">
+
                         <label for="role" class="form-label">Vai Trò</label>
                         <select class="form-select" id="role" required>
                             <option value="">Chọn vai trò</option>
                             <option value="user">Người Dùng</option>
                             <option value="owner">Chủ</option>
+
+                       
+
                         </select>
                     </div>
                     <div class="mb-3">
@@ -185,14 +205,19 @@
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="active" checked>
-                        <label class="form-check-label" for="active">Kích Hoạt</label>
+
+                        <label class="form-check-label" for="active">Hoạt Động</label>
+
                     </div>
                 </form>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" id="save-account">Lưu Tài Khoản</button>
+
+
+                <button type="button" class="btn btn-primary" id="save-account">Lưu</button>
+
             </div>
         </div>
     </div>
