@@ -41,17 +41,17 @@
                 <table class="table mt-3">
                     <thead>
                     <tr>
-                        <th scope="col">Thông tin</th>
-                        <th scope="col">Chi tiết</th>
+                        <th scope="col">Information</th>
+                        <th scope="col">Details</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr>
-                        <td>Ảnh Căn cước công dân</td>
+                        <td>Citizen ID Image</td>
                         <td><img src="<c:out value='${pageContext.request.contextPath}/${requestAuthority.imageIdCard}' />" alt="Căn cước công dân" style="max-width: 100px;"/></td>
                     </tr>
                     <tr>
-                        <td>Ảnh Giấy tờ chứng minh sở hữu nhà trọ </td>
+                        <td>Accommodation Ownership Image</td>
                         <td><img src="<c:out value='${pageContext.request.contextPath}/${requestAuthority.imageDoc}' />" alt="Giấy tờ chứng minh" style="max-width: 100px;"/></td>
                     </tr>
                     <tr>
@@ -59,7 +59,7 @@
                         <td><c:out value="${requestAuthority.descriptions}" /></td>
                     </tr>
                     <tr>
-                        <td>Trạng thái</td>
+                        <td>Status</td>
                         <td><c:out value="${requestAuthority.requestAuthorityStatus}" /></td>
                     </tr>
                     </tbody>
@@ -74,11 +74,11 @@
             </c:if>
             <form action="${pageContext.request.contextPath}/userRequestAuthorityServlet" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="imageidcard">Căn cước công dân:</label>
+                    <label for="imageidcard">Citizen ID:</label>
                     <input type="file" class="form-control-file" id="imageidcard" name="imageidcard" accept="image/*" required>
                 </div>
                 <div class="form-group">
-                    <label for="imagedoc">Giấy tờ chứng minh sở hữu nhà trọ:</label>
+                    <label for="imagedoc">Accommodation Ownership Image:</label>
                     <input type="file" class="form-control-file" id="imagedoc" name="imagedoc" accept="image/*" required>
                 </div>
                 <div class="form-group">
@@ -87,7 +87,7 @@
                 </div>
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" id="agreement" name="agreement" required>
-                    <label class="form-check-label" for="agreement">Đồng ý rằng giấy tờ của bạn đều minh bạch</label>
+                    <label class="form-check-label" for="agreement">Agree that all of your documents are genuine?</label>
                 </div>
                 <div class="g-recaptcha" data-sitekey="6LcjshIqAAAAAIn5SQVQnEPk9n3Vq95RtAGP_zcG"></div>
                 <button type="submit" class="btn btn-primary">Submit Request</button>

@@ -48,15 +48,15 @@
 
 <!-- Feedback Form Start -->
 <div class="container feedback-form">
-    <h3>Gửi Feedback</h3>
+    <h3>Send Feedback</h3>
     <div id="notificationArea" style="display: none;"></div>
     <form action="sendFeedback" method="POST">
         <div class="mb-3">
-            <label for="feedback" class="form-label">Nội dung Feedback:</label>
+            <label for="feedback" class="form-label">Feedback Content:</label>
             <textarea id="feedback" name="feedback" class="form-control" rows="5" required></textarea>
         </div>
         <div class="mb-3">
-            <label for="tag" class="form-label">Gửi đến:</label>
+            <label for="tag" class="form-label">Send to:</label>
             <select id="tag" name="tag" class="form-select">
                 <c:if test="${sessionScope.user.role != 'owner'}">
                     <option value="owner">Owner</option>
@@ -64,18 +64,18 @@
                 <option value="admin">Admin</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary btn-submit">Gửi Feedback</button>
+        <button type="submit" class="btn btn-primary btn-submit">Send</button>
     </form>
-    <button id="showHistoryBtn" class="btn btn-info btn-view">Xem Lịch Sử Feedback</button>
+    <button id="showHistoryBtn" class="btn btn-info btn-view">View History</button>
     <c:if test="${sessionScope.user.role == 'owner'}">
-        <button id="listFeedbackReceivedBtn" class="btn btn-secondary btn-view">List Feedback Received</button>
+        <button id="listFeedbackReceivedBtn" class="btn btn-secondary btn-view">List of Received Feedback</button>
     </c:if>
     <table id="historyFeedbackTable" class="table table-bordered" style="display:none;">
         <thead>
         <tr>
-            <th>Ngày Gửi</th>
-            <th>Nội Dung</th>
-            <th>Người Nhận</th>
+            <th>Send Date</th>
+            <th>Content</th>
+            <th>Receiver</th>
         </tr>
         </thead>
         <tbody></tbody>
