@@ -51,7 +51,7 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="./authorityRequests.jsp">
+                        <a class="sidebar-link" href="admincheckrequest.jsp">
                             <span class="icon">
                                 <i class="ti ti-user"></i>
                             </span>
