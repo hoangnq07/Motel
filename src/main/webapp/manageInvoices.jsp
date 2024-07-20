@@ -108,7 +108,7 @@
         <%
                     }
                     if (!hasRows) {
-                        out.println("<tr><td colspan='6'>Không tìm thấy hóa đơn nào cho Motel ID này.</td></tr>");
+                        out.println("<tr><td colspan='6'>Không tìm thấy hóa đơn nào cho phòng này!</td></tr>");
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();

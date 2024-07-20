@@ -5,6 +5,7 @@ import model.Invoice;
 import context.DBcontext;
 import java.sql.*;
 import java.util.Date;
+import java.util.Calendar;
 
 public class InvoiceService {
     public Invoice createInvoice(int motelRoomId, String invoiceStatus, float electricityIndex, float waterIndex) throws SQLException {
@@ -19,9 +20,15 @@ public class InvoiceService {
             InvoiceDAO invoiceDAO = new InvoiceDAO();
             Invoice latestInvoice = invoiceDAO.getLatestInvoiceForRoom(motelRoomId);
 
+
             if (latestInvoice != null) {
+                Date latestEndDate = latestInvoice.getEndDate();
                 if (electricityIndex <= latestInvoice.getElectricityIndex() || waterIndex <= latestInvoice.getWaterIndex()) {
-                    throw new IllegalArgumentException("New electricity and water indexes must be greater than the previous ones.");
+                    throw new IllegalArgumentException("Chỉ số điện hay nước phải lớn hơn so với hóa đơn trước!");
+                }
+
+                if (currentDate.before(latestEndDate)) {
+                    throw new IllegalStateException("Không thể tạo hóa đơn mới khi mà hóa đơn trước của phòng chưa hết hạn!");
                 }
             }
 
@@ -60,13 +67,19 @@ public class InvoiceService {
             if (renterId == -1) {
                 throw new SQLException("No renter found for the specified room.");
             }
-            Date endDate = new Date();
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(currentDate);
+            calendar.add(Calendar.MONTH, 1);
+            Date endDate = calendar.getTime();
+
+
             // Insert into Invoice table
             String insertInvoiceSQL = "INSERT INTO dbo.invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (?, ?, ?, ?, ?, ?)";
             int invoiceId;
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertInvoiceSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setDate(1, new java.sql.Date(currentDate.getTime()));
-                preparedStatement.setDate(2, new java.sql.Date(new Date().getTime()));
+                preparedStatement.setDate(2, new java.sql.Date(endDate.getTime()));
                 preparedStatement.setFloat(3, totalPrice);
                 preparedStatement.setString(4, invoiceStatus);
                 preparedStatement.setInt(5, renterId);

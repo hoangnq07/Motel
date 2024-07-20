@@ -8,6 +8,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tạo Hóa Đơn Mới</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
@@ -98,10 +99,59 @@
       $('#totalPriceHidden').val(totalPrice.toFixed(2));
     });
 
-    // Đổi giá trị của phòng khi chọn lại
     $('#motelRoomId').change(function() {
       $('#electricityUsage, #waterUsage').trigger('change');
     });
+
+    $('#billForm').submit(function(e) {
+      e.preventDefault();
+
+      $.ajax({
+        url: 'createBill',
+        type: 'POST',
+        data: $(this).serialize(),
+        dataType: 'json',
+        success: function(response) {
+          if (response.success) {
+            Swal.fire({
+              title: 'Thành công!',
+              text: 'Hóa đơn đã được tạo thành công! ID: ' + response.invoiceId,
+              icon: 'success'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                $('#billForm')[0].reset();
+                // Optionally, redirect to another page
+              }
+            });
+          } else if (response.error) {
+            showErrorMessage(response.error);
+          }
+        },
+        error: function(xhr, status, error) {
+          let errorMessage = 'Đã xảy ra lỗi. Vui lòng thử lại.';
+
+          try {
+            const responseJson = JSON.parse(xhr.responseText);
+            if (responseJson && responseJson.message) {
+              errorMessage = responseJson.message.replace(/^Unexpected error:\s*/, '');
+            }
+          } catch (e) {
+            console.error('Error parsing JSON response:', e);
+          }
+
+          showErrorMessage(errorMessage);
+        }
+      });
+    });
+
+    function showErrorMessage(message) {
+      Swal.fire({
+        title: 'Lỗi!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'Đóng'
+      });
+    }
   });
 </script>
 </body>
