@@ -5,7 +5,7 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8">
-    <title>HOME</title>
+    <title>Trang Chủ</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,22 +23,35 @@
 </div>
 <!-- Spinner End -->
 
+
 <!-- Navbar Start -->
 <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
+
     <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
         <a href="home" class="navbar-brand ms-4 ms-lg-0">
-            <h1 class="fw-bold text-primary mb-4">H<span class="text-secondary">O</span>ME</h1>
+            <a href="home" class="navbar-brand ms-4 ms-lg-0" >
+                <img src="${pageContext.request.contextPath}/logo/logo.png" alt="Logo" class="logo" width="auto" height="50">
+            </a>
+
         </a>
+
         <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarCollapse">
+
+
             <div class="navbar-nav ms-auto p-4 p-lg-0">
+
+                <a href="home" class="nav-item nav-link active">Trang Chủ</a>
                 <a href="motel-rooms?action=list" class="nav-item nav-link">Danh Sách Phòng</a>
-                <a href="feedback.jsp" class="nav-item nav-link">Đánh Giá</a>
+                <a href="feedback.jsp" class="nav-item nav-link">Phản Hồi</a>
+
                 <a href="viewNotifications" class="nav-item nav-link">Thông Báo</a>
             </div>
             <div class="d-none d-lg-flex ms-2">
+
                 <c:choose>
                     <c:when test="${not empty sessionScope.user}">
                         <li class="nav-item dropdown" style="list-style-type: none">
@@ -54,6 +67,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-end show" aria-labelledby="userDropdown" data-bs-popper="none">
                                 <div class="message-body">
+
                                     <a href="account_info.jsp" class="dropdown-item">Trang Cá Nhân</a>
                                     <c:if test="${sessionScope.user.role == 'owner'}">
                                         <a href="owner" class="dropdown-item">Quản Lý</a>
@@ -66,6 +80,7 @@
                                         <a href="bills.jsp" class="dropdown-item">Hóa Đơn</a>
                                     </c:if>
                                     <a href="favorite-rooms" class="dropdown-item">Phòng Yêu Thích</a>
+
                                     <a href="change_password.jsp" class="dropdown-item">Đổi Mật Khẩu</a>
                                     <a href="logout" class="btn btn-outline-primary mx-3 mt-2 d-block">Đăng Xuất</a>
                                 </div>
@@ -77,8 +92,10 @@
                         <a class="btn btn-primary ms-3" href="registration.jsp">Đăng Ký</a>
                     </c:otherwise>
                 </c:choose>
+
             </div>
         </div>
+
     </nav>
 </div>
 <!-- Navbar End -->
@@ -90,5 +107,7 @@
 <script src="${pageContext.request.contextPath}/assets/lib/easing/easing.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/lib/waypoints/waypoints.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
+
+
 </body>
 </html>
