@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Room Details</title>
+    <title>Chi Tiết Phòng</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         .body {
@@ -26,7 +26,7 @@
 <body class="body">
 <jsp:include page="header.jsp" />
 <div class="container">
-    <h1>Room Details</h1>
+    <h1>Chi Tiết Phòng</h1>
     <div class="row">
         <div class="col-md-6">
             <!-- Carousel -->
@@ -34,37 +34,37 @@
                 <div class="carousel-inner">
                     <c:if test="${empty images}">
                         <div class="carousel-item active">
-                            <img src="${pageContext.request.contextPath}/images/default-room.jpg" class="d-block" alt="Room Image" style="width: 700px; height: 500px;">
+                            <img src="${pageContext.request.contextPath}/images/default-room.jpg" class="d-block" alt="Hình Ảnh Phòng" style="width: 700px; height: 500px;">
                         </div>
                     </c:if>
                     <c:forEach var="image" items="${images}" varStatus="status">
                         <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                            <img src="${pageContext.request.contextPath}/images/${image}" class="d-block" alt="Room Image" style="width: 700px; height: 500px;">
+                            <img src="${pageContext.request.contextPath}/images/${image}" class="d-block" alt="Hình Ảnh Phòng" style="width: 700px; height: 500px;">
                         </div>
                     </c:forEach>
                 </div>
                 <a class="carousel-control-prev" href="#roomImagesCarousel" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
+                    <span class="sr-only">Trước</span>
                 </a>
                 <a class="carousel-control-next" href="#roomImagesCarousel" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
+                    <span class="sr-only">Tiếp</span>
                 </a>
             </div>
         </div>
         <div class="col-md-6">
             <h3>${room.description}</h3>
-            <p><strong>Category:</strong> ${room.category}</p>
-            <p><strong>Room Price:</strong> ${room.roomPrice} triệu/tháng</p>
-            <p><strong>Length:</strong> ${room.length} m</p>
-            <p><strong>Width:</strong> ${room.width} m</p>
-            <p><strong>Electricity Price:</strong> ${room.electricityPrice} per unit</p>
-            <p><strong>Water Price:</strong> ${room.waterPrice} per unit</p>
-            <p><strong>WiFi Price:</strong> ${room.wifiPrice}</p>
-            <p><strong>Owner's Name:</strong> ${room.accountFullname}</p>
-            <p><strong>Owner's Phone:</strong> ${room.accountPhone}</p>
-            <p><strong>Address:</strong> ${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
+            <p><strong>Loại Phòng:</strong> ${room.category}</p>
+            <p><strong>Giá Phòng:</strong> ${room.roomPrice} triệu/tháng</p>
+            <p><strong>Chiều Dài:</strong> ${room.length} m</p>
+            <p><strong>Chiều Rộng:</strong> ${room.width} m</p>
+            <p><strong>Giá Điện:</strong> ${room.electricityPrice} mỗi đơn vị</p>
+            <p><strong>Giá Nước:</strong> ${room.waterPrice} mỗi đơn vị</p>
+            <p><strong>Giá WiFi:</strong> ${room.wifiPrice}</p>
+            <p><strong>Tên Chủ Phòng:</strong> ${room.accountFullname}</p>
+            <p><strong>Số Điện Thoại Chủ Phòng:</strong> ${room.accountPhone}</p>
+            <p><strong>Địa Chỉ:</strong> ${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
         </div>
     </div>
 </div>
