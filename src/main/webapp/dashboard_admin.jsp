@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard</title>
+    <title>Bảng Admin</title>
     <link rel="shortcut icon" type="image/png" href="./assets1/images/logos/favicon.png"/>
     <link rel="stylesheet" href="./assets1/css/styles.min.css"/>
 </head>
@@ -31,7 +31,7 @@
                                 <span>
                                     <i class="ti ti-layout-dashboard"></i>
                                 </span>
-                            <span class="hide-menu">Dashboard</span>
+                            <span class="hide-menu">Bảng Điều Khiển</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -39,7 +39,7 @@
                                 <span>
                                     <i class="ti ti-user"></i>
                                 </span>
-                            <span class="hide-menu">Accounts</span>
+                            <span class="hide-menu">Tài khoản</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -47,7 +47,7 @@
                                 <span>
                                     <i class="ti ti-message"></i>
                                 </span>
-                            <span class="hide-menu">Feedback</span>
+                            <span class="hide-menu">Nhận xét</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -55,7 +55,7 @@
                             <span class="icon">
                                 <i class="ti ti-user"></i>
                             </span>
-                            <span>Request</span>
+                            <span>Yêu cầu</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -63,7 +63,7 @@
                             <span class="icon">
                                 <i class="ti ti-chart-bar"></i>
                             </span>
-                            <span>Statistics</span>
+                            <span>Thông số</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -71,7 +71,7 @@
                             <span>
                                 <i class="ti ti-file"></i>
                             </span>
-                            <span class="hide-menu">Posting Requests</span>
+                            <span class="hide-menu">Yêu Cầu Đăng Bài</span>
                         </a>
                     </li>
                 </ul>
@@ -104,13 +104,13 @@
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
                                 <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-user fs-6"></i>
-                                    <p>My Profile</p>
+                                    <p>Trang cá nhân</p>
                                 </a>
                                 <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-mail fs-6"></i>
-                                    <p>Change password</p>
+                                    <p>Đổi mật khẩu</p>
                                 </a>
-                                <a href="logout" class="btn btn-outline-primary mx-3 mt-2">Logout</a>
+                                <a href="logout" class="btn btn-outline-primary mx-3 mt-2">Đăng Xuất</a>
                             </div>
                         </li>
                     </ul>
@@ -136,13 +136,13 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Add New Account</h5>
+                <h5 class="modal-title">Tạo tài khoản mới</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id="add-account-form">
                     <div class="mb-3">
-                        <label for="fullname" class="form-label">Full Name</label>
+                        <label for="fullname" class="form-label">Họ Tên</label>
                         <input type="text" class="form-control" id="fullname" required>
                     </div>
                     <div class="mb-3">
@@ -150,47 +150,47 @@
                         <input type="email" class="form-control" id="email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="phone" class="form-label">Phone</label>
+                        <label for="phone" class="form-label">Số Điện Thoại</label>
                         <input type="tel" class="form-control" id="phone" required>
                     </div>
                     <div class="mb-3">
-                        <label for="dob" class="form-label">Date of Birth</label>
+                        <label for="dob" class="form-label">Ngày Sinh</label>
                         <input type="date" class="form-control" id="dob" required>
                     </div>
                     <div class="mb-3">
-                        <label for="citizenId" class="form-label">Citizen ID</label>
+                        <label for="citizenId" class="form-label">CCCD</label>
                         <input type="text" class="form-control" id="citizenId" required>
                     </div>
                     <div class="mb-3">
-                        <label for="gender" class="form-label">Gender</label>
+                        <label for="gender" class="form-label">Giới Tính</label>
                         <select class="form-select" id="gender" required>
-                            <option value="">Select gender</option>
-                            <option value="true">Male</option>
-                            <option value="false">Female</option>
+                            <option value="">Chọn giới tính</option>
+                            <option value="true">Nam</option>
+                            <option value="false">Nữ</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="role" class="form-label">Role</label>
+                        <label for="role" class="form-label">Vai trò</label>
                         <select class="form-select" id="role" required>
-                            <option value="">Select a role</option>
-                            <option value="user">User</option>
-                            <option value="owner">Owner</option>
+                            <option value="">Chọn vai trò</option>
+                            <option value="user">Người Dùng</option>
+                            <option value="owner">Người Chủ</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
+                        <label for="password" class="form-label">Mật Khẩu</label>
                         <input type="password" class="form-control" id="password" required>
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="active" checked>
-                        <label class="form-check-label" for="active">Active</label>
+                        <label class="form-check-label" for="active">Hoạt Động</label>
                     </div>
                 </form>
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="save-account">Save Account</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="save-account">Lưu</button>
             </div>
         </div>
     </div>

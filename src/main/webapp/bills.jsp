@@ -25,12 +25,12 @@
 
 <table border="1">
     <tr>
-        <th>Invoice ID</th>
-        <th>Create Date</th>
-        <th>End Date</th>
-        <th>Total Price</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th>ID của Hóa Đơn</th>
+        <th>Ngày Tạo</th>
+        <th>Ngày kết thúc</th>
+        <th>Tổng giá</th>
+        <th>Trạng Thái</th>
+        <th>Hành Động</th>
     </tr>
     <%
         Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
@@ -58,7 +58,7 @@
             <form action="vnpayajax" method="post">
                 <input type="hidden" name="amount" value="<%= totalPrice %>" />
                 <input type="hidden" name="invoiceId" value="<%= invoiceId %>" />
-                <button type="submit">Pay with VNPAY</button>
+                <button type="submit">Thanh toán với VNPAY</button>
             </form>
         </td>
     </tr>

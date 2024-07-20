@@ -21,23 +21,23 @@
                 <div class="container">
                     <div class="signup-content">
                         <div class="signup-form">
-                            <h2 class="form-title">Sign up</h2>
+                            <h2 class="form-title">Đăng Ký</h2>
 
                             <form method="POST" action="register" class="register-form"
                                   id="register-form">
 
                                 <div class="form-group">
                                     <label for="email"><i class="zmdi zmdi-email"></i></label> <input
-                                        type="email" name="email" id="email" required="" placeholder="Your Email" />
+                                        type="email" name="email" id="email" required="" placeholder="Email của bạn" />
                                 </div>
                                 <div class="form-group">
                                     <label for="pass"><i class="zmdi zmdi-lock"></i></label> <input
-                                        type="password" name="pass" id="pass" required="" placeholder="Password" />
+                                        type="password" name="pass" id="pass" required="" placeholder="Mật khẩu" />
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="contact"><i class="zmdi zmdi-lock-outline"></i></label>
-                                    <input type="text" name="phone" id="contact" required="" placeholder="Phone number" />
+                                    <input type="text" name="phone" id="contact" required="" placeholder="Số điện thoại" />
                                 </div>
                                 <div class="form-group">
                                     <label style="color: red" for="status" class="label-agree-term">
@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="form-group form-button">
                                     <input type="submit" name="signup" id="signup"
-                                           class="form-submit" value="Register" />
+                                           class="form-submit" value="Đăng ký!" />
                                 </div>
                             </form>
                         </div>
@@ -53,7 +53,7 @@
                             <figure>
                                 <img src="account_assets/images/signup-image.jpg" alt="sing up image">
                             </figure>
-                            <a href="login.jsp" class="signup-image-link">I am already member</a>
+                            <a href="login.jsp" class="signup-image-link">Tôi có tài khoản rồi.</a>
                         </div>
                     </div>
                 </div>
@@ -68,5 +68,4 @@
 
 
     </body>
-    <!-- This templates was made by Colorlib (https://colorlib.com) -->
 </html>

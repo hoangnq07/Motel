@@ -102,12 +102,12 @@
                 <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
                         data-bs-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
+                    <span class="visually-hidden">Trước</span>
                 </button>
                 <button class="carousel-control-next" type="button" data-bs-target="#header-carousel"
                         data-bs-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
+                    <span class="visually-hidden">Sau</span>
                 </button>
             </div>
         </div>
@@ -116,7 +116,7 @@
             <div class="row g-0 gx-5 align-items-end">
                 <div class="col-lg-6">
                     <div class="section-header text-start mb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 500px;">
-                        <h1 class="display-5 mb-3">New Rooms</h1>
+                        <h1 class="display-5 mb-3">Phòng Mới</h1>
                     </div>
                 </div>
             </div>
@@ -142,28 +142,28 @@
                                             <fmt:formatNumber value="${room.roomPrice}" type="number" groupingUsed="true"/> VND/tháng
                                         </p>
                                         <p>${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
-                                        <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">View Details</a>
+                                        <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">Xem Chi Tiết</a>
                                     </div>
                                 </div>
                             </div>
                         </c:forEach>
                     </c:when>
                     <c:otherwise>
-                        <p class="col-12">No rooms available.</p>
+                        <p class="col-12">Không có gì hết trơn.</p>
                     </c:otherwise>
                 </c:choose>
             </div>
 
             <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                <a class="btn btn-primary rounded-pill py-3 px-5" href="motel-rooms?action=list">Load More</a>
+                <a class="btn btn-primary rounded-pill py-3 px-5" href="motel-rooms?action=list">Xem Thêm</a>
             </div>
         </div>
         <jsp:include page="footer.jsp" />
         <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
         <c:if test="${not empty sessionScope.user and sessionScope.user.role == 'user'}">
             <df-messenger
-                    intent="WELCOME"
-                    chat-title="MotelBot"
+                    intent="Chào Mừng!"
+                    chat-title="HomeBot"
                     agent-id="d66eae9e-41a1-4459-821b-e8953259fad8"
                     language-code="en">
             </df-messenger>

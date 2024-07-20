@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Motel Rooms</title>
+    <title>Danh Sách Phòng</title>
     <!-- Include Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -67,37 +67,37 @@
         <input type="hidden" name="action" value="search">
         <div class="row mb-3">
             <div class="col-md-10">
-                <input type="text" id="search" name="search" class="form-control" placeholder="Search by name..." value="${param.search}">
+                <input type="text" id="search" name="search" class="form-control" placeholder="Tìm theo tên..." value="${param.search}">
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Search</button>
+                <button type="submit" class="btn btn-primary w-100">Tìm</button>
             </div>
         </div>
 
         <div class="row">
             <div class="form-group col-md-2">
-                <label for="province">Province:</label>
+                <label for="province">Tỉnh:</label>
                 <select id="province" name="province" class="form-control" onchange="updateHiddenInputs()">
                     <option value="-1">Chọn tỉnh thành</option>
                     <!-- Populate with provinces -->
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <label for="district">District:</label>
+                <label for="district">Quận/Huyện:</label>
                 <select id="district" name="district" class="form-control" onchange="updateHiddenInputs()">
                     <option value="-1">Chọn quận/huyện</option>
                     <!-- Populate with districts -->
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <label for="town">Town:</label>
+                <label for="town">Phường/Xã:</label>
                 <select id="town" name="town" class="form-control" onchange="updateHiddenInputs()">
                     <option value="-1">Chọn phường/xã</option>
                     <!-- Populate with towns -->
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <label for="category">Category:</label>
+                <label for="category">Phân Loại:</label>
                 <select id="category" name="category" class="form-control">
                     <option value="-1">Chọn loại phòng</option>
                 </select>
@@ -107,27 +107,27 @@
 
         <div class="row">
             <div class="form-group col-md-2">
-                <label for="sortPrice">Sort by Price:</label>
+                <label for="sortPrice">Sắp xếp theo Giá:</label>
                 <select id="sortPrice" name="sortPrice" class="form-control">
-                    <option value="-1">Select</option>
-                    <option value="asc" ${param.sortPrice == 'asc' ? 'selected' : ''}>Low to High</option>
-                    <option value="desc" ${param.sortPrice == 'desc' ? 'selected' : ''}>High to Low</option>
+                    <option value="-1">Chọn</option>
+                    <option value="asc" ${param.sortPrice == 'asc' ? 'selected' : ''}>Thấp đến Cao</option>
+                    <option value="desc" ${param.sortPrice == 'desc' ? 'selected' : ''}>Cao đến Thấp</option>
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <label for="sortArea">Sort by Area:</label>
+                <label for="sortArea">Sắp xếp theo khu vực:</label>
                 <select id="sortArea" name="sortArea" class="form-control">
-                    <option value="-1">Select</option>
-                    <option value="asc" ${param.sortArea == 'asc' ? 'selected' : ''}>Small to Large</option>
-                    <option value="desc" ${param.sortArea == 'desc' ? 'selected' : ''}>Large to Small</option>
+                    <option value="-1">Chọn</option>
+                    <option value="asc" ${param.sortArea == 'asc' ? 'selected' : ''}>Nhỏ đến Lớn</option>
+                    <option value="desc" ${param.sortArea == 'desc' ? 'selected' : ''}>Lớn đến Nhỏ</option>
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <label for="sortDate">Sort by Date:</label>
+                <label for="sortDate">Sắp xếp theo thời gian:</label>
                 <select id="sortDate" name="sortDate" class="form-control">
                     <option value="-1">Select</option>
-                    <option value="newest" ${param.sortDate == 'newest' ? 'selected' : ''}>Newest</option>
-                    <option value="oldest" ${param.sortDate == 'oldest' ? 'selected' : ''}>Oldest</option>
+                    <option value="newest" ${param.sortDate == 'newest' ? 'selected' : ''}>Mới nhất</option>
+                    <option value="oldest" ${param.sortDate == 'oldest' ? 'selected' : ''}>Cũ nhất</option>
                 </select>
             </div>
         </div>
@@ -163,7 +163,7 @@
                         </p>
                         <p>${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
                         <i class="favorite ${room.favorite ? 'fas text-danger' : 'far'} fa-heart" onclick="toggleFavorite(this, ${room.motelRoomId})"></i>
-                        <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">View Details</a>
+                        <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">Xem chi tiết</a>
                     </div>
                 </div>
             </div>

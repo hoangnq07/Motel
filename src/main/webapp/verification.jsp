@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Verification</title>
+    <title>Xác Minh Email</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -52,12 +52,12 @@
 </head>
 <body>
 <div class="container">
-    <h1>Verify Your Email</h1>
+    <h1>Xác Minh Email</h1>
     <% String email = (String) session.getAttribute("email"); %>
-    <p>A verification code has been sent to <%= email %>. Please enter the code below:</p>
+    <p>Mã xác nhận đã được gửi đến <%= email %>. Vui lòng hãy nhập mã xác nhận ấy:</p>
     <form action="verify" method="post">
-        <input type="text" name="verificationCode" placeholder="Enter the verification code" required>
-        <input type="submit" value="Verify">
+        <input type="text" name="verificationCode" placeholder="Nhập mã xác nhận" required>
+        <input type="submit" value="Xác nhận">
     </form>
 </div>
 </body>

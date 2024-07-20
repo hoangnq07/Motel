@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Manage Invoices</title>
+    <title>Quản Lý Hóa Đơn</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
     <style>
@@ -30,16 +30,16 @@
 </head>
 <body>
 <div class="container">
-    <h1>Manage Invoices</h1>
+    <h1>Quản Lý Hóa Đơn</h1>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>Invoice ID</th>
-            <th>Create Date</th>
-            <th>End Date</th>
-            <th>Total Price</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th>ID của Hóa Đơn</th>
+            <th>Ngày tạo</th>
+            <th>Ngày kết thúc</th>
+            <th>Tổng Giá</th>
+            <th>Trạng Thái</th>
+            <th>Hành Động</th>
         </tr>
         </thead>
         <tbody>
@@ -82,11 +82,11 @@
             <td class="action-buttons">
                 <form action="editInvoice" method="get" class="d-inline">
                     <input type="hidden" name="invoiceId" value="<%= invoiceId %>">
-                    <input type="submit" class="btn btn-warning btn-sm" value="Edit">
+                    <input type="submit" class="btn btn-warning btn-sm" value="Chỉnh sửa">
                 </form>
-                <form action="deleteInvoice" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this invoice?');">
+                <form action="deleteInvoice" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc là muốn xóa hóa đơn này không?');">
                     <input type="hidden" name="invoiceId" value="<%= invoiceId %>">
-                    <input type="submit" class="btn btn-danger btn-sm" value="Delete">
+                    <input type="submit" class="btn btn-danger btn-sm" value="Xóa">
                 </form>
             </td>
         </tr>
@@ -96,14 +96,14 @@
                     e.printStackTrace();
                 }
             } else {
-                out.println("<tr><td colspan='6'>Account ID not found in session.</td></tr>");
+                out.println("<tr><td colspan='6'>Không tìm thấy ID của Tài khoản.</td></tr>");
             }
         %>
         </tbody>
     </table>
 
     <!-- Nút để mở modal -->
-    <button id="createBillButton" class="btn btn-primary">Create Bill</button>
+    <button id="createBillButton" class="btn btn-primary">Tạo Hóa Đơn</button>
 
     <!-- Modal để hiển thị createBill.jsp -->
     <div class="modal fade" id="createBillModal" tabindex="-1" role="dialog" aria-labelledby="createBillModalLabel" aria-hidden="true">
