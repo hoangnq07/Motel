@@ -3,6 +3,7 @@ package controller;
 import com.google.gson.Gson;
 import dao.AccountDAO;
 import Account.Account;
+import dao.FeedbackDAO;
 import model.Feedback;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -33,8 +34,8 @@ public class OwnerFeedbacksServlet extends HttpServlet {
             int ownerId = user.getAccountId();
 
             try {
-                AccountDAO accountDAO = new AccountDAO();
-                List<Feedback> feedbackList = accountDAO.getFeedbacksReceivedByOwner(ownerId);
+                FeedbackDAO feedbackDAO = new FeedbackDAO();
+                List<Feedback> feedbackList = feedbackDAO.getFeedbacksReceivedByOwner(ownerId);
 
                 // Chuyển đổi danh sách feedback thành JSON
                 Gson gson = new Gson();

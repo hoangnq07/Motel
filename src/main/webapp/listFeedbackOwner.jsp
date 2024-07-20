@@ -1,4 +1,3 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
@@ -50,6 +49,7 @@
             <th>Ngày Giờ</th>
             <th>Nội Dung</th>
             <th>Tên Người Gửi</th>
+            <th>Nhà Trọ</th>
             <th>Phòng</th>
         </tr>
         </thead>
@@ -82,11 +82,12 @@
                                 .append($('<td>').text(formattedDate))
                                 .append($('<td>').text(fb.feedbackText))
                                 .append($('<td>').text(fb.senderName))
-                                .append($('<td>').text(fb.roomName))
+                                .append($('<td>').text(fb.motelName)) // Hiển thị tên nhà trọ
+                                .append($('<td>').text(fb.roomName)) // Hiển thị tên phòng
                                 .appendTo(tbody);
                         });
                     } else {
-                        $('<tr>').append($('<td>').attr('colspan', '3').text('Không có feedback nào.')).appendTo(tbody);
+                        $('<tr>').append($('<td>').attr('colspan', '5').text('Không có feedback nào.')).appendTo(tbody);
                     }
                 },
                 error: function(error) {
