@@ -201,6 +201,8 @@
 <script src="./assets1/js/app.min.js"></script>
 <script>
     $(document).ready(function () {
+        // ... (existing ready function content) ...
+
         // Handle Accounts click
         $('#accounts').click(function (e) {
             e.preventDefault();
@@ -209,27 +211,17 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    var accountsHtml = '<h3>All Accounts</h3><button id="add-account-btn" class="btn btn-success mb-3">Add Account</button><table class="table table-hover">' +
-                        '<thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                    var accountsHtml = '<h3>All Accounts</h3>' +
+                        '<div class="mb-3">' +
+                        '<input type="text" id="accountSearch" class="form-control" placeholder="Search accounts...">' +
+                        '</div>' +
+                        '<button id="add-account-btn" class="btn btn-success mb-3">Add Account</button>' +
+                        '<table class="table table-hover">' +
+                        '<thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>' +
+                        '<tbody id="accountTableBody">';
 
                     data.forEach(function (account) {
-                        accountsHtml += '<tr>' +
-                            '<td>' + account.accountId + '</td>' +
-                            '<td>' + account.fullname + '</td>' +
-                            '<td>' + account.email + '</td>' +
-                            '<td>' + account.phone + '</td>' +
-                            '<td>' + account.role + '</td>' +
-                            '<td><div class="form-check form-switch">' +
-                            '<input class="form-check-input status-toggle" type="checkbox" role="switch" ' +
-                            'id="status-' + account.accountId + '" ' + (account.active ? 'checked' : '') + ' ' +
-                            'data-id="' + account.accountId + '">' +
-                            '<label class="form-check-label" for="status-' + account.accountId + '">' +
-                            '</div></td>' +
-                            '<td>' +
-                            '<button class="btn btn-primary btn-sm edit-account" data-id="' + account.accountId + '">Edit</button> ' +
-                            // '<button class="btn btn-danger btn-sm delete-account" data-id="' + account.accountId + '">Delete</button>' +
-                            '</td>' +
-                            '</tr>';
+                        accountsHtml += generateAccountRow(account);
                     });
 
                     accountsHtml += '</tbody></table>';
@@ -237,6 +229,14 @@
                     // Add Account functionality
                     $('#add-account-btn').click(function () {
                         $('#add-account-modal').modal('show');
+                    });
+                    // Search functionality
+                    $('#accountSearch').on('input', function() {
+                        var searchQuery = $(this).val().toLowerCase();
+                        $('#accountTableBody tr').each(function() {
+                            var rowText = $(this).text().toLowerCase();
+                            $(this).toggle(rowText.indexOf(searchQuery) > -1);
+                        });
                     });
                     // Edit account functionality
                     $('.edit-account').click(function () {
@@ -373,7 +373,24 @@
             });
         });
 
-
+        function generateAccountRow(account) {
+            return '<tr>' +
+                '<td>' + account.accountId + '</td>' +
+                '<td>' + account.fullname + '</td>' +
+                '<td>' + account.email + '</td>' +
+                '<td>' + account.phone + '</td>' +
+                '<td>' + account.role + '</td>' +
+                '<td><div class="form-check form-switch">' +
+                '<input class="form-check-input status-toggle" type="checkbox" role="switch" ' +
+                'id="status-' + account.accountId + '" ' + (account.active ? 'checked' : '') + ' ' +
+                'data-id="' + account.accountId + '">' +
+                '<label class="form-check-label" for="status-' + account.accountId + '">' +
+                '</div></td>' +
+                '<td>' +
+                '<button class="btn btn-primary btn-sm edit-account" data-id="' + account.accountId + '">Edit</button> ' +
+                '</td>' +
+                '</tr>';
+        }
 
         function updateAccountStatus(accountId, isActive) {
             $.ajax({

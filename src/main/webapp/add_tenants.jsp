@@ -62,19 +62,7 @@
         .actions a {
             margin-right: 10px;
         }
-        .create-btn {
-            margin-bottom: 20px;
-        }
-        .modal-body {
-            max-height: calc(100vh - 200px);
-            overflow-y: auto;
-        }
 
-        .sidebar {
-            background-color: #343a40;
-            min-height: 100vh;
-            padding-top: 20px;
-        }
         .sidebar a {
             color: #f8f9fa;
             padding: 10px 15px;
@@ -88,54 +76,11 @@
         .content-area {
             padding: 20px;
         }
-        .nav-link {
-            border-radius: 0;
-        }
 
     </style>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-    <div class="col-md-2 sidebar">
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link " href="${pageContext.request.contextPath}/home">
-                    <i class="fas fa-home mr-2"></i>Home
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link ${param.page == 'motel-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=motel-list">
-                    <i class="fas fa-building mr-2"></i>Quản lý Nhà trọ
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link ${param.page == 'room-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=room-list">
-                    <i class="fas fa-door-open mr-2"></i>Quản lý Phòng trọ
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link ${param.page == 'customer-management' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=customer-management">
-                    <i class="fas fa-users mr-2"></i>Quản lý Thành viên
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="createBill.jsp">
-                    <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa đơn
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link ${param.page == 'notifications' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=notify">
-                    <i class="fas fa-bell mr-2"></i>Thông báo
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="${pageContext.request.contextPath}/logout">
-                    <i class="fas fa-sign-out-alt mr-2"></i>Logout
-                </a>
-            </li>
-        </ul>
-    </div>
+
 <div class="container">
     <div class="col-md-10 content-area">
     <div>
@@ -191,8 +136,7 @@
 
     </div>
 </div>
-    </div>
-</div>
+
 
 <script>
     function searchAccounts() {

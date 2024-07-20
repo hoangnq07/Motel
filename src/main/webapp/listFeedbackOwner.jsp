@@ -7,45 +7,9 @@
     <meta charset="utf-8">
     <title>Danh Sách Feedback</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .feedback-table {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f8f9fa;
-        }
-        .feedback-table h3 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .body{
-            margin-top: 50px !important;
-        }
-    </style>
-</head>
-<body class="body">
 
-<!-- Header Start -->
-<jsp:include page="header.jsp" ></jsp:include>
-<!-- Header End -->
+</head>
+<body>
 
 <!-- Feedback List Start -->
 <div class="container feedback-table">
@@ -56,6 +20,7 @@
             <th>Ngày Giờ</th>
             <th>Nội Dung</th>
             <th>Tên Người Gửi</th>
+            <th>Phòng</th>
         </tr>
         </thead>
         <tbody id="feedbackList">
@@ -64,10 +29,6 @@
     </table>
 </div>
 <!-- Feedback List End -->
-
-<!-- Footer Start -->
-<jsp:include page="footer.jsp" ></jsp:include>
-<!-- Footer End -->
 
 <!-- JavaScript Libraries -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -91,6 +52,7 @@
                                 .append($('<td>').text(formattedDate))
                                 .append($('<td>').text(fb.feedbackText))
                                 .append($('<td>').text(fb.senderName))
+                                .append($('<td>').text(fb.roomName))
                                 .appendTo(tbody);
                         });
                     } else {

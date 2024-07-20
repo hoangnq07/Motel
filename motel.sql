@@ -58,7 +58,6 @@ CREATE TABLE dbo.motel_room(
     water_price FLOAT,
     wifi_price FLOAT,
     room_status BIT NOT NULL DEFAULT 0,
-	post_request_status NVARCHAR(50),
     category_room_id INT,
     motel_id INT,
     account_id INT,
@@ -195,17 +194,29 @@ INSERT INTO dbo.category_room (descriptions, quantity, status) VALUES
 ('Double Room', 2, 1);
 
 -- Thêm dữ liệu mẫu vào bảng motel_room
-INSERT INTO dbo.motel_room (create_date, name, descriptions, length, width, room_price, electricity_price, water_price, wifi_price, room_status, category_room_id,post_request_status, motel_id, account_id) VALUES
-(GETDATE(),N'P101', N'Phòng rộng rãi, đầy đủ tiện nghi', 4.0, 5.0, 3000000, 3500, 15000, 200000, 1, 1, N'approved',1, 12),
-(GETDATE(),N'P102', N'Phòng sạch sẽ, thoáng mát', 3.5, 4.5, 2500000, 3500, 15000, 200000, 1, 2,  N'approved',1, 12),
-(GETDATE(),N'P103', N'Phòng giá rẻ, tiện nghi', 3.0, 4.0, 2000000, 3500, 15000, 200000, 1, 1,  N'approved',1, 12),
-(GETDATE(),N'P104', N'Phòng gần trung tâm', 4.5, 5.5, 3500000, 3500, 15000, 200000, 1, 2, N'', 1, 12),
-(GETDATE(),N'P101', N'Phòng có view đẹp', 5.0, 6.0, 4000000, 3500, 15000, 200000, 1, 1,  N'approved',2, 2),
-(GETDATE(),N'P102', N'Phòng an ninh tốt', 3.8, 4.8, 2800000, 3500, 15000, 200000, 1, 1,  N'approved',2, 2),
-(GETDATE(),N'P103', N'Phòng gần trường học', 3.6, 4.6, 2600000, 3500, 15000, 200000, 1, 2, N'approved', 2, 2),
-(GETDATE(),N'P104', N'Phòng rộng, thoáng', 4.2, 5.2, 3200000, 3500, 15000, 200000, 1, 1,  N'approved',2, 2),
-(GETDATE(),N'P105', N'Phòng đẹp, tiện nghi', 4.8, 5.8, 3700000, 3500, 15000, 200000, 1, 2,  N'',1, 12),
-(GETDATE(),N'P1016', N'Phòng cao cấp', 5.2, 6.2, 4200000, 3500, 15000, 200000, 1, 1,  N'approved',1, 12);
+INSERT INTO dbo.motel_room (create_date, name, descriptions, length, width, room_price, electricity_price, water_price, wifi_price, room_status, category_room_id, motel_id, account_id) VALUES
+(GETDATE(),N'P101', N'Phòng rộng rãi, đầy đủ tiện nghi', 4.0, 5.0, 3000000, 3500, 15000, 200000, 0, 1, 1, 12),
+(GETDATE(),N'P102', N'Phòng sạch sẽ, thoáng mát', 3.5, 4.5, 2500000, 3500, 15000, 200000, 0, 2, 1, 12),
+(GETDATE(),N'P103', N'Phòng giá rẻ, tiện nghi', 3.0, 4.0, 2000000, 3500, 15000, 200000, 0, 1, 1, 12),
+(GETDATE(),N'P104', N'Phòng gần trung tâm', 4.5, 5.5, 3500000, 3500, 15000, 200000, 0, 2, 1, 12),
+(GETDATE(),N'P101', N'Phòng có view đẹp', 5.0, 6.0, 4000000, 3500, 15000, 200000, 0, 1, 2, 2),
+(GETDATE(),N'P102', N'Phòng an ninh tốt', 3.8, 4.8, 2800000, 3500, 15000, 200000, 0, 1, 2, 2),
+(GETDATE(),N'P103', N'Phòng gần trường học', 3.6, 4.6, 2600000, 3500, 15000, 200000, 0, 2, 2, 2),
+(GETDATE(),N'P104', N'Phòng rộng, thoáng', 4.2, 5.2, 3200000, 3500, 15000, 200000, 0, 1, 2, 2),
+(GETDATE(),N'P105', N'Phòng đẹp, tiện nghi', 4.8, 5.8, 3700000, 3500, 15000, 200000, 0, 2, 1, 12),
+(GETDATE(),N'P1016', N'Phòng cao cấp', 5.2, 6.2, 4200000, 3500, 15000, 200000, 0, 1, 1, 12);
 
 
+DECLARE @i INT = 1;
+
+WHILE @i <= 32
+BEGIN
+    INSERT INTO dbo.image (name, motel_room_id)
+    VALUES ('room1_img1.jpg', @i),
+           ('img1.jpg', @i),
+           ('img2.jpg', @i),
+           ('img3.jpg', @i);
+
+    SET @i = @i + 1;
+END
 

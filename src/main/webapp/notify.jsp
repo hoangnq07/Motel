@@ -21,9 +21,9 @@
         </div>
         <div class="form-group">
             <label for="message">Message:</label>
-            <input type="text" class="form-control" id="message" name="message" required>
+            <textarea class="form-control" id="message" name="message" rows="3" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Send</button>
+        <button type="submit" class="btn btn-primary mt-3">Send</button>
     </form>
     <br>
     <div id="statusMessage"></div>

@@ -77,7 +77,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'statics' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=statics">
-                        <i class="fas fa-comments mr-2"></i>Revenue
+                        <i class="fas fa-chart-bar mr-2"></i>Revenue
                     </a>
                 </li>
                 <li class="nav-item">
@@ -105,10 +105,13 @@
                     <jsp:include page="manageInvoices.jsp"/>
                 </c:when>
                 <c:when test="${param.page == 'feedback'}">
-                    <jsp:include page="viewfeedback.jsp"/>
+                    <jsp:include page="listFeedbackOwner.jsp"/>
                 </c:when>
                 <c:when test="${param.page == 'statics'}">
                     <jsp:include page="revenue.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'renter'}">
+                    <jsp:include page="add_tenants.jsp?motel_room_id=${param.motel_room_id}"/>
                 </c:when>
             </c:choose>
         </div>
