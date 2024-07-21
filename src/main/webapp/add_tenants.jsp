@@ -108,6 +108,7 @@
                         <th>Email</th>
                         <th>Số điện thoại</th>
                         <th>Ngày bắt đầu thuê</th>
+                        <th>Action</th>
                     </tr>
                     <c:forEach var="renter" items="${currentTenants}">
                         <tr>
@@ -115,6 +116,9 @@
                             <td>${renter.account.email}</td>
                             <td>${renter.account.phone}</td>
                             <td><fmt:formatDate value="${renter.renterDate}" pattern="yyyy-MM-dd"/></td>
+                            <td>
+                                <button onclick="deleteTenant(${renter.renterId}, ${motelRoomId})">Delete</button>
+                            </td>
                         </tr>
                     </c:forEach>
                 </table>
@@ -182,6 +186,26 @@
                 alert('Error adding tenant: ' + textStatus + ' - ' + errorThrown);
             }
         });
+    }
+    function deleteTenant(renterId, motelRoomId) {
+        if (confirm('Bạn có chắc chắn muốn xóa người thuê này?')) {
+            $.ajax({
+                url: 'deleteTenant',
+                method: 'POST',
+                data: { renterId: renterId, motelRoomId: motelRoomId },
+                success: function(response) {
+                    if (response === 'success') {
+                        alert('Xóa người thuê thành công');
+                        location.reload();  // Tải lại trang để cập nhật danh sách
+                    } else {
+                        alert('Lỗi: ' + response);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Lỗi khi xóa người thuê: ' + textStatus + ' - ' + errorThrown);
+                }
+            });
+        }
     }
 </script>
 </body>

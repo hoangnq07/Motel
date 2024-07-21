@@ -85,7 +85,41 @@ public class RenterDAO {
             throw e;
         }
     }
+    public boolean deleteTenant(int renterId) {
+        String sql = "UPDATE renter SET check_out_date = GETDATE() WHERE renter_id = ? AND check_out_date IS NULL";
 
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, renterId);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                updateRoomStatus(renterId);
+            }
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            logger.severe("Error updating renter check-out date: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void updateRoomStatus(int renterId) {
+        String sql = "UPDATE motel_room SET room_status = 0 " +
+                "WHERE motel_room_id = (SELECT motel_room_id FROM renter WHERE renter_id = ?)";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, renterId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            logger.severe("Error updating room status: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
     public Renter getRenterById(int renterId) {
         Renter renter = null;
         String sql = "SELECT r.*, a.* FROM renter r " +
