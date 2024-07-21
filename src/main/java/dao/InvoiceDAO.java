@@ -1,18 +1,62 @@
 package dao;
 
 import context.DBcontext;
+import model.Electricity;
 import model.RevenueData;
+
+import java.sql.*;
 import java.util.List;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.Invoice;
+import model.Water;
 
 public class InvoiceDAO {
+    public int addInvoice(Invoice invoice) throws SQLException {
+        String sql = "INSERT INTO invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setDate(1, new java.sql.Date(invoice.getCreateDate().getTime()));
+            stmt.setDate(2, invoice.getEndDate() != null ? new java.sql.Date(invoice.getEndDate().getTime()) : null);
+            stmt.setDouble(3, invoice.getTotalPrice());
+            stmt.setString(4, invoice.getInvoiceStatus());
+            stmt.setInt(5, invoice.getRenterId());
+            stmt.setInt(6, invoice.getMotelRoomId());
 
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating invoice failed, no rows affected.");
+            }
+
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    return generatedKeys.getInt(1);
+                } else {
+                    throw new SQLException("Creating invoice failed, no ID obtained.");
+                }
+            }
+        }
+    }
+    public static void addElectricityIndex(Electricity electricity) throws SQLException {
+        String sql = "INSERT INTO electricity (create_date, electricity_index, invoice_id) VALUES (?, ?, ?)";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, new java.sql.Date(electricity.getCreateDate().getTime()));
+            stmt.setFloat(2, electricity.getElectricityIndex());
+            stmt.setInt(3, electricity.getInvoiceId());
+            stmt.executeUpdate();
+        }
+    }
+    public static void addWaterIndex(Water water) throws SQLException {
+        String sql = "INSERT INTO water (create_date, water_index, invoice_id) VALUES (?, ?, ?)";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setDate(1, new java.sql.Date(water.getCreateDate().getTime()));
+            stmt.setFloat(2, water.getWaterIndex());
+            stmt.setInt(3, water.getInvoiceId());
+            stmt.executeUpdate();
+        }
+    }
     public Invoice getInvoiceById(int invoiceId) throws SQLException, ClassNotFoundException {
         String sql = "SELECT i.*, e.electricity_index, w.water_index " +
                 "FROM dbo.invoice i " +

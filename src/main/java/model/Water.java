@@ -14,6 +14,10 @@ public class Water {
         this.invoiceId = invoiceId;
     }
 
+    public Water() {
+
+    }
+
     public int getWaterId() {
         return waterId;
     }

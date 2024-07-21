@@ -14,6 +14,10 @@ public class Electricity {
         this.invoiceId = invoiceId;
     }
 
+    public Electricity() {
+
+    }
+
     public int getElectricityId() {
         return electricityId;
     }
