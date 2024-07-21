@@ -54,9 +54,7 @@ public class AddTenantServlet extends HttpServlet {
             boolean success = renterDAO.addRenter(renter);
 
             if (success) {
-                if (MotelRoomDAO.isRoomAtCapacity(motelRoomId)) {
-                    MotelRoomDAO.updateRoomStatus(motelRoomId, false);
-                }
+                MotelRoomDAO.updateRoomStatus(motelRoomId, false);
                 if(!isHasRenter){
                     float electricityIndex = Float.parseFloat(request.getParameter("electricityIndex"));
                     float waterIndex = Float.parseFloat(request.getParameter("waterIndex"));

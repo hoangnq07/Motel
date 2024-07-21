@@ -363,10 +363,11 @@ public class AccountDAO {
     }
     public List<Account> searchAccounts(String searchTerm) throws SQLException {
         List<Account> accounts = new ArrayList<>();
-        String sql = "SELECT * FROM accounts a " +
+        String sql = "SELECT DISTINCT a.* FROM accounts a " +
+                "LEFT JOIN renter r ON a.account_id = r.renter_id " +
                 "WHERE (a.fullname LIKE ? OR a.email LIKE ? OR a.phone LIKE ? OR a.citizen_id LIKE ?) " +
                 "AND a.role = 'user' " +
-                "AND NOT EXISTS (SELECT 1 FROM renter r WHERE r.renter_id = a.account_id)";
+                "AND (r.renter_id IS NULL OR r.check_out_date IS NOT NULL)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

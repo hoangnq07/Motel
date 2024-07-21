@@ -55,18 +55,36 @@ public class RenterDAO {
             e.printStackTrace();
         }
     }
-
-    public void deleteRenter(int renterId) {
-        String sql = "DELETE FROM renter WHERE renter_id = ?";
+    public boolean checkOut(int renterId) {
+        String sql = "UPDATE renter SET check_out_date = GETDATE() WHERE renter_id = ? AND check_out_date IS NULL";
 
         try (Connection conn = DBcontext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, renterId);
-            ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
+
+            return rowsAffected > 0;
         } catch (SQLException e) {
+            logger.severe("Error updating renter check-out date: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
+    public int countRemainingRenters(int motelRoomId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM renter WHERE motel_room_id = ? AND check_out_date IS NULL";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, motelRoomId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
 
     private Account extractAccountFromResultSet(ResultSet rs) throws SQLException {
         Account account = new Account();

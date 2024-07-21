@@ -426,14 +426,14 @@
 
     }
     function returnRoom(renterId, motelRoomId) {
-        if (confirm('Are you sure you want to return this room?')) {
+        if (confirm('Bạn có muốn thực hiện trả phòng?')) {
             $.ajax({
-                url: 'returnRoom',
+                url: 'checkOut',
                 method: 'POST',
                 data: { renterId: renterId, motelRoomId: motelRoomId },
                 success: function(response) {
                     if (response === 'success') {
-                        alert('Room returned successfully');
+                        alert('Trả phòng thành công');
                         location.reload();
                     } else {
                         alert('Error: ' + response);
