@@ -1,6 +1,6 @@
 package controller;
 
-import dao.RenterDAO;
+import dao.FeedbackDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,14 +10,13 @@ import jakarta.servlet.http.HttpSession;
 import Account.Account;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
 
 @WebServlet(name = "FeedbackServlet", value = "/sendFeedback")
 public class FeedbackServlet extends HttpServlet {
-    private RenterDAO renterDAO;
+    private FeedbackDAO feedbackDAO;
 
     public void init() {
-        renterDAO = new RenterDAO(); // Khởi tạo DAO
+        feedbackDAO = new FeedbackDAO(); // Khởi tạo DAO
     }
 
     @Override
@@ -28,18 +27,24 @@ public class FeedbackServlet extends HttpServlet {
         String feedbackText = request.getParameter("feedback");
         String tag = request.getParameter("tag");
         HttpSession session = request.getSession();
-        Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
+        Account user = (Account) session.getAttribute("user");
 
-        if (accountId == null) {
+        if (user == null) {
             response.getWriter().write("{\"error\": \"User not logged in.\"}");
             return;
         }
 
+        Integer accountId = user.getAccountId();
+
         try {
+            int[] motelDetails = feedbackDAO.getMotelDetailsByUserId(accountId);
+            Integer motelId = motelDetails[0];
+            Integer motelRoomId = motelDetails[1];
+
             if ("owner".equals(tag)) {
-                sendFeedbackToOwner(accountId, feedbackText);
+                sendFeedbackToOwner(accountId, feedbackText, motelId, motelRoomId);
             } else if ("admin".equals(tag)) {
-                sendFeedbackToAdmin(feedbackText, accountId);
+                sendFeedbackToAdmin(feedbackText, accountId, motelId, motelRoomId);
             }
             response.getWriter().write("{\"success\": \"Feedback sent successfully.\"}");
         } catch (SQLException e) {
@@ -48,16 +53,14 @@ public class FeedbackServlet extends HttpServlet {
         }
     }
 
-    private void sendFeedbackToOwner(int userId, String feedbackText) throws SQLException {
+    private void sendFeedbackToOwner(int userId, String feedbackText, Integer motelId, Integer motelRoomId) throws SQLException {
         System.out.println("Sending feedback to owner...");
-        int ownerId = renterDAO.getOwnerIdByRenterId(userId);
+        int ownerId = feedbackDAO.getOwnerIdByRenterId(userId);
         System.out.println("Owner ID: " + ownerId);
-        renterDAO.saveFeedback(feedbackText, userId, ownerId, "Owner");  // Thêm tag "owner"
+        feedbackDAO.saveFeedback(feedbackText, userId, ownerId, "Owner", motelId, motelRoomId);
     }
 
-    private void sendFeedbackToAdmin(String feedbackText, int fromUserId) throws SQLException {
-        // Không cần lấy danh sách các admin, chỉ lưu một lần với to_user_id là NULL
-        renterDAO.saveFeedback(feedbackText, fromUserId, null, "Admin");
+    private void sendFeedbackToAdmin(String feedbackText, int fromUserId, Integer motelId, Integer motelRoomId) throws SQLException {
+        feedbackDAO.saveFeedback(feedbackText, fromUserId, null, "Admin", motelId, motelRoomId);
     }
-
 }

@@ -490,17 +490,13 @@
                 dataType: 'json',
                 success: function (data) {
                     var feedbackHtml = '<h3>Phản Hồi</h3><table class="table table-hover">' +
-                        '<thead><tr><th>Ngày</th><th>Nội Dung Phản Hồi</th><th>Người Gửi</th><th>Hành Động</th></tr></thead><tbody>';
+                        '<thead><tr><th>Ngày</th><th>Nội Dung Phản Hồi</th><th>Người Gửi</th></tr></thead><tbody>';
 
                     data.forEach(function (fb) {
                         feedbackHtml += '<tr>' +
                             '<td>' + new Date(fb.createDate).toLocaleString() + '</td>' +
                             '<td>' + fb.feedbackText + '</td>' +
                             '<td>' + fb.senderName + '</td>' +
-                            '<td><button class="btn btn-primary reply-btn" data-id="' + fb.feedbackId + '">Phản Hồi</button></td>' +
-                            '</tr>' +
-                            '<tr id="reply-row-' + fb.feedbackId + '" class="reply-row" style="display:none;">' +
-                            '<td colspan="4"><textarea class="form-control" rows="2"></textarea><button class="btn btn-success mt-2">Gửi Phản Hồi</button></td>' +
                             '</tr>';
                     });
 
