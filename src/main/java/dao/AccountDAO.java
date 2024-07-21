@@ -178,32 +178,6 @@ public class AccountDAO {
         return false;
     }
 
-    public List<Feedback> getFeedbacksForAdmin() {
-        List<Feedback> feedbacks = new ArrayList<>();
-        // Cập nhật câu truy vấn để lấy feedback với tag là 'Admin'
-        String sql = "SELECT f.feedback_id, f.feedback_text, f.create_date, a.fullname as senderName " +
-                "FROM feedback f " +
-                "JOIN accounts a ON f.account_id = a.account_id " + // Người gửi
-                "WHERE f.tag = 'Admin';"; // Chỉ lấy feedback có tag là 'Admin'
-
-        try (Connection conn = getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Feedback feedback = new Feedback();
-                feedback.setFeedbackId(rs.getInt("feedback_id"));
-                feedback.setFeedbackText(rs.getString("feedback_text"));
-                feedback.setCreateDate(rs.getTimestamp("create_date"));
-                feedback.setSenderName(rs.getString("senderName")); // Tên người gửi
-                feedbacks.add(feedback);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return feedbacks;
-    }
-
-
 
     public List<Account> getAllAccount() {
         List<Account> accounts = new ArrayList<>();
@@ -339,7 +313,11 @@ public class AccountDAO {
     }
     public List<Account> searchAccounts(String searchTerm) throws SQLException {
         List<Account> accounts = new ArrayList<>();
-        String sql = "SELECT * FROM accounts WHERE email LIKE ? OR phone LIKE ? OR citizen_id LIKE ?";
+        String sql = "SELECT DISTINCT a.* FROM accounts a " +
+                "LEFT JOIN renter r ON a.account_id = r.renter_id " +
+                "WHERE (a.fullname LIKE ? OR a.email LIKE ? OR a.phone LIKE ? OR a.citizen_id LIKE ?) " +
+                "AND a.role = 'user' " +
+                "AND (r.renter_id IS NULL OR r.check_out_date IS NOT NULL)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -348,6 +326,7 @@ public class AccountDAO {
             stmt.setString(1, searchPattern);
             stmt.setString(2, searchPattern);
             stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
