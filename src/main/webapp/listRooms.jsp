@@ -8,7 +8,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Danh Sách Phòng</title>
+
     <!-- Include Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -62,23 +64,37 @@
 <body class="body">
 <jsp:include page="header.jsp"></jsp:include>
 
+<%
+    String motelIdStr = request.getParameter("id");
+    if (motelIdStr != null && !motelIdStr.isEmpty()) {
+        session.setAttribute("currentMotelId", Integer.parseInt(motelIdStr));
+        out.println("<p>Debug: Motel ID " + motelIdStr + " stored in session.</p>");
+    } else {
+        out.println("<p>Debug: No motel ID found in URL.</p>");
+    }
+%>
+
 <div class="container mt-5">
     <form id="searchForm" method="GET" action="${pageContext.request.contextPath}/motel-rooms">
         <input type="hidden" name="action" value="search">
         <div class="row mb-3">
             <div class="col-md-10">
-                <input type="text" id="search" name="search" class="form-control" placeholder="Tìm theo tên..." value="${param.search}">
+
+                <input type="text" id="search" name="search" class="form-control" placeholder="Tìm kiếm theo tên..." value="${param.search}">
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Tìm</button>
+                <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+
             </div>
         </div>
 
         <div class="row">
             <div class="form-group col-md-2">
-                <label for="province">Tỉnh:</label>
+
+                <label for="province">Tỉnh/Thành phố:</label>
+
                 <select id="province" name="province" class="form-control" onchange="updateHiddenInputs()">
-                    <option value="-1">Chọn tỉnh thành</option>
+                    <option value="-1">Chọn tỉnh/thành phố</option>
                     <!-- Populate with provinces -->
                 </select>
             </div>
@@ -97,7 +113,9 @@
                 </select>
             </div>
             <div class="form-group col-md-2">
-                <label for="category">Phân Loại:</label>
+
+                <label for="category">Loại phòng:</label>
+
                 <select id="category" name="category" class="form-control">
                     <option value="-1">Chọn loại phòng</option>
                 </select>
@@ -107,6 +125,7 @@
 
         <div class="row">
             <div class="form-group col-md-2">
+
                 <label for="sortPrice">Sắp xếp theo Giá:</label>
                 <select id="sortPrice" name="sortPrice" class="form-control">
                     <option value="-1">Chọn</option>
@@ -125,7 +144,7 @@
             <div class="form-group col-md-2">
                 <label for="sortDate">Sắp xếp theo thời gian:</label>
                 <select id="sortDate" name="sortDate" class="form-control">
-                    <option value="-1">Select</option>
+                    <option value="-1">Chọn</option>
                     <option value="newest" ${param.sortDate == 'newest' ? 'selected' : ''}>Mới nhất</option>
                     <option value="oldest" ${param.sortDate == 'oldest' ? 'selected' : ''}>Cũ nhất</option>
                 </select>
@@ -141,7 +160,7 @@
         <input type="hidden" id="minArea" name="minArea" value="${param.minArea}">
         <input type="hidden" id="maxArea" name="maxArea" value="${param.maxArea}">
         <div class="form-group col-md-2 align-self-end">
-            <button type="submit" class="btn btn-primary w-100">Filter</button>
+            <button type="submit" class="btn btn-primary w-100">Lọc</button>
         </div>
     </form>
     <!-- Room Listings -->
@@ -150,10 +169,10 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="room-card">
                     <c:if test="${not empty room.image}">
-                        <img src="${pageContext.request.contextPath}/images/${room.image.get(0)}" alt="Room Image">
+                        <img src="${pageContext.request.contextPath}/images/${room.image.get(0)}" alt="Hình ảnh phòng">
                     </c:if>
                     <c:if test="${empty room.image}">
-                        <img src="${pageContext.request.contextPath}/images/default-room.jpg" alt="Default Room Image">
+                        <img src="${pageContext.request.contextPath}/images/default-room.jpg" alt="Hình ảnh mặc định">
                     </c:if>
                     <div class="room-details">
                         <h5>${room.description}</h5>
@@ -207,7 +226,7 @@
                     element.classList.toggle('far'); // Toggle the empty heart
                     element.classList.toggle('fas'); // Toggle the filled heart
                 } else {
-                    alert('An error occurred while processing your request');
+                    alert('Đã xảy ra lỗi trong quá trình xử lý yêu cầu của bạn');
                 }
             })
             .catch(error => {
@@ -237,7 +256,7 @@
 
         // Populate province, district, and town dropdowns (fetch data from backend)
         $.getJSON('${pageContext.request.contextPath}/assets/province/data.json', function(data) {
-            let provinceOptions = '<option value="-1">Chọn tỉnh thành</option>';
+            let provinceOptions = '<option value="-1">Chọn tỉnh/thành phố</option>';
             $.each(data.provinces, function(key, value) {
                 provinceOptions += '<option value="' + value.name + '">' + value.name + '</option>';
             });

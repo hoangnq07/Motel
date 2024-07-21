@@ -203,30 +203,6 @@ public class AccountDAO {
         return feedbacks;
     }
 
-        public List<Feedback> getFeedbacksReceivedByOwner(int ownerId) throws SQLException, ClassNotFoundException {
-            List<Feedback> feedbacks = new ArrayList<>();
-            String sql = "SELECT f.feedback_id, f.feedback_text, f.create_date, a.fullname as senderName " +
-                    "FROM feedback f " +
-                    "JOIN accounts a ON f.account_id = a.account_id " + // Người gửi
-                    "WHERE f.to_user_id = ? AND a.role != 'owner';"; // Chỉ lấy feedback mà owner đã nhận
-
-            try (Connection conn = getConnection();
-                 PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setInt(1, ownerId);
-                try (ResultSet rs = ps.executeQuery()) {
-                    while (rs.next()) {
-                        Feedback feedback = new Feedback();
-                        feedback.setFeedbackId(rs.getInt("feedback_id"));
-                        feedback.setFeedbackText(rs.getString("feedback_text"));
-                        feedback.setCreateDate(rs.getTimestamp("create_date"));
-                        feedback.setSenderName(rs.getString("senderName")); // Tên người gửi
-                        feedbacks.add(feedback);
-                    }
-                }
-            }
-            return feedbacks;
-        }
-
 
 
     public List<Account> getAllAccount() {

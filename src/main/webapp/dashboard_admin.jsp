@@ -1,10 +1,14 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!doctype html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
     <title>Bảng Admin</title>
+
     <link rel="shortcut icon" type="image/png" href="./assets1/images/logos/favicon.png"/>
     <link rel="stylesheet" href="./assets1/css/styles.min.css"/>
 </head>
@@ -18,7 +22,7 @@
         <!-- Sidebar scroll-->
         <div>
             <div class="brand-logo d-flex align-items-center justify-content-between">
-                <a href="home" class="text-nowrap logo-img">HOME</a>
+                <a href="home" class="text-nowrap logo-img">TRANG CHỦ</a>
                 <div class="close-btn d-xl-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
                     <i class="ti ti-x fs-8"></i>
                 </div>
@@ -39,7 +43,9 @@
                                 <span>
                                     <i class="ti ti-user"></i>
                                 </span>
-                            <span class="hide-menu">Tài khoản</span>
+
+                            <span class="hide-menu">Tài Khoản</span>
+
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -47,7 +53,9 @@
                                 <span>
                                     <i class="ti ti-message"></i>
                                 </span>
-                            <span class="hide-menu">Nhận xét</span>
+
+                            <span class="hide-menu">Phản Hồi</span>
+
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -55,7 +63,9 @@
                             <span class="icon">
                                 <i class="ti ti-user"></i>
                             </span>
-                            <span>Yêu cầu</span>
+
+                            <span>Yêu Cầu</span>
+
                         </a>
                     </li>
                     <li class="sidebar-item">
@@ -63,17 +73,20 @@
                             <span class="icon">
                                 <i class="ti ti-chart-bar"></i>
                             </span>
-                            <span>Thông số</span>
+
+                            <span>Thống Kê</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="pending-room-requests?action=listPending" id="posting-requests" aria-expanded="false">
-                            <span>
-                                <i class="ti ti-file"></i>
-                            </span>
+                        <a class="sidebar-link" href="#" id="posting-requests" aria-expanded="false">
+        <span>
+            <i class="ti ti-file"></i>
+        </span>
+
                             <span class="hide-menu">Yêu Cầu Đăng Bài</span>
                         </a>
                     </li>
+
                 </ul>
             </nav>
             <!-- End Sidebar navigation -->
@@ -104,11 +117,13 @@
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
                                 <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-user fs-6"></i>
+
                                     <p>Trang cá nhân</p>
                                 </a>
                                 <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
                                     <i class="ti ti-mail fs-6"></i>
                                     <p>Đổi mật khẩu</p>
+
                                 </a>
                                 <a href="logout" class="btn btn-outline-primary mx-3 mt-2">Đăng Xuất</a>
                             </div>
@@ -136,13 +151,17 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Tạo tài khoản mới</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                <h5 class="modal-title">Thêm Tài Khoản Mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+
             </div>
             <div class="modal-body">
                 <form id="add-account-form">
                     <div class="mb-3">
-                        <label for="fullname" class="form-label">Họ Tên</label>
+
+                        <label for="fullname" class="form-label">Họ Và Tên</label>
+
                         <input type="text" class="form-control" id="fullname" required>
                     </div>
                     <div class="mb-3">
@@ -169,12 +188,15 @@
                             <option value="false">Nữ</option>
                         </select>
                     </div>
-                    <div class="mb-3">
-                        <label for="role" class="form-label">Vai trò</label>
+
+                        <label for="role" class="form-label">Vai Trò</label>
                         <select class="form-select" id="role" required>
                             <option value="">Chọn vai trò</option>
                             <option value="user">Người Dùng</option>
-                            <option value="owner">Người Chủ</option>
+                            <option value="owner">Chủ</option>
+
+                       
+
                         </select>
                     </div>
                     <div class="mb-3">
@@ -183,14 +205,19 @@
                     </div>
                     <div class="mb-3 form-check">
                         <input type="checkbox" class="form-check-input" id="active" checked>
+
                         <label class="form-check-label" for="active">Hoạt Động</label>
+
                     </div>
                 </form>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+
+
                 <button type="button" class="btn btn-primary" id="save-account">Lưu</button>
+
             </div>
         </div>
     </div>
@@ -201,6 +228,42 @@
 <script src="./assets1/js/app.min.js"></script>
 <script>
     $(document).ready(function () {
+
+        $('#posting-requests').click(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: 'pending-room-requests?action=listPending',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var requestsHtml = '<h3>Phòng Trọ Đang Chờ Duyệt</h3><div class="row">';
+                    data.rooms.forEach(function (room) {
+                        var imageUrl = room.image && room.image.length > 0 ? 'images/' + room.image[0] : 'images/default-room.jpg';
+                        requestsHtml += '<div class="col-md-4">' +
+                            '<div class="card room-card">' +
+                            '<img class="card-img-top" src="' + imageUrl + '" alt="Hình Ảnh Phòng">' +
+                            '<div class="card-body room-details">' +
+                            '<h5 class="card-title">' + room.description + '</h5>' +
+                            '<p class="card-text">' + room.detailAddress + ', ' + room.district + ', ' + room.province + '</p>' +
+                            '<p class="card-text price">' + new Intl.NumberFormat().format(room.roomPrice) + '</p>' +
+                            '<a href="room-details?roomId=' + room.motelRoomId + '" class="btn btn-primary">Xem Chi Tiết</a>' +
+                            '<button class="btn btn-success" onclick="updateRoomStatus(' + room.motelRoomId + ', \'approved\')">Duyệt</button>' +
+                            '<button class="btn btn-danger" onclick="updateRoomStatus(' + room.motelRoomId + ', \'declined\')">Từ Chối</button>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                    });
+                    requestsHtml += '</div>';
+                    $('#content-container').html(requestsHtml);
+                },
+                error: function () {
+                    alert('Không thể lấy dữ liệu yêu cầu phòng trọ. Vui lòng thử lại sau.');
+                }
+            });
+        });
+
+        // Function to update room status
+
         // ... (existing ready function content) ...
 
         // Handle Accounts click
@@ -211,13 +274,13 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    var accountsHtml = '<h3>All Accounts</h3>' +
+                    var accountsHtml = '<h3>Tất Cả Tài Khoản</h3>' +
                         '<div class="mb-3">' +
-                        '<input type="text" id="accountSearch" class="form-control" placeholder="Search accounts...">' +
+                        '<input type="text" id="accountSearch" class="form-control" placeholder="Tìm kiếm tài khoản...">' +
                         '</div>' +
-                        '<button id="add-account-btn" class="btn btn-success mb-3">Add Account</button>' +
+                        '<button id="add-account-btn" class="btn btn-success mb-3">Thêm Tài Khoản</button>' +
                         '<table class="table table-hover">' +
-                        '<thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead>' +
+                        '<thead><tr><th>ID</th><th>Tên</th><th>Email</th><th>Số Điện Thoại</th><th>Vai Trò</th><th>Trạng Thái</th><th>Hành Động</th></tr></thead>' +
                         '<tbody id="accountTableBody">';
 
                     data.forEach(function (account) {
@@ -263,14 +326,14 @@
                                 $('#role').val(account.role);
                                 $('#active').prop('checked', account.active);
                                 // Change the modal title and save button text
-                                $('.modal-title').text('Edit Account');
-                                $('#save-account').text('Update Account').data('id', accountId);
+                                $('.modal-title').text('Chỉnh Sửa Tài Khoản');
+                                $('#save-account').text('Cập Nhật Tài Khoản').data('id', accountId);
 
                                 // Show the modal
                                 $('#add-account-modal').modal('show');
                             },
                             error: function () {
-                                alert('Failed to fetch account details');
+                                alert('Không thể lấy chi tiết tài khoản');
                             }
                         });
                     });
@@ -317,15 +380,15 @@
                             data: JSON.stringify(accountData),
                             success: function (response) {
                                 if (response.success) {
-                                    alert(accountId ? 'Account updated successfully' : 'Account added successfully');
+                                    alert(accountId ? 'Cập nhật tài khoản thành công' : 'Thêm tài khoản thành công');
                                     $('#add-account-modal').modal('hide');
                                     $('#accounts').click(); // Refresh the account list
                                 } else {
-                                    alert(accountId ? 'Failed to update account' : 'Failed to add account');
+                                    alert(accountId ? 'Không thể cập nhật tài khoản' : 'Không thể thêm tài khoản');
                                 }
                             },
                             error: function () {
-                                alert('An error occurred');
+                                alert('Đã xảy ra lỗi');
                             }
                         });
                     });
@@ -333,28 +396,28 @@
                     // Reset the form when the modal is hidden
                     $('#add-account-modal').on('hidden.bs.modal', function () {
                         $('#add-account-form')[0].reset();
-                        $('.modal-title').text('Add New Account');
-                        $('#save-account').text('Save Account').removeData('id');
+                        $('.modal-title').text('Thêm Tài Khoản Mới');
+                        $('#save-account').text('Lưu Tài Khoản').removeData('id');
                     });
 
                     // Delete account functionality
                     $('.delete-account').click(function () {
                         var accountId = $(this).data('id');
-                        if (confirm('Are you sure you want to delete this account?')) {
+                        if (confirm('Bạn có chắc chắn muốn xóa tài khoản này không?')) {
                             $.ajax({
                                 url: 'deleteAccount',
                                 type: 'POST',
                                 data: {accountId: accountId},
                                 success: function (response) {
                                     if (response.success) {
-                                        alert('Account deleted successfully');
+                                        alert('Xóa tài khoản thành công');
                                         $('#accounts').click(); // Refresh the account list
                                     } else {
-                                        alert('Failed to delete account');
+                                        alert('Không thể xóa tài khoản');
                                     }
                                 },
                                 error: function () {
-                                    alert('An error occurred while deleting the account');
+                                    alert('Đã xảy ra lỗi khi xóa tài khoản');
                                 }
                             });
                         }
@@ -368,7 +431,7 @@
                     });
                 },
                 error: function () {
-                    alert('Unable to fetch accounts. Please try again later.');
+                    alert('Không thể lấy dữ liệu tài khoản. Vui lòng thử lại sau.');
                 }
             });
         });
@@ -387,7 +450,7 @@
                 '<label class="form-check-label" for="status-' + account.accountId + '">' +
                 '</div></td>' +
                 '<td>' +
-                '<button class="btn btn-primary btn-sm edit-account" data-id="' + account.accountId + '">Edit</button> ' +
+                '<button class="btn btn-primary btn-sm edit-account" data-id="' + account.accountId + '">Chỉnh Sửa</button> ' +
                 '</td>' +
                 '</tr>';
         }
@@ -403,15 +466,15 @@
                 success: function (response) {
                     if (response.success) {
                         // Update the label
-                        alert('Account status updated successfully');
+                        alert('Cập nhật trạng thái tài khoản thành công');
                     } else {
-                        alert('Failed to update account status');
+                        alert('Không thể cập nhật trạng thái tài khoản');
                         // Revert the toggle if update failed
                         $('#status-' + accountId).prop('checked', !isActive);
                     }
                 },
                 error: function () {
-                    alert('An error occurred while updating account status');
+                    alert('Đã xảy ra lỗi khi cập nhật trạng thái tài khoản');
                     // Revert the toggle if update failed
                     $('#status-' + accountId).prop('checked', !isActive);
                 }
@@ -426,18 +489,18 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
-                    var feedbackHtml = '<h3>Feedback</h3><table class="table table-hover">' +
-                        '<thead><tr><th>Date</th><th>Feedback</th><th>From</th><th>Actions</th></tr></thead><tbody>';
+                    var feedbackHtml = '<h3>Phản Hồi</h3><table class="table table-hover">' +
+                        '<thead><tr><th>Ngày</th><th>Nội Dung Phản Hồi</th><th>Người Gửi</th><th>Hành Động</th></tr></thead><tbody>';
 
                     data.forEach(function (fb) {
                         feedbackHtml += '<tr>' +
                             '<td>' + new Date(fb.createDate).toLocaleString() + '</td>' +
                             '<td>' + fb.feedbackText + '</td>' +
                             '<td>' + fb.senderName + '</td>' +
-                            '<td><button class="btn btn-primary reply-btn" data-id="' + fb.feedbackId + '">Reply</button></td>' +
+                            '<td><button class="btn btn-primary reply-btn" data-id="' + fb.feedbackId + '">Phản Hồi</button></td>' +
                             '</tr>' +
                             '<tr id="reply-row-' + fb.feedbackId + '" class="reply-row" style="display:none;">' +
-                            '<td colspan="4"><textarea class="form-control" rows="2"></textarea><button class="btn btn-success mt-2">Send Reply</button></td>' +
+                            '<td colspan="4"><textarea class="form-control" rows="2"></textarea><button class="btn btn-success mt-2">Gửi Phản Hồi</button></td>' +
                             '</tr>';
                     });
 
@@ -450,11 +513,24 @@
                     });
                 },
                 error: function () {
-                    alert('Unable to fetch feedback. Please try again later.');
+                    alert('Không thể lấy dữ liệu phản hồi. Vui lòng thử lại sau.');
                 }
             });
         });
     });
+
+    function updateRoomStatus(roomId, status) {
+        $.post('${pageContext.request.contextPath}/pending-room-requests', { action: status === 'approved' ? 'approvePostRequest' : 'rejectPostRequest', roomId: roomId }, function(response) {
+            if (response.success) {
+                alert('Phòng đã được ' + status);
+                location.reload();
+            } else {
+                alert('Không thể ' + status + ' phòng');
+            }
+        }, 'json').fail(function() {
+            alert('Lỗi liên lạc với máy chủ');
+        });
+    }
 </script>
 
 </body>

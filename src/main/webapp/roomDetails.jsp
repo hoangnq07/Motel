@@ -26,7 +26,9 @@
 <body class="body">
 <jsp:include page="header.jsp" />
 <div class="container">
-    <h1>Chi Tiết về Phòng</h1>
+
+    <h1>Chi Tiết Phòng</h1>
+
     <div class="row">
         <div class="col-md-6">
             <!-- Carousel -->
@@ -34,12 +36,12 @@
                 <div class="carousel-inner">
                     <c:if test="${empty images}">
                         <div class="carousel-item active">
-                            <img src="${pageContext.request.contextPath}/images/default-room.jpg" class="d-block" alt="Room Image" style="width: 700px; height: 500px;">
+                            <img src="${pageContext.request.contextPath}/images/default-room.jpg" class="d-block" alt="Hình Ảnh Phòng" style="width: 700px; height: 500px;">
                         </div>
                     </c:if>
                     <c:forEach var="image" items="${images}" varStatus="status">
                         <div class="carousel-item ${status.index == 0 ? 'active' : ''}">
-                            <img src="${pageContext.request.contextPath}/images/${image}" class="d-block" alt="Room Image" style="width: 700px; height: 500px;">
+                            <img src="${pageContext.request.contextPath}/images/${image}" class="d-block" alt="Hình Ảnh Phòng" style="width: 700px; height: 500px;">
                         </div>
                     </c:forEach>
                 </div>
@@ -49,12 +51,15 @@
                 </a>
                 <a class="carousel-control-next" href="#roomImagesCarousel" role="button" data-slide="next">
                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Sau</span>
+
+                    <span class="sr-only">Tiếp</span>
+
                 </a>
             </div>
         </div>
         <div class="col-md-6">
             <h3>${room.description}</h3>
+
             <p><strong>Phân Loại:</strong> ${room.category}</p>
             <p><strong>Giá Phòng:</strong> ${room.roomPrice} Triệu/tháng</p>
             <p><strong>Chiều Dài:</strong> ${room.length} m</p>
@@ -64,6 +69,7 @@
             <p><strong>Giá Wi-Fi:</strong> ${room.wifiPrice}</p>
             <p><strong>Người Chủ:</strong> ${room.accountFullname}</p>
             <p><strong>Số Điện Thoại:</strong> ${room.accountPhone}</p>
+
             <p><strong>Địa Chỉ:</strong> ${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
         </div>
     </div>

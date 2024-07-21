@@ -31,6 +31,21 @@
 <body>
 <div class="container">
     <h1>Quản Lý Hóa Đơn</h1>
+
+    <%
+        Enumeration<String> attributeNames = session.getAttributeNames();
+        while (attributeNames.hasMoreElements()) {
+            String name = attributeNames.nextElement();
+        }
+
+        Integer motelId = null;
+        if (session.getAttribute("motelId") != null) {
+            motelId = (Integer) session.getAttribute("motelId");
+        } else if (session.getAttribute("currentMotelId") != null) {
+            motelId = (Integer) session.getAttribute("currentMotelId");
+        }
+    %>
+
     <table class="table table-bordered">
         <thead>
         <tr>
@@ -43,36 +58,36 @@
         </tr>
         </thead>
         <tbody>
-        <%
-            Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
-            if (accountId != null) {
-                try (Connection conn = DBcontext.getConnection();
-                     PreparedStatement pstmt = conn.prepareStatement(
-                             "SELECT \n" +
-                                     "    mr.motel_room_id,\n" +
-                                     "    i.invoice_id,\n" +
-                                     "    i.create_date,\n" +
-                                     "    i.end_date,\n" +
-                                     "    i.total_price,\n" +
-                                     "    i.invoice_status\n" +
-                                     "FROM dbo.motel_room mr\n" +
-                                     "LEFT JOIN dbo.invoice i ON mr.motel_room_id = i.motel_room_id\n" +
-                                     "WHERE mr.account_id = ?\n" +
-                                     "ORDER BY i.create_date DESC;")) {
 
-                    pstmt.setInt(1, accountId);
-                    ResultSet rs = pstmt.executeQuery();
+            <%
+                if (motelId != null) {
+                    try (Connection conn = DBcontext.getConnection();
+                         PreparedStatement pstmt = conn.prepareStatement(
+                                 "SELECT \n" +
+                                         "    i.invoice_id,\n" +
+                                         "    mr.name AS room_name,\n" +
+                                         "    i.create_date,\n" +
+                                         "    i.end_date,\n" +
+                                         "    i.total_price,\n" +
+                                         "    i.invoice_status\n" +
+                                         "FROM dbo.motel_room mr\n" +
+                                         "JOIN dbo.invoice i ON mr.motel_room_id = i.motel_room_id\n" +
+                                         "WHERE mr.motel_id = ?\n" +
+                                         "ORDER BY i.create_date DESC;")) {
 
-                    while (rs.next()) {
-                        int invoiceId = rs.getInt("invoice_id");
-                        if (rs.wasNull()) {
-                            continue;
-                        }
-                        Date createDate = rs.getDate("create_date");
-                        Date endDate = rs.getDate("end_date");
-                        float totalPrice = rs.getFloat("total_price");
-                        String status = rs.getString("invoice_status");
-        %>
+                        pstmt.setInt(1, motelId);
+                        ResultSet rs = pstmt.executeQuery();
+
+                        boolean hasRows = false;
+                        while (rs.next()) {
+                            hasRows = true;
+                            int invoiceId = rs.getInt("invoice_id");
+                            String roomName = rs.getString("room_name");
+                            Date createDate = rs.getDate("create_date");
+                            Date endDate = rs.getDate("end_date");
+                            float totalPrice = rs.getFloat("total_price");
+                            String status = rs.getString("invoice_status");
+            %>
         <tr>
             <td><%= invoiceId %></td>
             <td><%= createDate %></td>
@@ -92,11 +107,15 @@
         </tr>
         <%
                     }
+                    if (!hasRows) {
+                        out.println("<tr><td colspan='6'>Không tìm thấy hóa đơn nào cho Motel ID này.</td></tr>");
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
+                    out.println("<tr><td colspan='6'>Có lỗi xảy ra khi truy vấn dữ liệu: " + e.getMessage() + "</td></tr>");
                 }
             } else {
-                out.println("<tr><td colspan='6'>Không tìm thấy ID của Tài khoản.</td></tr>");
+                out.println("<tr><td colspan='6'>Không tìm thấy ID của Motel trong session.</td></tr>");
             }
         %>
         </tbody>

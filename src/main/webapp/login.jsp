@@ -11,6 +11,12 @@
 
         <!-- Main css -->
         <link rel="stylesheet" href="account_assets/css/style.css">
+
+        <style>
+            body, h1, h2, h3, h4, h5, h6, p, a, input, label {
+                font-family: initial;
+            }
+        </style>
     </head>
     <body>
 
