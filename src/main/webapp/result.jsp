@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Reset Password Result</title>
+    <title>Kết Quả Đặt Lại Mật Khẩu</title>
 </head>
 <body>
     <%
@@ -12,10 +12,10 @@
 
     <% if (message != null) { %>
         <p><%= message %></p>
-        <a href="login.jsp">Go to Login</a>
+        <a href="login.jsp">Về trang Login</a>
     <% } else if (error != null) { %>
         <p><%= error %></p>
-        <a href="forgot-password.jsp">Try Again</a>
+        <a href="forgot-password.jsp">Thử lại</a>
     <% } %>
 </body>
 </html>

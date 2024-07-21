@@ -23,19 +23,19 @@
 </head>
 <body>
 <div class="container">
-    <h2>Pending Requests</h2>
+    <h2>Những Yêu Cầu Đang Chờ</h2>
     <c:if test="${not empty pendingRequests}">
         <table class="table table-bordered">
             <thead>
             <tr>
-                <th>Request ID</th>
-                <th>Create Date</th>
-                <th>Descriptions</th>
-                <th>Account ID</th>
-                <th>Status</th>
-                <th>ID Card Image</th>
-                <th>Document Image</th>
-                <th>Action</th>
+                <th>ID của Yêu cầu</th>
+                <th>Ngày Tạo</th>
+                <th>Thông Tin Mô Tả</th>
+                <th>ID của Tài Khoản</th>
+                <th>Trạng Thái</th>
+                <th>Ảnh CCCD</th>
+                <th>Ảnh Văn Bản</th>
+                <th>Hành Động</th>
             </tr>
             </thead>
             <tbody>
@@ -60,7 +60,7 @@
         </table>
     </c:if>
     <c:if test="${empty pendingRequests}">
-        <p>No pending requests found.</p>
+        <p>Hiện không có Yêu Cầu nào</p>
     </c:if>
 </div>
 

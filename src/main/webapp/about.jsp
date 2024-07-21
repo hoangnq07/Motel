@@ -37,15 +37,16 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="contact-info text-center">
-                <h2>Contact Us</h2>
+                <h2>Liên Hệ với Chúng Tôi</h2>
                 <p>Feel free to get in touch with us through any of the following methods:</p>
+                <p>Vui lòng liên hệ với chúng tôi thông qua những cách này</p>
                 <div class="row mt-4">
                     <div class="col-md-6">
-                        <h5>Address</h5>
-                        <p>Da Nang<br>City, Ngu Hanh Son<br>District</p>
+                        <h5>Địa Chỉ</h5>
+                        <p>Thành phố Đà Nẵng<br>Quận Ngũ Hành Sơn<br></p>
                     </div>
                     <div class="col-md-6">
-                        <h5>Phone</h5>
+                        <h5>Số điện thoại</h5>
                         <p>0123456789</p>
                     </div>
                 </div>
@@ -55,12 +56,12 @@
                         <p>info@company.com</p>
                     </div>
                     <div class="col-md-6">
-                        <h5>Working Hours</h5>
-                        <p>Monday - Friday: 9 AM - 6 PM<br>Saturday - Sunday: Closed</p>
+                        <h5>Giờ làm việc</h5>
+                        <p>Thứ 2 - Thứ 6: 9 AM - 6 PM<br>Thứ 7 - Chủ Nhật: Không làm việc</p>
                     </div>
                 </div>
                 <div class="social-icons mt-4">
-                    <h5>Follow Us</h5>
+                    <h5>Theo dõi chúng tôi</h5>
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-twitter"></i></a>
                     <a href="#"><i class="fab fa-linkedin-in"></i></a>

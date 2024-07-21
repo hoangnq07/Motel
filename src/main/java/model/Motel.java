@@ -17,7 +17,6 @@ public class Motel {
     private String ward;
     private String wardId;
     private int accountId;
-
     // Constructor
     public Motel() {
     }

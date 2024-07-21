@@ -1,15 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
+
 <c:if test="${not empty requestScope.accounts}">
-    <h2>Search Results:</h2>
+    <h2>Kết Quả:</h2>
     <table>
         <tr>
-            <th>Full Name</th>
+            <th>Họ Tên</th>
             <th>Email</th>
-            <th>Phone</th>
-            <th>Citizen ID</th>
-            <th>Action</th>
+            <th>SĐT</th>
+            <th>CCCD</th>
+            <th>Ngày Thuê</th>
+            <th>Hành Động</th>
         </tr>
         <c:forEach var="account" items="${requestScope.accounts}">
             <c:if test="${account.role != 'admin'}">
@@ -19,7 +21,7 @@
                     <td>${account.phone}</td>
                     <td>${account.citizenId}</td>
                     <td>
-                        <button onclick="openAddTenantModal(${account.accountId}, ${requestScope.motelRoomId})">Add Tenant</button>
+                        <button onclick="openAddTenantModal(${account.accountId}, ${requestScope.motelRoomId})">Thêm vào Phòng</button>
                     </td>
                 </tr>
             </c:if>
@@ -28,5 +30,5 @@
 </c:if>
 
 <c:if test="${empty accounts}">
-    <p>No results found.</p>
+    <p>Không có kết quả.</p>
 </c:if>

@@ -8,8 +8,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet(name = "NotificationServlet", urlPatterns = {"/sendNotification"})
+@WebServlet(name = "NotificationServlet", urlPatterns = {"/sendNotification","/listNotifications"})
 public class NotificationServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String message = request.getParameter("message");
@@ -36,6 +37,15 @@ public class NotificationServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request, response);
+        NotificationDAO dao = new NotificationDAO();
+        try {
+            List<Object[]> sentNotifications = dao.getSentNotifications();
+            request.setAttribute("sentNotifications", sentNotifications);
+            request.getRequestDispatcher("/notify.jsp").forward(request, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "Failed to fetch sent notifications: " + e.getMessage());
+            request.getRequestDispatcher("/notify.jsp").forward(request, response);
+        }
     }
 }

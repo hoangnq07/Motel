@@ -1,4 +1,3 @@
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
@@ -6,7 +5,7 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8">
-    <title>Danh Sách Feedback</title>
+    <title>Danh Sách Đánh Giá</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <style>
         .feedback-table {
@@ -42,14 +41,15 @@
 <body>
 <!-- Feedback List Start -->
 <div class="container feedback-table">
-    <h3>Received Feedbacks</h3>
+    <h3>Đánh Giá Đã Nhận</h3>
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>Date</th>
-            <th>Content</th>
-            <th>Sender</th>
-            <th>Room</th>
+            <th>Ngày Nhận</th>
+            <th>Nội Dung</th>
+            <th>Tên Người Gửi</th>
+            <th>Nhà Trọ</th>
+            <th>Phòng</th>
         </tr>
         </thead>
         <tbody id="feedbackList">
@@ -80,11 +80,12 @@
                                 .append($('<td>').text(formattedDate))
                                 .append($('<td>').text(fb.feedbackText))
                                 .append($('<td>').text(fb.senderName))
-                                .append($('<td>').text(fb.roomName))
+                                .append($('<td>').text(fb.motelName)) // Hiển thị tên nhà trọ
+                                .append($('<td>').text(fb.roomName)) // Hiển thị tên phòng
                                 .appendTo(tbody);
                         });
                     } else {
-                        $('<tr>').append($('<td>').attr('colspan', '3').text('Không có feedback nào.')).appendTo(tbody);
+                        $('<tr>').append($('<td>').attr('colspan', '5').text('Không có feedback nào.')).appendTo(tbody);
                     }
                 },
                 error: function(error) {

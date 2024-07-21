@@ -7,10 +7,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Notification</title>
+    <title>Thông báo</title>
 </head>
 <body>
-<h1>Notifications</h1>
+<h1>Thông báo</h1>
 <ul>
     <%
         if (notifications != null && !notifications.isEmpty()) {
@@ -21,7 +21,7 @@
         }
     } else {
     %>
-    <li>No notifications available</li>
+    <li>Hiện chưa có thông báo nào.</li>
     <%
         }
     %>
