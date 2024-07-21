@@ -71,10 +71,9 @@
         </dependency>
         <!-- JSTL -->
         <dependency>
-            <groupId>jakarta.taglibs</groupId>
-            <artifactId>jakarta.taglibs-api</artifactId>
-            <version>3.0.0</version>
-            <scope>provided</scope>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>org.mindrot</groupId>
