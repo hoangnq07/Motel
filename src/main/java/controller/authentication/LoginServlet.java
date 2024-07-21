@@ -47,7 +47,8 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("user", account);
 
                 if (user.getRole().equals("admin")) {
-                    request.getRequestDispatcher("dashboard_admin.jsp").forward(request, response);
+                    session.setAttribute("adminLastAccessTime", System.currentTimeMillis());
+                    response.sendRedirect("admin");
                 } else {
                     request.getRequestDispatcher("home").forward(request, response);
                 }
