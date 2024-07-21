@@ -55,6 +55,11 @@
                         <i class="fas fa-door-open mr-2"></i>Quản lý Phòng
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link ${param.page == 'all-renters' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=all-renters">
+                        <i class="fas fa-users mr-2"></i>Danh sách người thuê
+                    </a>
+                </li>
 <%--                <li class="nav-item">--%>
 <%--                    <a class="nav-link ${param.page == 'customer-management' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=customer-management">--%>
 <%--                        <i class="fas fa-users mr-2"></i>Quản lý Người thuê--%>
@@ -94,6 +99,9 @@
                 </c:when>
                 <c:when test="${param.page == 'room-list'}">
                     <jsp:include page="motel-rooms-list.jsp"/>
+                </c:when>
+                <c:when test="${param.page == 'all-renters'}">
+                    <jsp:include page="all-renters.jsp"/>
                 </c:when>
                 <c:when test="${param.page == 'customer-management'}">
                     <jsp:include page="renters.jsp"/>
