@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Calendar;
 
 public class InvoiceService {
-    public Invoice createInvoice(int motelRoomId, String invoiceStatus, float electricityIndex, float waterIndex) throws SQLException {
+    public String createInvoice(int motelRoomId, String invoiceStatus, float electricityIndex, float waterIndex) throws SQLException {
         Connection connection = null;
         try {
             connection = DBcontext.getConnection();
@@ -118,10 +118,20 @@ public class InvoiceService {
                 psWater.executeUpdate();
             }
 
+            Invoice newInvoice = new Invoice(invoiceId, currentDate, endDate, totalPrice, invoiceStatus, renterId, motelRoomId, electricityIndex, waterIndex);
             connection.commit();
 
+            return "SUCCESS:" + newInvoice.getInvoiceId();
 
-            return new Invoice(invoiceId, currentDate, endDate, totalPrice, invoiceStatus, renterId, motelRoomId, electricityIndex, waterIndex);
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException excep) {
+                    excep.printStackTrace();
+                }
+            }
+            return "ERROR:" + e.getMessage();
         } catch (SQLException e) {
             if (connection != null) {
                 try {
@@ -131,13 +141,24 @@ public class InvoiceService {
                     excep.printStackTrace();
                 }
             }
-            throw e;
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            return "ERROR:Database error: " + e.getMessage();
+        } catch (Exception e) {
+            if (connection != null) {
+                try {
+                    connection.rollback();
+                } catch (SQLException excep) {
+                    excep.printStackTrace();
+                }
+            }
+            return "ERROR:Unexpected error: " + e.getMessage();
         } finally {
             if (connection != null) {
-                connection.setAutoCommit(true);
-                connection.close();
+                try {
+                    connection.setAutoCommit(true);
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
