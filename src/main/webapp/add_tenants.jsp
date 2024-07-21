@@ -275,7 +275,7 @@
                     <label for="modalStartDate">Ngày thuê:</label>
                     <input type="date" id="modalStartDate" name="startDate" required>
                     <div id="utilityIndexInputs" style="display: none;">
-                        <label for="modalElectricityIndex"Chỉ số điện hiện tại:</label>
+                        <label for="modalElectricityIndex">Chỉ số điện hiện tại:</label>
                         <input type="number" id="modalElectricityIndex" name="electricityIndex">
                         <label for="modalWaterIndex">Chỉ số nước hiện tại:</label>
                         <input type="number" id="modalWaterIndex" name="waterIndex">
