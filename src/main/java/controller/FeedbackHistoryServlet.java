@@ -2,7 +2,7 @@ package controller;
 
 import Account.Account;
 import com.google.gson.Gson;
-import dao.RenterDAO;
+import dao.FeedbackDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -30,7 +30,7 @@ public class FeedbackHistoryServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
 
         try {
-            List<Feedback> feedbacks = new RenterDAO().getFeedbackHistory(userId); // Đảm bảo RenterDAO có phương thức getFeedbackHistory
+            List<Feedback> feedbacks = new FeedbackDAO().getFeedbackHistory(userId); // Đảm bảo RenterDAO có phương thức getFeedbackHistory
             String jsonResponse = new Gson().toJson(feedbacks);
             out.print(jsonResponse);
             out.flush();
