@@ -361,7 +361,16 @@ public class MotelRoomDAO {
             System.out.println("Motel room with id " + motelRoomId + " does not exist.");
         }
     }
-
+    public static boolean updateRoomStatus(int motelRoomId, boolean status) throws SQLException {
+        String sql = "UPDATE motel_room SET room_status = ? WHERE motel_room_id = ?";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setBoolean(1, status);
+            stmt.setInt(2, motelRoomId);
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        }
+    }
     public void deleteMotelRoom(int motelRoomId) throws SQLException {
         if (isMotelRoomExists(motelRoomId)) {
             connection.setAutoCommit(false);
@@ -657,37 +666,42 @@ public class MotelRoomDAO {
         }
     }
 
-    public static void main(String[] args) {
+    public static boolean isRoomAtCapacity(int motelRoomId) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
         try {
-            MotelRoomDAO motelRoomDAO = new MotelRoomDAO();
+            conn = DBcontext.getConnection();
 
-            // Test getRoomsByStatus
-            System.out.println("Testing getRoomsByStatus with 'pending' status...");
-            List<MotelRoom> rooms = motelRoomDAO.getRoomsByStatus("Pending", 1, 10);
-            for (MotelRoom room : rooms) {
-                System.out.println("Room ID: " + room.getMotelRoomId() + ", Description: " + room.getDescription());
+            // First, get the room capacity
+            String capacityQuery = "SELECT cr.quantity FROM motel_room mr JOIN category_room cr ON mr.category_room_id = cr.category_room_id WHERE mr.motel_room_id = ?";
+            pstmt = conn.prepareStatement(capacityQuery);
+            pstmt.setInt(1, motelRoomId);
+            rs = pstmt.executeQuery();
+
+            if (!rs.next()) {
+                throw new SQLException("Room not found");
             }
 
-            // Test getCountByStatus
-            System.out.println("Testing getCountByStatus with 'pending' status...");
-            int count = motelRoomDAO.getCountByStatus("pending");
-            System.out.println("Count of pending rooms: " + count);
+            int capacity = rs.getInt("quantity");
 
-            // Test updatePostRequestStatus
-            System.out.println("Testing updatePostRequestStatus to 'approved' for room ID 1...");
-            boolean updateResult = motelRoomDAO.updatePostRequestStatus(1, "approved");
-            System.out.println("Update result: " + updateResult);
+            // Then, count current tenants
+            String countQuery = "SELECT COUNT(*) as tenant_count FROM renter WHERE motel_room_id = ? AND check_out_date IS NULL";
+            pstmt = conn.prepareStatement(countQuery);
+            pstmt.setInt(1, motelRoomId);
+            rs = pstmt.executeQuery();
 
-            // Rerun getRoomsByStatus to see changes
-            System.out.println("Rerunning getRoomsByStatus after update...");
-            rooms = motelRoomDAO.getRoomsByStatus("approved", 1, 10);
-            for (MotelRoom room : rooms) {
-                System.out.println("Room ID: " + room.getMotelRoomId() + ", Status: approved");
+            if (rs.next()) {
+                int currentTenants = rs.getInt("tenant_count");
+                return currentTenants >= capacity;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+
+            return false;
+        } finally {
+            if (rs != null) rs.close();
+            if (pstmt != null) pstmt.close();
+            if (conn != null) conn.close();
         }
     }
-
 }
 

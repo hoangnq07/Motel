@@ -363,7 +363,10 @@ public class AccountDAO {
     }
     public List<Account> searchAccounts(String searchTerm) throws SQLException {
         List<Account> accounts = new ArrayList<>();
-        String sql = "SELECT * FROM accounts WHERE email LIKE ? OR phone LIKE ? OR citizen_id LIKE ?";
+        String sql = "SELECT * FROM accounts a " +
+                "WHERE (a.fullname LIKE ? OR a.email LIKE ? OR a.phone LIKE ? OR a.citizen_id LIKE ?) " +
+                "AND a.role = 'user' " +
+                "AND NOT EXISTS (SELECT 1 FROM renter r WHERE r.renter_id = a.account_id)";
 
         try (Connection conn = getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -372,6 +375,7 @@ public class AccountDAO {
             stmt.setString(1, searchPattern);
             stmt.setString(2, searchPattern);
             stmt.setString(3, searchPattern);
+            stmt.setString(4, searchPattern);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
