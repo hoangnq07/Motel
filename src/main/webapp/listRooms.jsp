@@ -64,16 +64,6 @@
 <body class="body">
 <jsp:include page="header.jsp"></jsp:include>
 
-<%
-    String motelIdStr = request.getParameter("id");
-    if (motelIdStr != null && !motelIdStr.isEmpty()) {
-        session.setAttribute("currentMotelId", Integer.parseInt(motelIdStr));
-        out.println("<p>Debug: Motel ID " + motelIdStr + " stored in session.</p>");
-    } else {
-        out.println("<p>Debug: No motel ID found in URL.</p>");
-    }
-%>
-
 <div class="container mt-5">
     <form id="searchForm" method="GET" action="${pageContext.request.contextPath}/motel-rooms">
         <input type="hidden" name="action" value="search">

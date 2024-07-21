@@ -8,6 +8,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tạo Hóa Đơn Mới</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 <body>
@@ -67,6 +68,8 @@
       <label for="waterUsage">Chỉ số nước:</label>
       <input type="number" id="waterUsage" name="waterUsage" class="form-control" step="0.01" required>
     </div>
+
+
 <%--    <div class="form-group">--%>
 <%--      <label for="endDate">End Date:</label>--%>
 <%--      <input type="date" id="endDate" name="endDate" class="form-control" required>--%>
@@ -87,7 +90,6 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function() {
-    // Tính tổng tiền dựa trên dữ liệu điện nước nhập vào
     $('#electricityUsage, #waterUsage').change(function() {
       var electricityPrice = $('#motelRoomId option:selected').attr('data-electricity-price');
       var waterPrice = $('#motelRoomId option:selected').attr('data-water-price');
@@ -98,38 +100,55 @@
       $('#totalPriceHidden').val(totalPrice.toFixed(2));
     });
 
-    // Đổi giá trị của phòng khi chọn lại
     $('#motelRoomId').change(function() {
       $('#electricityUsage, #waterUsage').trigger('change');
     });
+
+    $('#billForm').submit(function(e) {
+      e.preventDefault();
+
+      $.ajax({
+        url: 'createBill',
+        type: 'POST',
+        data: $(this).serialize(),
+        dataType: 'text',
+        success: function(response) {
+          console.log('Full Response:', response);
+          if (response.startsWith('SUCCESS:')) {
+            var invoiceId = response.split(':')[1];
+            Swal.fire({
+              title: 'Thành công!',
+              text: 'Hóa đơn đã được tạo thành công! ID của Hóa Đơn là ' + invoiceId,
+              icon: 'success'
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = 'owner?page=bill';
+              }
+            });
+          } else if (response.startsWith('ERROR:')) {
+            var errorMessage = response.substr(6);
+            showErrorMessage(errorMessage);
+          } else {
+            showErrorMessage('Unexpected response. Check console for details.');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error('AJAX Error:', status, error);
+          console.log('Chi tiết lỗi:', xhr.responseText);
+          showErrorMessage('Đã xảy ra lỗi. Vui lòng thử lại.');
+        }
+      });
+    });
+
+    function showErrorMessage(message) {
+      Swal.fire({
+        title: 'Lỗi!',
+        text: message,
+        icon: 'error',
+        confirmButtonText: 'Đóng'
+      });
+    }
   });
 </script>
 </body>
-<script>
-  // function confirmBill() {
-  //   $.ajax({
-  //     url: 'createBill',
-  //     type: 'POST',
-  //     data: $('#billForm').serialize(),
-  //     dataType: 'json',
-  //     success: function(response) {
-  //       if (response.status === 'success') {
-  //         alert('Bill created successfully!');
-  //         $('#confirmationDialog').remove();
-  //         // Optionally, reset the form or redirect to a new page
-  //       } else {
-  //         alert('Error: ' + response.message);
-  //       }
-  //     },
-  //     error: function(xhr, status, error) {
-  //       if (xhr.status === 409) {
-  //         alert('Cannot create invoice: ' + xhr.responseJSON.message);
-  //       } else {
-  //         alert('An error occurred. Please try again. Details: ' + xhr.responseText);
-  //       }
-  //     }
-  //   });
-  // }
-
-</script>
 </html>
