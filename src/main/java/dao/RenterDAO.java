@@ -86,6 +86,32 @@ public class RenterDAO {
         }
     }
 
+    public static List<Renter> getAllRenters() {
+        List<Renter> renters = new ArrayList<>();
+        String sql = "SELECT a.fullname AS renter_name, a.email AS renter_email, rt.renter_date, mr.name AS room_name " +
+                "FROM dbo.renter rt " +
+                "JOIN dbo.motel_room mr ON rt.motel_room_id = mr.motel_room_id " +
+                "JOIN dbo.accounts a ON rt.renter_id = a.account_id " +
+                "ORDER BY mr.name";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                String fullname = rs.getString("renter_name");
+                String email = rs.getString("renter_email");
+                String date = rs.getString("renter_date");
+                String roomName = rs.getString("room_name");
+
+                Renter renter = new Renter();
+                renters.add(renter);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return renters;
+    }
     public Renter getRenterById(int renterId) {
         Renter renter = null;
         String sql = "SELECT r.*, a.* FROM renter r " +
