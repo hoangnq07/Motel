@@ -27,6 +27,31 @@
     </form>
     <br>
     <div id="statusMessage"></div>
+
+    <h2 class="mt-4">Thông Báo Đã Gửi</h2>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Phòng</th>
+            <th>Nội Dung</th>
+            <th>Thời Gian</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="item" items="${sentNotifications}">
+            <tr>
+                <td>${item[1]}</td>
+                <td>${item[0].message}</td>
+                <td>${item[0].createDate}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm">Edit</button>
+                    <button class="btn btn-danger btn-sm">Delete</button>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -53,6 +78,17 @@
                 }
             });
         });
+    });
+    $(".editBtn").on("click", function(){
+        var id = $(this).data("id");
+        var message = $(this).data("message");
+        var newMessage = prompt("Enter new message:", message);
+        if (newMessage !== null) {
+            $.post("editNotification", { notificationId: id, message: newMessage }, function(response){
+                $("#statusMessage").html('<div class="alert alert-info">' + response + '</div>');
+                location.reload(); // Reload to reflect changes
+            });
+        }
     });
 </script>
 </body>

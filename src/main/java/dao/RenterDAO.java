@@ -10,53 +10,6 @@ import java.util.logging.Logger;
 
 public class RenterDAO {
 
-    public List<Renter> getRentersByMotel(int motelId) {
-        List<Renter> renters = new ArrayList<>();
-        String sql = "SELECT r.*, a.* FROM renter r " +
-                "JOIN accounts a ON r.renter_id = a.account_id " +
-                "JOIN motel_room mr ON r.motel_room_id = mr.motel_room_id " +
-                "WHERE mr.motel_id = ?";
-
-        try (Connection conn = DBcontext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, motelId);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Account account = extractAccountFromResultSet(rs);
-                Renter renter = extractRenterFromResultSet(rs, account);
-                renters.add(renter);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return renters;
-    }
-
-    public List<Renter> getRentersByMotelRoom(int motelRoomId) {
-        List<Renter> renters = new ArrayList<>();
-        String sql = "SELECT r.*, a.* FROM renter r " +
-                "JOIN accounts a ON r.renter_id = a.account_id " +
-                "WHERE r.motel_room_id = ?";
-
-        try (Connection conn = DBcontext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, motelRoomId);
-            ResultSet rs = ps.executeQuery();
-
-            while (rs.next()) {
-                Account account = extractAccountFromResultSet(rs);
-                Renter renter = extractRenterFromResultSet(rs, account);
-                renters.add(renter);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return renters;
-    }
-
     private static final Logger logger = Logger.getLogger(RenterDAO.class.getName());
 
     public boolean addRenter(Renter renter) throws SQLException {
@@ -86,28 +39,6 @@ public class RenterDAO {
         }
     }
 
-    public Renter getRenterById(int renterId) {
-        Renter renter = null;
-        String sql = "SELECT r.*, a.* FROM renter r " +
-                "JOIN accounts a ON r.renter_id = a.account_id " +
-                "WHERE r.renter_id = ?";
-
-        try (Connection conn = DBcontext.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, renterId);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                Account account = extractAccountFromResultSet(rs);
-                renter = extractRenterFromResultSet(rs, account);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return renter;
-    }
-
     public void updateRenter(Renter renter) {
         String sql = "UPDATE renter SET change_room_date = ?, check_out_date = ?, renter_date = ?, motel_room_id = ? WHERE renter_id = ?";
 
@@ -124,18 +55,36 @@ public class RenterDAO {
             e.printStackTrace();
         }
     }
-
-    public void deleteRenter(int renterId) {
-        String sql = "DELETE FROM renter WHERE renter_id = ?";
+    public boolean checkOut(int renterId) {
+        String sql = "UPDATE renter SET check_out_date = GETDATE() WHERE renter_id = ? AND check_out_date IS NULL";
 
         try (Connection conn = DBcontext.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
+
             ps.setInt(1, renterId);
-            ps.executeUpdate();
+            int rowsAffected = ps.executeUpdate();
+
+            return rowsAffected > 0;
         } catch (SQLException e) {
+            logger.severe("Error updating renter check-out date: " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
+    public int countRemainingRenters(int motelRoomId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM renter WHERE motel_room_id = ? AND check_out_date IS NULL";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, motelRoomId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
 
     private Account extractAccountFromResultSet(ResultSet rs) throws SQLException {
         Account account = new Account();

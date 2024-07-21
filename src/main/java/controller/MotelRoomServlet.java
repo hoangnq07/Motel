@@ -8,6 +8,7 @@ import java.util.List;
 
 import Account.Account;
 import com.google.gson.Gson;
+import dao.RenterDAO;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.Part;
 import model.CategoryRoom;
@@ -45,6 +46,24 @@ public class MotelRoomServlet extends HttpServlet {
             searchRooms(request, response);
         } else if ("requestPost".equals(action)) {
             requestPost(request, response);
+        }else if ("checkRoomOccupancy".equals(action)) {
+            checkRoomOccupancy(request, response);
+        } else {
+            sendErrorResponse(response, HttpServletResponse.SC_BAD_REQUEST, "Invalid action");
+        }
+    }
+
+    private void checkRoomOccupancy(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int motelRoomId = Integer.parseInt(request.getParameter("motelRoomId"));
+
+        try {
+            boolean isOccupied = MotelRoomDAO.isRoomAtCapacity(motelRoomId);
+
+            response.setContentType("text/plain");
+            response.getWriter().write(isOccupied ? "occupied" : "vacant");
+        } catch (SQLException e) {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("Error checking room occupancy");
         }
     }
 
