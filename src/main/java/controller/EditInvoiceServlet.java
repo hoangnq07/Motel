@@ -52,7 +52,7 @@ public class EditInvoiceServlet extends HttpServlet {
 
             try {
                 invoiceDAO.updateInvoice(invoice);
-                response.sendRedirect("manageInvoices.jsp");
+                response.sendRedirect("owner?page=bill");
             } catch (SQLException e) {
                 e.printStackTrace();
                 String errorMessage = "Unable to update invoice: " + e.getMessage();

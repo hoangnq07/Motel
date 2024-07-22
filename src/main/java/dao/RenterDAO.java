@@ -207,6 +207,7 @@ public class RenterDAO {
         return tenants;
     }
 
+
     public boolean isUserAlreadyRenting(int accountId) {
         String sql = "SELECT COUNT(*) FROM renter WHERE renter_id = ? AND (check_out_date IS NULL OR check_out_date > GETDATE())";
 
@@ -225,5 +226,156 @@ public class RenterDAO {
         }
 
         return false;
+    }
+
+    public void updateRoomStatus(int motelRoomId, boolean status) throws SQLException {
+        String sql = "UPDATE motel_room SET room_status = ? WHERE motel_room_id = ?";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setBoolean(1, status);
+            ps.setInt(2, motelRoomId);
+            ps.executeUpdate();
+        }
+    }
+
+    public void checkAndUpdateRoomStatus(int motelRoomId) throws SQLException {
+        int currentRenterCount = getNumberOfRentersByMotelRoomId(motelRoomId);
+        int maxRenters = getMaxRentersForRoom(motelRoomId);
+
+        boolean isFull = currentRenterCount >= maxRenters;
+        updateRoomStatus(motelRoomId, !isFull);
+    }
+
+    public void checkoutRenter(int renterId) throws SQLException {
+        String sql = "UPDATE renter SET check_out_date = GETDATE() WHERE renter_id = ?";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, renterId);
+            ps.executeUpdate();
+
+            // Get the motel_room_id for this renter
+            int motelRoomId = getMotelRoomIdByRenterId(renterId);
+
+            // Check and update room status
+            checkAndUpdateRoomStatus(motelRoomId);
+        }
+    }
+
+    private int getMotelRoomIdByRenterId(int renterId) throws SQLException {
+        String sql = "SELECT motel_room_id FROM renter WHERE renter_id = ?";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, renterId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("motel_room_id");
+            }
+        }
+        throw new SQLException("No motel room found for renter id: " + renterId);
+    }
+
+    public int getMaxRentersForRoom(int motelRoomId) throws SQLException {
+        String sql = "SELECT cr.quantity FROM category_room cr " +
+                "JOIN motel_room mr ON cr.category_room_id = mr.category_room_id " +
+                "WHERE mr.motel_room_id = ?";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, motelRoomId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("quantity");
+            }
+        }
+        return 0;
+    }
+
+    public int getNumberOfRentersByMotelRoomId(int motelRoomId) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) AS renter_count FROM renter WHERE motel_room_id = ? AND check_out_date IS NULL";
+
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, motelRoomId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt("renter_count");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    public boolean hasUnpaidInvoices(int renterId) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM invoice WHERE renter_id = ? AND invoice_status = 'UNPAID'";
+        try (Connection conn = DBcontext.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, renterId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+        return false;
+    }
+
+    public boolean deleteRenter(int renterId, boolean forceDelete) throws SQLException {
+        Connection conn = null;
+        try {
+            conn = DBcontext.getConnection();
+            conn.setAutoCommit(false);
+
+            if (!forceDelete && hasUnpaidInvoices(renterId)) {
+                return false; // Don't delete if there are unpaid invoices and not forced
+            }
+
+            // Get motel_room_id before deletion
+            int motelRoomId = getMotelRoomIdByRenterId(renterId);
+
+            // Delete all invoices (both paid and unpaid)
+            String deleteInvoicesSQL = "DELETE FROM invoice WHERE renter_id = ?";
+            try (PreparedStatement deleteInvoicesPs = conn.prepareStatement(deleteInvoicesSQL)) {
+                deleteInvoicesPs.setInt(1, renterId);
+                deleteInvoicesPs.executeUpdate();
+            }
+
+            // Delete renter
+            String deleteRenterSQL = "DELETE FROM renter WHERE renter_id = ?";
+            try (PreparedStatement deleteRenterPs = conn.prepareStatement(deleteRenterSQL)) {
+                deleteRenterPs.setInt(1, renterId);
+                int rowsAffected = deleteRenterPs.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    // Check and update room status after deletion
+                    checkAndUpdateRoomStatus(motelRoomId);
+
+                    conn.commit();
+                    return true;
+                }
+            }
+
+            conn.rollback();
+            return false;
+        } catch (SQLException e) {
+            if (conn != null) {
+                try {
+                    conn.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            throw e;
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.setAutoCommit(true);
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
