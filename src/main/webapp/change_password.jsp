@@ -13,7 +13,7 @@
     </head>
     <body>
         <jsp:include page="header.jsp" ></jsp:include>
-        <div class="container mt-5">
+        <div class="container mt-5" style="margin-top: 120px !important;">
             <h2>Đổi Mật Khẩu</h2>
             <c:if test="${not empty status}">
                 <p style="color: red;">${status}</p>

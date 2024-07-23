@@ -85,7 +85,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>Danh Sách Trọ/Chung Cư</h1>
+    <h1>Danh Sách  Nhà Trọ</h1>
     <button type="button" class="btn btn-primary create-btn" data-toggle="modal" data-target="#addMotelModal">
         Thêm Mới
     </button>

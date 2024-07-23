@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         body {
-            margin-top: 50px;
+            margin-top: 120px !important;
             background-color: #f8f9fa;
         }
-        .container {
+        .container-1 {
             max-width: 600px;
             padding: 20px;
             background-color: #ffffff;
@@ -33,7 +33,7 @@
 </head>
 <body>
 <jsp:include page="header.jsp" />
-<div class="container">
+<div class="container container-1">
     <h2>Yêu Cầu Trở Thành Người Chủ</h2>
     <c:choose>
         <c:when test="${not empty requestAuthorities}">

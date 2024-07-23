@@ -33,14 +33,15 @@ public class InvoiceService {
             }
 
             // Get room prices
-            String getRoomPricesSQL = "SELECT electricity_price, water_price FROM dbo.motel_room WHERE motel_room_id = ?";
-            float electricityPrice = 0, waterPrice = 0;
+            String getRoomPricesSQL = "SELECT electricity_price, water_price, room_price FROM dbo.motel_room WHERE motel_room_id = ?";
+            float electricityPrice = 0, waterPrice = 0, roomPrice = 0;
             try (PreparedStatement ps = connection.prepareStatement(getRoomPricesSQL)) {
                 ps.setInt(1, motelRoomId);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
                         electricityPrice = rs.getFloat("electricity_price");
                         waterPrice = rs.getFloat("water_price");
+                        roomPrice = rs.getFloat("room_price");
                     } else {
                         throw new SQLException("Room not found.");
                     }
@@ -50,8 +51,7 @@ public class InvoiceService {
             // Calculate total price
             float electricityUsage = latestInvoice != null ? electricityIndex - latestInvoice.getElectricityIndex() : electricityIndex;
             float waterUsage = latestInvoice != null ? waterIndex - latestInvoice.getWaterIndex() : waterIndex;
-            float totalPrice = (electricityUsage * electricityPrice) + (waterUsage * waterPrice);
-
+            float totalPrice = roomPrice + (electricityUsage * electricityPrice) + (waterUsage * waterPrice);
 
             // Find the renter_id from the motel_room_id
             String selectRenterIdSQL = "SELECT renter_id FROM dbo.renter WHERE motel_room_id = ?";
@@ -75,15 +75,14 @@ public class InvoiceService {
 
 
             // Insert into Invoice table
-            String insertInvoiceSQL = "INSERT INTO dbo.invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (?, ?, ?, ?, ?, ?)";
+            String insertInvoiceSQL = "INSERT INTO dbo.invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (?, ?, ?, ?, NULL, ?)";
             int invoiceId;
             try (PreparedStatement preparedStatement = connection.prepareStatement(insertInvoiceSQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setDate(1, new java.sql.Date(currentDate.getTime()));
                 preparedStatement.setDate(2, new java.sql.Date(endDate.getTime()));
                 preparedStatement.setFloat(3, totalPrice);
                 preparedStatement.setString(4, invoiceStatus);
-                preparedStatement.setInt(5, renterId);
-                preparedStatement.setInt(6, motelRoomId);
+                preparedStatement.setInt(5, motelRoomId);
                 int affectedRows = preparedStatement.executeUpdate();
                 if (affectedRows == 0) {
                     throw new SQLException("Creating invoice failed, no rows affected.");
@@ -97,10 +96,6 @@ public class InvoiceService {
                     }
                 }
             }
-
-
-
-
 
             // Insert into Electricity table
             String insertElectricitySQL = "INSERT INTO dbo.electricity (create_date, electricity_index, invoice_id) VALUES (GETDATE(), ?, ?)";

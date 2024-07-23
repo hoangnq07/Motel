@@ -3,10 +3,13 @@ import Account.Account;
 import dao.FeedbackDAO;
 import dao.MotelDAO;
 import dao.MotelRoomDAO;
+import dao.RenterDAO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import model.Motel;
+import model.Renter;
+
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -49,18 +52,22 @@ public class OwnerServlet extends HttpServlet {
                         request.setAttribute("rooms", MotelRoomDAO.getMotelRoomsByMotelId(motelId));
                     break;
                 case "createBill":
-
                     break;
                 case "feedback":
-                    try {
-                        request.setAttribute("feedbacks", FeedbackDAO.getFeedbackForOwner(account.getAccountId()));
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
+//                    try {
+//                        request.setAttribute("feedbacks", FeedbackDAO.getFeedbackForOwner(account.getAccountId()));
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
                     break;
                 case "statics":
                     break;
                 case "renter":
+                    break;
+                case "all-renter":
+//                    motelId = (int) request.getSession().getAttribute("motelId");
+//                    List<Renter> renters = RenterDAO.getAllRentersByMotel(motelId);
+//                    request.setAttribute("renters", renters);
                     break;
             }
             request.getRequestDispatcher("motel-manage.jsp").forward(request, response);

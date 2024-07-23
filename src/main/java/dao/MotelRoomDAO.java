@@ -180,6 +180,7 @@ public class MotelRoomDAO {
                 room.setMotelId(rs.getInt("motel_id"));
                 room.setAccountId(rs.getInt("account_id"));
                 room.setImage(motelRoomDAO.getImagesForRoom(rs.getInt("motel_room_id")));
+                room.setPostRequestStatus(rs.getString("post_request_status"));
                 rooms.add(room);
             }
         } catch (SQLException e) {

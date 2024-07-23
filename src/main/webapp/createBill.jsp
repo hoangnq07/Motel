@@ -38,18 +38,28 @@
           if (motelId != null) {
             try (Connection conn = DBcontext.getConnection();
                  PreparedStatement pstmt = conn.prepareStatement(
-                         "SELECT mr.motel_room_id, mr.name, mr.room_price, mr.electricity_price, mr.water_price \n" +
-                                 "FROM motel_room mr\n" +
-                                 "JOIN motels m ON mr.motel_id = m.motel_id\n" +
-                                 "WHERE m.motel_id = ? AND mr.room_status = 1")) {
+                         "SELECT mr.motel_room_id, mr.name, mr.room_price, mr.electricity_price, mr.water_price, " +
+                                 "CASE WHEN r.renter_id IS NULL THEN 'Chưa Thuê' ELSE 'Đã Thuê' END AS renter_status " +
+                                 "FROM motel_room mr " +
+                                 "LEFT JOIN renter r ON mr.motel_room_id = r.motel_room_id AND r.check_out_date IS NULL " +
+                                 "JOIN motels m ON mr.motel_id = m.motel_id " +
+                                 "WHERE m.motel_id = ?")) {
               pstmt.setInt(1, motelId);
               ResultSet rs = pstmt.executeQuery();
               while (rs.next()) {
-                out.println("<option value='" + rs.getInt("motel_room_id") + "' " +
-                        "data-room-price='" + rs.getFloat("room_price") + "' " +
-                        "data-electricity-price='" + rs.getFloat("electricity_price") + "' " +
-                        "data-water-price='" + rs.getFloat("water_price") + "'>" +
-                        rs.getString("name") + "</option>");
+                String renterStatus = rs.getString("renter_status");
+                String optionText = rs.getString("name") + " - " + renterStatus;
+                String optionValue = rs.getInt("motel_room_id") + "";
+                String disabled = renterStatus.equals("No renter") ? "disabled" : "";
+        %>
+        <option value='<%= optionValue %>'
+                data-room-price='<%= rs.getFloat("room_price") %>'
+                data-electricity-price='<%= rs.getFloat("electricity_price") %>'
+                data-water-price='<%= rs.getFloat("water_price") %>'
+                <%= disabled %>>
+          <%= optionText %>
+        </option>
+        <%
               }
             } catch (SQLException e) {
               e.printStackTrace();
@@ -59,7 +69,13 @@
           }
         %>
       </select>
+
     </div>
+
+    <div id="noRenterMessage" class="alert alert-warning" style="display: none;">
+      Phòng này chưa có người thuê.
+    </div>
+
     <div class="form-group">
       <label for="electricityUsage">Chỉ số điện:</label>
       <input type="number" id="electricityUsage" name="electricityUsage" class="form-control" step="0.01" required>
@@ -70,34 +86,38 @@
     </div>
 
 
-<%--    <div class="form-group">--%>
-<%--      <label for="endDate">End Date:</label>--%>
-<%--      <input type="date" id="endDate" name="endDate" class="form-control" required>--%>
-<%--    </div>--%>
-<%--    <div class="form-group">--%>
-<%--      <label for="totalPrice">Total Price:</label>--%>
-<%--      <input type="text" id="totalPrice" class="form-control" readonly>--%>
-      <input type="hidden" id="totalPriceHidden" name="totalPrice">
-    </div>
-    <input type="hidden" id="invoiceStatus" name="invoiceStatus" value="UNPAID">
-    <input type="hidden" id="action" name="action" value="confirm">
-    <button type="submit" class="btn btn-primary" onclick="confirmBill()">Tạo</button>
-    <button type="button" class="btn btn-secondary ml-2" data-dismiss="modal">Hủy</button>
-  </form>
+    <%--    <div class="form-group">--%>
+    <%--      <label for="endDate">End Date:</label>--%>
+    <%--      <input type="date" id="endDate" name="endDate" class="form-control" required>--%>
+    <%--    </div>--%>
+    <%--    <div class="form-group">--%>
+    <%--      <label for="totalPrice">Total Price:</label>--%>
+    <%--      <input type="text" id="totalPrice" class="form-control" readonly>--%>
+    <input type="hidden" id="totalPriceHidden" name="totalPrice">
+</div>
+<input type="hidden" id="invoiceStatus" name="invoiceStatus" value="UNPAID">
+<input type="hidden" id="action" name="action" value="confirm">
+<button type="submit" class="btn btn-primary" onclick="confirmBill()">Tạo</button>
+<button type="button" class="btn btn-secondary ml-2" data-dismiss="modal">Hủy</button>
+</form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function() {
-    $('#electricityUsage, #waterUsage').change(function() {
-      var electricityPrice = $('#motelRoomId option:selected').attr('data-electricity-price');
-      var waterPrice = $('#motelRoomId option:selected').attr('data-water-price');
-      var electricityUsage = parseFloat($('#electricityUsage').val());
-      var waterUsage = parseFloat($('#waterUsage').val());
-      var totalPrice = (electricityUsage * electricityPrice) + (waterUsage * waterPrice);
-      $('#totalPrice').val(totalPrice.toFixed(2));
-      $('#totalPriceHidden').val(totalPrice.toFixed(2));
+    $('#motelRoomId').change(function() {
+      var selectedOption = $(this).find('option:selected');
+      if (selectedOption.is(':disabled')) {
+        $('#noRenterMessage').show();
+        $('#electricityUsage, #waterUsage').prop('disabled', true);
+        $('button[type="submit"]').prop('disabled', true);
+      } else {
+        $('#noRenterMessage').hide();
+        $('#electricityUsage, #waterUsage').prop('disabled', false);
+        $('button[type="submit"]').prop('disabled', false);
+      }
+      $('#electricityUsage, #waterUsage').trigger('change');
     });
 
     $('#motelRoomId').change(function() {
@@ -148,6 +168,8 @@
         confirmButtonText: 'Đóng'
       });
     }
+
+
   });
 </script>
 </body>

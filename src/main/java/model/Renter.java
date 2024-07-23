@@ -8,6 +8,8 @@ public class Renter {
     private Date checkOutDate;
     private Date renterDate;
     private int motelRoomId;
+    private String roomName;
+    private String motelName;
     private Account account;
 
     // Constructors
@@ -25,6 +27,22 @@ public class Renter {
     // Getters and Setters
     public int getRenterId() {
         return renterId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public String getMotelName() {
+        return motelName;
+    }
+
+    public void setMotelName(String motelName) {
+        this.motelName = motelName;
     }
 
     public void setRenterId(int renterId) {

@@ -13,15 +13,15 @@ import model.Water;
 
 public class InvoiceDAO {
     public int addInvoice(Invoice invoice) throws SQLException {
-        String sql = "INSERT INTO invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO invoice (create_date, end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (?, ?, ?, ?, null, ?)";
         try (Connection conn = DBcontext.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setDate(1, new java.sql.Date(invoice.getCreateDate().getTime()));
             stmt.setDate(2, invoice.getEndDate() != null ? new java.sql.Date(invoice.getEndDate().getTime()) : null);
             stmt.setDouble(3, invoice.getTotalPrice());
             stmt.setString(4, invoice.getInvoiceStatus());
-            stmt.setInt(5, invoice.getRenterId());
-            stmt.setInt(6, invoice.getMotelRoomId());
+//            stmt.setInt(5, invoice.getRenterId());
+            stmt.setInt(5, invoice.getMotelRoomId());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {

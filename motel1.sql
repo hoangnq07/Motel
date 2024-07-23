@@ -1,4 +1,5 @@
-﻿-- Tạo cơ sở dữ liệu
+﻿
+-- Tạo cơ sở dữ liệu
 CREATE DATABASE motel;
 USE motel;
 
@@ -118,13 +119,14 @@ CREATE TABLE dbo.water(
 
 CREATE TABLE dbo.request_authority(
     request_authority_id [int] PRIMARY KEY IDENTITY(1,1) NOT NULL,
-    [image] [varchar](255) NULL,
     createdate [date] NULL,
     descriptions [nvarchar](255) NULL,
     respdescriptions [nvarchar](255) NULL,
     responsedate [date] NULL,
     account_id [int] NULL,
     request_authority_status [nvarchar](255) NULL,
+	[imageidcard] [varchar](255) NULL,
+	[imagedoc] [varchar](255) NULL,
     FOREIGN KEY (account_id) REFERENCES dbo.accounts (account_id)
 );
 
@@ -153,6 +155,8 @@ CREATE TABLE dbo.feedback (
     account_id INT,
     motel_id INT,
     motel_room_id INT,
+	[to_user_id] [int] NULL,
+	[tag] [varchar](50) NULL,
     FOREIGN KEY (account_id) REFERENCES dbo.accounts(account_id) ,
     FOREIGN KEY (motel_id) REFERENCES dbo.motels(motel_id) ,
     FOREIGN KEY (motel_room_id) REFERENCES dbo.motel_room(motel_room_id) ON DELETE CASCADE

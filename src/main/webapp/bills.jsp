@@ -17,13 +17,41 @@
     String paymentMessage = (String) session.getAttribute("paymentMessage");
     if (paymentMessage != null) {
 %>
-<p style="color: green;"><%= paymentMessage %></p>
+<%= paymentMessage %>
 <%
         session.removeAttribute("paymentMessage");
     }
 %>
 
-<table border="1">
+<%
+    Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
+    boolean hasRentedRoom = false;
+
+    try (Connection connection = DBcontext.getConnection()) {
+        // Check if the user has rented a room
+        String checkRenterSQL = "SELECT motel_room_id FROM dbo.renter WHERE renter_id = ?";
+        int motelRoomId = 0;
+
+        try (PreparedStatement psCheckRenter = connection.prepareStatement(checkRenterSQL)) {
+            psCheckRenter.setInt(1, accountId);
+            ResultSet rsCheckRenter = psCheckRenter.executeQuery();
+            if (rsCheckRenter.next()) {
+                hasRentedRoom = true;
+                motelRoomId = rsCheckRenter.getInt("motel_room_id");
+            }
+        }
+
+        if (!hasRentedRoom) {
+%>
+<p>Bạn chưa thuê vào phòng trọ nào cả!</p>
+<%
+} else {
+    String selectInvoicesSQL = "SELECT * FROM dbo.invoice WHERE motel_room_id = ?";
+    try (PreparedStatement psInvoices = connection.prepareStatement(selectInvoicesSQL)) {
+        psInvoices.setInt(1, motelRoomId);
+        ResultSet rsInvoices = psInvoices.executeQuery();
+%>
+<table>
     <tr>
         <th>ID của Hóa Đơn</th>
         <th>Ngày Tạo</th>
@@ -33,20 +61,12 @@
         <th>Hành Động</th>
     </tr>
     <%
-        Integer accountId = ((Account) session.getAttribute("user")).getAccountId();
-
-        try (Connection connection = DBcontext.getConnection()) {
-            // Get the renter's invoices
-            String selectInvoicesSQL = "SELECT * FROM dbo.invoice WHERE renter_id = ?";
-            try (PreparedStatement psInvoices = connection.prepareStatement(selectInvoicesSQL)) {
-                psInvoices.setInt(1, accountId);
-                ResultSet rsInvoices = psInvoices.executeQuery();
-                while (rsInvoices.next()) {
-                    int invoiceId = rsInvoices.getInt("invoice_id");
-                    Date createDate = rsInvoices.getDate("create_date");
-                    Date endDate = rsInvoices.getDate("end_date");
-                    float totalPrice = rsInvoices.getFloat("total_price");
-                    String status = rsInvoices.getString("invoice_status");
+        while (rsInvoices.next()) {
+            int invoiceId = rsInvoices.getInt("invoice_id");
+            Date createDate = rsInvoices.getDate("create_date");
+            Date endDate = rsInvoices.getDate("end_date");
+            float totalPrice = rsInvoices.getFloat("total_price");
+            String status = rsInvoices.getString("invoice_status");
     %>
     <tr>
         <td><%= invoiceId %></td>
@@ -56,20 +76,26 @@
         <td><%= status %></td>
         <td>
             <form action="vnpayajax" method="post">
-                <input type="hidden" name="amount" value="<%= totalPrice %>" />
-                <input type="hidden" name="invoiceId" value="<%= invoiceId %>" />
+                <input type="hidden" name="amount" value="<%= totalPrice %>">
+                <input type="hidden" name="invoiceId" value="<%= invoiceId %>">
                 <button type="submit">Thanh toán với VNPAY</button>
             </form>
         </td>
     </tr>
     <%
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            out.println("<tr><td colspan='6'>Error fetching bills.</td></tr>");
         }
     %>
+</table>
+<%
+        }
+    }
+} catch (SQLException e) {
+    e.printStackTrace();
+%>
+<p>Error fetching bills.</p>
+<%
+    }
+%>
 </table>
 <jsp:include page="footer.jsp" />
 </body>

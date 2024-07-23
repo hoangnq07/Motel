@@ -39,7 +39,7 @@
             margin-bottom: 5px;
             font-weight: bold;
         }
-        input[type="text"] {
+        input[type="text"], select {
             padding: 8px;
             margin-bottom: 10px;
             border: 1px solid #ccc;
@@ -74,7 +74,10 @@
         <label>Tổng Giá:</label>
         <input type="text" name="totalPrice" value="<%= invoice.getTotalPrice() %>" />
         <label>Trạng Thái Hóa Đơn:</label>
-        <input type="text" name="invoiceStatus" value="<%= invoice.getInvoiceStatus() %>" />
+        <select name="invoiceStatus">
+            <option value="PAID" <%= "PAID".equals(invoice.getInvoiceStatus()) ? "selected" : "" %>>PAID</option>
+            <option value="UNPAID" <%= "UNPAID".equals(invoice.getInvoiceStatus()) ? "selected" : "" %>>UNPAID</option>
+        </select>
         <label>Chỉ số điện:</label>
         <input type="text" name="electricityIndex" value="<%= invoice.getElectricityIndex() %>" />
         <label>Chỉ số nước:</label>

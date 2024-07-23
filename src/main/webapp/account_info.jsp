@@ -66,7 +66,7 @@
 </head>
 <body>
 <jsp:include page="header.jsp" ></jsp:include>
-<div class="container mt-5 ">
+<div class="container mt-5 " style="margin-top: 120px !important;">
     <h1>Update Profile</h1>
 
     <form action="UpdateProfileServlet" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">

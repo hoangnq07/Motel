@@ -67,9 +67,9 @@
         <button type="submit" class="btn btn-primary btn-submit">Gửi</button>
     </form>
     <button id="showHistoryBtn" class="btn btn-info btn-view">Xem Lịch Sử</button>
-    <c:if test="${sessionScope.user.role == 'owner'}">
-        <button id="listFeedbackReceivedBtn" class="btn btn-secondary btn-view">Danh sách đánh giá đã nhận</button>
-    </c:if>
+<%--    <c:if test="${sessionScope.user.role == 'owner'}">--%>
+<%--        <button id="listFeedbackReceivedBtn" class="btn btn-secondary btn-view">Danh sách đánh giá đã nhận</button>--%>
+<%--    </c:if>--%>
     <table id="historyFeedbackTable" class="table table-bordered" style="display:none;">
         <thead>
         <tr>

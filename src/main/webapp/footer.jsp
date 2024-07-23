@@ -36,7 +36,7 @@
         <div class="row g-5">
             <div class="col-lg-3 col-md-6">
                 <h1 class="fw-bold text-primary mb-4">H<span class="text-secondary">O</span>ME</h1>
-                <p>We are dedicated to providing exceptional service and quality products to our customers. Our team is committed to innovation and excellence, ensuring that we meet and exceed your expectations.</p>
+                <p>Chúng tôi cam kết cung cấp dịch vụ xuất sắc và sản phẩm chất lượng cho khách hàng. Đội ngũ của chúng tôi luôn nỗ lực đổi mới và hoàn thiện, đảm bảo đáp ứng và vượt qua mong đợi của bạn.</p>
                 <div class="d-flex pt-2">
                     <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-twitter"></i></a>
                     <a class="btn btn-square btn-outline-light rounded-circle me-1" href=""><i class="fab fa-facebook-f"></i></a>

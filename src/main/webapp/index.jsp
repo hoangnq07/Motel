@@ -140,25 +140,27 @@
                             </c:choose>
                             <div class="room-details">
                                 <h5>${room.description}</h5>
-                                <p>${room.length * room.width} m²</p>
+                                <p>
+                                    <fmt:formatNumber value="${room.length * room.width}" type="number" minFractionDigits="0" maxFractionDigits="2"/> m²
+                                </p>
                                 <p class="price">
                                     <fmt:formatNumber value="${room.roomPrice}" type="number" groupingUsed="true"/> VND/tháng
                                 </p>
                                 <p>${room.detailAddress}, ${room.ward}, ${room.district}, ${room.province}</p>
-                                <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">View Details</a>
+                                <a href="room-details?roomId=${room.motelRoomId}" class="btn btn-primary">Xem chi tiết</a>
                             </div>
                         </div>
                     </div>
                 </c:forEach>
             </c:when>
             <c:otherwise>
-                <p class="col-12">No rooms available.</p>
+                <p class="col-12">Không có phòng khả dụng.</p>
             </c:otherwise>
         </c:choose>
     </div>
 
     <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-        <a class="btn btn-primary rounded-pill py-3 px-5" href="motel-rooms?action=list">Load More</a>
+        <a class="btn btn-primary rounded-pill py-3 px-5" href="motel-rooms?action=list">Xem thêm</a>
     </div>
 </div>
 <jsp:include page="footer.jsp" />

@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="java.util.List" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -218,6 +219,16 @@
         }
 
         function requestPost(roomId) {
+            // Lấy giá trị của postRequestStatus từ hàng tương ứng
+            var postRequestStatus = document.querySelector('tr[data-room-id="' + roomId + '"] .postRequestStatus').textContent.trim();
+
+            // Kiểm tra nếu postRequestStatus là "approve"
+            if (postRequestStatus === 'approved') {
+                alert('Phòng đã được duyệt. Không thể yêu cầu đăng phòng.');
+                return; // Dừng hàm nếu đã được duyệt
+            }
+
+            // Nếu không phải "approve", tiếp tục gửi yêu cầu
             var url = contextPath + "/motel-rooms?action=requestPost&roomId=" + roomId;
             fetch(url)
                 .then(function(response) {
@@ -269,10 +280,18 @@
                 <td class="description">${room.description}</td>
                 <td class="length">${room.length}</td>
                 <td class="width">${room.width}</td>
-                <td class="roomPrice">${room.roomPrice}</td>
-                <td class="electricityPrice">${room.electricityPrice}</td>
-                <td class="waterPrice">${room.waterPrice}</td>
-                <td class="wifiPrice">${room.wifiPrice}</td>
+                <td class="roomPrice">
+                    <fmt:formatNumber value="${room.roomPrice}" type="number" minFractionDigits="0" maxFractionDigits="0"/>
+                </td>
+                <td class="electricityPrice">
+                    <fmt:formatNumber value="${room.electricityPrice}" type="number" minFractionDigits="0" maxFractionDigits="0"/>
+                </td>
+                <td class="waterPrice">
+                    <fmt:formatNumber value="${room.waterPrice}" type="number" minFractionDigits="0" maxFractionDigits="0"/>
+                </td>
+                <td class="wifiPrice">
+                    <fmt:formatNumber value="${room.wifiPrice}" type="number" minFractionDigits="0" maxFractionDigits="0"/>
+                </td>
                 <td class="category">${room.category}</td>
                 <c:choose>
                     <c:when test="${not empty room.image}">
@@ -295,6 +314,9 @@
                     <a href="javascript:void(0);" onclick="requestPost(${room.motelRoomId});">Yêu Cầu Đăng Bài</a>
                 </td>
                 <td class="postRequestStatus">${room.postRequestStatus}</td>
+                <c:if test="${empty room.postRequestStatus }">
+                        </c:if>
+
             </tr>
         </c:forEach>
         </tbody>

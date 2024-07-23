@@ -73,7 +73,7 @@
                                         <a href="owner" class="dropdown-item">Quản Lý</a>
                                     </c:if>
                                     <c:if test="${sessionScope.user.role == 'admin'}">
-                                        <a href="admincheckrequest.jsp" class="dropdown-item">Yêu Cầu</a>
+                                        <a href="admin" class="dropdown-item">Admin Dashboard</a>
                                     </c:if>
                                     <c:if test="${sessionScope.user.role == 'user'}">
                                         <a href="${pageContext.request.contextPath}/checkRequest" class="dropdown-item">Yêu Cầu</a>

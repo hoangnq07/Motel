@@ -47,7 +47,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'motel-list' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=motel-list">
-                        <i class="fas fa-building mr-2"></i>Quản lý Trọ/Chung Cư
+                        <i class="fas fa-building mr-2"></i>Quản lý Trọ
                     </a>
                 </li>
                 <li class="nav-item">
@@ -60,11 +60,6 @@
                         <i class="fas fa-users mr-2"></i>Danh sách người thuê
                     </a>
                 </li>
-<%--                <li class="nav-item">--%>
-<%--                    <a class="nav-link ${param.page == 'customer-management' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=customer-management">--%>
-<%--                        <i class="fas fa-users mr-2"></i>Quản lý Người thuê--%>
-<%--                    </a>--%>
-<%--                </li>--%>
                 <li class="nav-item">
                     <a class="nav-link ${param.page == 'createinvoice' ? 'active' : ''}" href="${pageContext.request.contextPath}/owner?page=bill">
                         <i class="fas fa-file-invoice-dollar mr-2"></i>Hóa Đơn
@@ -102,9 +97,6 @@
                 </c:when>
                 <c:when test="${param.page == 'all-renters'}">
                     <jsp:include page="all-renters.jsp"/>
-                </c:when>
-                <c:when test="${param.page == 'customer-management'}">
-                    <jsp:include page="renters.jsp"/>
                 </c:when>
                 <c:when test="${param.page == 'notify'}">
                     <jsp:include page="notify.jsp"/>

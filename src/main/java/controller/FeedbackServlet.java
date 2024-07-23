@@ -37,14 +37,13 @@ public class FeedbackServlet extends HttpServlet {
         Integer accountId = user.getAccountId();
 
         try {
-            int[] motelDetails = feedbackDAO.getMotelDetailsByUserId(accountId);
-            Integer motelId = motelDetails[0];
-            Integer motelRoomId = motelDetails[1];
-
             if ("owner".equals(tag)) {
+                int[] motelDetails = feedbackDAO.getMotelDetailsByUserId(accountId);
+                Integer motelId = motelDetails[0];
+                Integer motelRoomId = motelDetails[1];
                 sendFeedbackToOwner(accountId, feedbackText, motelId, motelRoomId);
             } else if ("admin".equals(tag)) {
-                sendFeedbackToAdmin(feedbackText, accountId, motelId, motelRoomId);
+                sendFeedbackToAdmin(feedbackText, accountId);
             }
             response.getWriter().write("{\"success\": \"Feedback sent successfully.\"}");
         } catch (SQLException e) {
@@ -60,7 +59,8 @@ public class FeedbackServlet extends HttpServlet {
         feedbackDAO.saveFeedback(feedbackText, userId, ownerId, "Owner", motelId, motelRoomId);
     }
 
-    private void sendFeedbackToAdmin(String feedbackText, int fromUserId, Integer motelId, Integer motelRoomId) throws SQLException {
-        feedbackDAO.saveFeedback(feedbackText, fromUserId, null, "Admin", motelId, motelRoomId);
+    private void sendFeedbackToAdmin(String feedbackText, int fromUserId) throws SQLException {
+        System.out.println("Sending feedback to admin...");
+        feedbackDAO.saveFeedback(feedbackText, fromUserId, null, "Admin", null, null);
     }
 }

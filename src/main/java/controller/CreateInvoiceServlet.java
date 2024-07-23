@@ -49,11 +49,10 @@ public class CreateInvoiceServlet extends HttpServlet {
             float totalPrice = roomPrice + wifiPrice + (waterIndex * waterPrice) + (electricityIndex * electricityPrice);
 
             // Tạo hóa đơn
-            String insertInvoiceSql = "INSERT INTO dbo.invoice (end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (GETDATE(), ?, 'Chưa thanh toán', (SELECT renter_id FROM dbo.renter WHERE motel_room_id = ?), ?)";
+            String insertInvoiceSql = "INSERT INTO dbo.invoice (end_date, total_price, invoice_status, renter_id, motel_room_id) VALUES (GETDATE(), ?, 'Chưa thanh toán', NULL, ?)";
             PreparedStatement psInvoice = conn.prepareStatement(insertInvoiceSql);
             psInvoice.setFloat(1, totalPrice);
             psInvoice.setInt(2, motelRoomId);
-            psInvoice.setInt(3, motelRoomId);
             psInvoice.executeUpdate();
 
             // Gửi email hóa đơn

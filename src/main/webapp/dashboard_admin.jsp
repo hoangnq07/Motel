@@ -30,14 +30,7 @@
             <!-- Sidebar navigation-->
             <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
                 <ul id="sidebarnav">
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="./index.html" aria-expanded="false">
-                                <span>
-                                    <i class="ti ti-layout-dashboard"></i>
-                                </span>
-                            <span class="hide-menu">Bảng Điều Khiển</span>
-                        </a>
-                    </li>
+
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="#" id="accounts" aria-expanded="false">
                                 <span>
@@ -59,29 +52,26 @@
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="admincheckrequest.jsp">
-                            <span class="icon">
-                                <i class="ti ti-user"></i>
-                            </span>
-
+                        <a class="sidebar-link" href="#" id="requestsLink">
+                        <span class="icon">
+                            <i class="ti ti-user"></i>
+                        </span>
                             <span>Yêu Cầu</span>
-
                         </a>
                     </li>
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="./statistics.html">
-                            <span class="icon">
-                                <i class="ti ti-chart-bar"></i>
-                            </span>
-
+                        <a class="sidebar-link" href="#" id="statisticsLink">
+                        <span class="icon">
+                            <i class="ti ti-chart-bar"></i>
+                        </span>
                             <span>Thống Kê</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="#" id="posting-requests" aria-expanded="false">
-        <span>
-            <i class="ti ti-file"></i>
-        </span>
+                            <span>
+                                <i class="ti ti-file"></i>
+                            </span>
 
                             <span class="hide-menu">Yêu Cầu Đăng Bài</span>
                         </a>
@@ -115,16 +105,7 @@
                                      class="rounded-circle">
                             </a>
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop2">
-                                <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                    <i class="ti ti-user fs-6"></i>
 
-                                    <p>Trang cá nhân</p>
-                                </a>
-                                <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
-                                    <i class="ti ti-mail fs-6"></i>
-                                    <p>Đổi mật khẩu</p>
-
-                                </a>
                                 <a href="logout" class="btn btn-outline-primary mx-3 mt-2">Đăng Xuất</a>
                             </div>
                         </li>
@@ -195,10 +176,7 @@
                             <option value="user">Người Dùng</option>
                             <option value="owner">Chủ</option>
 
-                       
-
                         </select>
-                    </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Mật Khẩu</label>
                         <input type="password" class="form-control" id="password" required>
@@ -527,6 +505,17 @@
             alert('Lỗi liên lạc với máy chủ');
         });
     }
+
+    $(document).ready(function() {
+        $('#statisticsLink').on('click', function(event) {
+            event.preventDefault();
+            $('#content-container').load('./accountRoleStatistics.jsp');
+        });
+        $('#requestsLink').on('click', function(event) {
+            event.preventDefault();
+            $('#content-container').load('viewPendingRequests');
+        });
+    });
 </script>
 
 </body>
