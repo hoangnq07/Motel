@@ -16,7 +16,9 @@ import static context.DBcontext.getConnection;
 
 public class AccountDAO {
 
-    private static final String LOGIN = "SELECT email,password,role from [accounts] where email=?";
+    private static final String LOGIN = "SELECT email, `password`, `role`\n" +
+            "FROM accounts\n" +
+            "WHERE email = ?";
 
     public static Account searchUser(String email) {
         String QUERY = "SELECT * FROM accounts WHERE email=?";
