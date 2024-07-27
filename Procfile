@@ -1,1 +1,1 @@
-web: java -jar target/webapp-runner.jar --port $PORT target/Project.war
+web: java -jar target/dependency/webapp-runner.jar target/demo-1.0-SNAPSHOT.war
