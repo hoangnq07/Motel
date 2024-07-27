@@ -60,7 +60,7 @@
                                     <a href="forgot-password.jsp" class="signup-image-link">Quên Mật Khẩu ư?</a>
                                 </div>
                             </form>
-                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:9999/Project/login-google&response_type=code
+                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=https://motel-eac476bfc319.herokuapp.com/login-google&response_type=code
                                    &client_id=641055812351-oek687om0tcvhgbmfutel5qjn1cdd9nl.apps.googleusercontent.com&approval_prompt=force" class="btn btn-google">
                                 <span class="google-icon">G+</span>
                                 <span class="btn-text">Đăng Nhập với Google</span>
