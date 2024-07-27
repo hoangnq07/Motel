@@ -7,11 +7,11 @@ import java.sql.SQLException;
 
 public class DBcontext {
     public static Connection getConnection() throws SQLException {
-        String jdbcUrl = "jdbc:sqlserver://Localhost:1433;databaseName=motel";
-        String username = "sa";
-        String password = "123456";
+        String jdbcUrl = "jdbc:mysql://103.97.126.29/nrmkbzgh_motel";
+        String username = "nrmkbzgh_motel";
+        String password = "123456789";
         try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
             throw new SQLException("Database driver not found");
