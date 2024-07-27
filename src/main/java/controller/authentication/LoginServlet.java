@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  *
  * @author PC
  */
-//@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
+@WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
 
     private static final Logger LOGGER = Logger.getLogger(LoginServlet.class.getName());
